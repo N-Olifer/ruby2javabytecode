@@ -13,6 +13,7 @@
 IDENTIFIER [A-Za-z_][A-Za-z_0-9]*
 
 %x STRING
+%x STRING2
 %x LINE_COMMENT
 %x MULTILINE_COMMENT
 
@@ -103,23 +104,33 @@ do printf("do\n");
 
 
 
-\" {
-    strcpy(literal,"");
+\" { strcpy(literal,"");
     BEGIN(STRING);
     }
 <STRING>[^\\\n\"]+ strcat(literal,yytext);
 <STRING>\\n strcat(literal,"\n");
 <STRING>\\\\ strcat(literal,"\\");
 <STRING>\\\" strcat(literal,"\"");
+<STRING>\\\' strcat(literal,"\'");
 <STRING>\\r strcat(literal,"\r");
 <STRING>\\s strcat(literal," ");
 <STRING>\\t strcat(literal,"\t");
+<STRING>\\;
 <STRING>\" { 
     printf("String in \"\": %s\n", literal);
     BEGIN(INITIAL);
     }
 
-
+\' { strcpy(literal,"");
+    BEGIN(STRING2);
+    }
+<STRING2>[^\\\n\']+ strcat(literal,yytext);
+<STRING2>\\n strcat(literal,"\n");
+<STRING2>\\\' strcat(literal,"\'");
+<STRING2>\' {
+    printf("String in \'\': %s\n", literal);
+    BEGIN(INITIAL);
+    }
 . printf("Error, unexpected lexem %s !!!!!!\n", yytext);
 %%
 
