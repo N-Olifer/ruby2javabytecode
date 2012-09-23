@@ -78,7 +78,8 @@ class TestClass
   end
 
   protected
-  def method1
+  def method1! x
+    @xField = 3
     puts @xField
   end
 
@@ -95,11 +96,16 @@ class TestChild < TestClass
     return 55
   end
 
-  def method1
+  def method1! x
+    puts x
     super
+  end
+  
+  def isTrue?
+    return true
   end
 end
 
 object = TestChild.new(3,4)
 object.childMethod
-object.method1
+object.method1! 54
