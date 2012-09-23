@@ -142,11 +142,11 @@ void main(int argc, char* argv[])
     //setlocale(LC_CTYPE, ".1251");
     if (argc < 2)
     {
-        yyin = fopen("test.txt", "r");
+        yyin = fopen("test", "r");
     }
     else if((yyin = fopen(argv[1], "r")) == 0)
     {
-        printf("Невозможно открыть файл %s\n", argv[1]);
+        printf("Can't read file %s\n", argv[1]);
         exit(1);
     }
     yylex();
