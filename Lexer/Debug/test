@@ -17,12 +17,12 @@ arr = [1, 2, 3]
 puts arr[1]
 
 
-
+$global = 0
 
 if a > 5
-  puts ">5"
+  puts "This is\s>\nand5 and\\"
 else
-  puts "<5"
+  puts "Start\r\nrrrr<\t5$global"
 end
 
 a = 43534

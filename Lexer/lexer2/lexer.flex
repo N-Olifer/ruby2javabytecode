@@ -4,6 +4,7 @@
 	#include <string.h>
 	
 	char comment[666];
+	char literal[1000];
 %} 
 
 %option noyywrap 
@@ -86,7 +87,7 @@ while printf("while\n");
 until printf("until\n");
 do printf("do\n");
 
-[0-9]+ printf("%s : constant\n", yytext);
+[0-9]+ printf("%s : dec constant\n", yytext);
 
 {IDENTIFIER} printf("%s : identifier\n", yytext);
 \${IDENTIFIER} printf("%s : $identifier\n", yytext);
@@ -100,8 +101,26 @@ do printf("do\n");
 [[:blank:]]+
 [\n\t]+
 
-. printf("Error, unexpected lexem %s !!!!!!\n", yytext);
 
+
+\" {
+    strcpy(literal,"");
+    BEGIN(STRING);
+    }
+<STRING>[^\\\n\"]+ strcat(literal,yytext);
+<STRING>\\n strcat(literal,"\n");
+<STRING>\\\\ strcat(literal,"\\");
+<STRING>\\\" strcat(literal,"\"");
+<STRING>\\r strcat(literal,"\r");
+<STRING>\\s strcat(literal," ");
+<STRING>\\t strcat(literal,"\t");
+<STRING>\" { 
+    printf("String in \"\": %s\n", literal);
+    BEGIN(INITIAL);
+    }
+
+
+. printf("Error, unexpected lexem %s !!!!!!\n", yytext);
 %%
 
 void main(int argc, char* argv[])
