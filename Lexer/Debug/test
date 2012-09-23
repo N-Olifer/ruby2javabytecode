@@ -27,8 +27,10 @@ else
 tratata"
 end
 
-a = 43534
-
+a = 43_534
+b = 0x102_A
+c = 03_34
+d = 0b1_0000_1000_1011_1011
 
 =begin asdf
 ef dfdfdf  hhh!!!...fg==en

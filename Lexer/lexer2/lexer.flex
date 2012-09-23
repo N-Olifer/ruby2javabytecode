@@ -88,7 +88,10 @@ while printf("while\n");
 until printf("until\n");
 do printf("do\n");
 
-[0-9]+ printf("%s : dec constant\n", yytext);
+0b[01]([01_]*[01])? printf("%s : bin constant\n", yytext);
+0x[0-9A-Fa-f]([0-9A-Fa-f_]*[0-9A-Fa-f])? printf("%s : hex constant\n", yytext);
+0[0-7]([0-7_]*[0-7])? printf("%s : oct constant\n", yytext);
+[0-9]([0-9_]*[0-9])? printf("%s : dec constant\n", yytext);
 
 {IDENTIFIER} printf("%s : identifier\n", yytext);
 \${IDENTIFIER} printf("%s : $identifier\n", yytext);
