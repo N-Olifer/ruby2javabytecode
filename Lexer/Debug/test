@@ -1,0 +1,101 @@
+
+def func()
+  a = 5
+  a = 6
+  b = a + 1
+  puts a
+end
+
+a = 10
+testVar = a * 2
+a = testVar / 2
+a = a + 1
+a = a - 1
+
+#comment 1
+arr = [1, 2, 3]
+puts arr[1]
+
+
+
+
+if a > 5
+  puts ">5"
+else
+  puts "<5"
+end
+
+a = 43534
+
+
+=begin asdf
+ef dfdfdf  hhh!!!...fg==en
+aaaaddd
+g1
+=end
+
+if ( !(a != 12) ) then a = 12
+
+if (a == 10)  || (a <= 10)
+  a = 5
+elsif (a != 11) && (a >= 5)
+  a = 6
+else
+  a = 1
+end
+
+if true || nil
+  puts "true"
+elsif false
+  puts "false"
+end
+
+if a == 10 then a = 9 end
+a = 8 if a == 9
+
+unless a == 8
+  a = 5
+end
+
+while a > 0 do
+  a = a - 1
+end
+
+until a == 10 do
+  a = a + 1
+end
+
+class TestClass
+
+  @@staticField  = 99
+
+  def initialize (x, y)
+    @xField, @yField = x, y
+  end
+
+  protected
+  def method1
+    puts @xField
+  end
+
+  private
+  def method2( param )
+    puts param
+  end
+end
+
+class TestChild < TestClass
+  def childMethod
+    puts @@staticField
+    puts @xField
+    return 55
+  end
+
+  def method1
+    super
+  end
+end
+
+object = TestChild.new(3,4)
+object.childMethod
+object.method1
