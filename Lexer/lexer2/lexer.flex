@@ -75,6 +75,10 @@ false printf("false\n");
 true printf("true\n");
 nil printf("nil\n");
 
+public printf("public\n");
+protected printf("protected\n");
+private printf("private\n");
+
 \|\| printf("||\n");
 \&\& printf("&&\n");
 \! printf("!\n");
@@ -101,11 +105,8 @@ do printf("do\n");
 {IDENTIFIER}\! printf("%s : identifier!\n", yytext);
 {IDENTIFIER}\= printf("%s : identifier=\n", yytext);
 
-
 [[:blank:]]+
 [\n\t]+
-
-
 
 \" { strcpy(literal,"");
     BEGIN(STRING);
