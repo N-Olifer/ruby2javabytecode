@@ -2,9 +2,6 @@
 	#include <stdio.h> 
 	#include <locale.h>
 	#include <string.h>
-	
-	char comment[666];
-	char literal[1000];
 %} 
 
 %option noyywrap 
@@ -18,6 +15,11 @@ IDENTIFIER [A-Za-z_][A-Za-z_0-9]*
 %x MULTILINE_COMMENT
 
 %%
+
+%{ 
+	char comment[1000];
+	char literal[1000];
+%} 
 
 \# {
 	comment[0] = 0; 
@@ -33,64 +35,62 @@ IDENTIFIER [A-Za-z_][A-Za-z_0-9]*
 	BEGIN(MULTILINE_COMMENT);
 	comment[0] = 0;
 }
-
 <MULTILINE_COMMENT>"=end" {
 	BEGIN(INITIAL);
 	printf("%s : multiline comment\n", comment);
 }
-
-<MULTILINE_COMMENT>. strcat(comment, yytext);
 <MULTILINE_COMMENT>\n
+<MULTILINE_COMMENT>.* strcat(comment, yytext);
 
-class printf("class\n");
-super printf("super\n");
-self printf("self\n");
-sub printf("sub\n");
-def printf("def\n");
-return printf("return\n");
-end printf("end\n");
 
-\* printf("*\n");
-\; printf(";\n");
-\. printf(".\n");
-\, printf(",\n");
-\{ printf("{\n");
-\} printf("}\n");
-\[ printf("[\n");
-\] printf("]\n");
-\( printf("(\n");
-\) printf(")\n");
-\+ printf("+\n");
-\- printf("-\n");
-\/ printf("/\n");
-\= printf("=\n");
-\=\= printf("==\n");
-\< printf("<\n");
-\> printf(">\n");
-\>\= printf(">=\n");
-\<\= printf("<=\n");
-\!\= printf("!=\n");
+class printf("class : keyword\n");
+super printf("super : keyword\n");
+self printf("self : keyword\n");
+sub printf("sub : keyword\n");
+def printf("def : keyword\n");
+return printf("return : keyword\n");
+end printf("end : keyword\n");
 
-false printf("false\n");
-true printf("true\n");
-nil printf("nil\n");
+if printf("if : keyword\n");
+else printf("else : keyword\n");
+elsif printf("elsif : keyword\n");
+then printf("then : keyword\n");
+for printf("for : keyword\n");
+while printf("while : keyword\n");
+until printf("until : keyword\n");
+do printf("do : keyword\n");
 
-public printf("public\n");
-protected printf("protected\n");
-private printf("private\n");
+public printf("public : keyword\n");
+protected printf("protected : keyword\n");
+private printf("private : keyword\n");
 
-\|\| printf("||\n");
-\&\& printf("&&\n");
-\! printf("!\n");
+false printf("false : keyword\n");
+true printf("true : keyword\n");
+nil printf("nil : keyword\n");
 
-if printf("if\n");
-else printf("else\n");
-elsif printf("elsif\n");
-then printf("then\n");
-for printf("for\n");
-while printf("while\n");
-until printf("until\n");
-do printf("do\n");
+";" printf(";\n");
+"." printf(".\n");
+"," printf(",\n");
+"{" printf("{\n");
+"}" printf("}\n");
+"[" printf("[\n");
+"]" printf("]\n");
+"(" printf("(\n");
+")" printf(")\n");
+"+" printf("+ : operator\n");
+"-" printf("- : operator\n");
+"*" printf("* : operator\n");
+"/" printf("/ : operator\n");
+"=" printf("= : operator\n");
+"==" printf("== : operator\n");
+"<" printf("< : operator\n");
+">" printf("> : operator\n");
+">=" printf(">= : operator\n");
+"<=" printf("<= : operator\n");
+"!=" printf("!= : operator\n");
+"||" printf("||\n");
+"&&" printf("&&\n");
+"!" printf("!\n");
 
 0b[01]([01_]*[01])? printf("%s : bin constant\n", yytext);
 0x[0-9A-Fa-f]([0-9A-Fa-f_]*[0-9A-Fa-f])? printf("%s : hex constant\n", yytext);
@@ -98,15 +98,16 @@ do printf("do\n");
 [0-9]([0-9_]*[0-9])? printf("%s : dec constant\n", yytext);
 
 {IDENTIFIER} printf("%s : identifier\n", yytext);
-\${IDENTIFIER} printf("%s : $identifier\n", yytext);
-\@{IDENTIFIER} printf("%s : @identifier\n", yytext);
-\@\@{IDENTIFIER} printf("%s : @@identifier\n", yytext);
-{IDENTIFIER}\? printf("%s : identifier?\n", yytext);
-{IDENTIFIER}\! printf("%s : identifier!\n", yytext);
-{IDENTIFIER}\= printf("%s : identifier=\n", yytext);
+"$"{IDENTIFIER} printf("%s : $identifier\n", yytext);
+"@"{IDENTIFIER} printf("%s : @identifier\n", yytext);
+"@@"{IDENTIFIER} printf("%s : @@identifier\n", yytext);
+{IDENTIFIER}"?" printf("%s : identifier?\n", yytext);
+{IDENTIFIER}"!" printf("%s : identifier!\n", yytext);
+{IDENTIFIER}"=" printf("%s : identifier=\n", yytext);
 
-[[:blank:]]+
-[\n\t]+
+[[:blank:]]+ printf("space\n");
+[\n]+ printf("next line\n");
+
 
 \" { strcpy(literal,"");
     BEGIN(STRING);
@@ -136,6 +137,7 @@ do printf("do\n");
     BEGIN(INITIAL);
     }
 . printf("Error, unexpected lexem %s !!!!!!\n", yytext);
+
 %%
 
 void main(int argc, char* argv[])
