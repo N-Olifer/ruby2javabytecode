@@ -16,6 +16,10 @@ a = a - 1
 arr = [1, 2, 3]
 puts arr[1]
 
+a = 43_534
+b = 0x102_A
+c = 03_34
+d = 0b1_0000_1000_1011_1011
 
 $global = 0
 
@@ -26,11 +30,6 @@ else
   puts "Start\r\nrrrr<\t5$global \
 tratata"
 end
-
-a = 43_534
-b = 0x102_A
-c = 03_34
-d = 0b1_0000_1000_1011_1011
 
 =begin asdf
 ef dfdfdf  hhh!!!...fg==en
@@ -114,3 +113,5 @@ object.method1! 54
 
 puts "this is string with exp#{2+3}"
 puts "this is string with exp#{4+5} ok"
+puts "this is string with global#$global ok"
+puts "this is string with global#$global"
