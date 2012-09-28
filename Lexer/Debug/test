@@ -111,3 +111,6 @@ end
 object = TestChild.new(3,4)
 object.childMethod
 object.method1! 54
+
+puts "this is string with exp#{2+3}"
+puts "this is string with exp#{4+5} ok"

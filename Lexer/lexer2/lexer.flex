@@ -11,6 +11,7 @@ IDENTIFIER [A-Za-z_][A-Za-z_0-9]*
 
 %x STRING
 %x STRING2
+%s EXP_IN_STRING
 %x LINE_COMMENT
 %x MULTILINE_COMMENT
 
@@ -68,6 +69,50 @@ false printf("false : keyword\n");
 true printf("true : keyword\n");
 nil printf("nil : keyword\n");
 
+\" { literal[0] = 0;
+    BEGIN(STRING);
+    }
+<STRING>[^\\\n\"#{}]+ strcat(literal,yytext);
+<STRING>\\n strcat(literal,"\n");
+<STRING>\\\\ strcat(literal,"\\");
+<STRING>\\\" strcat(literal,"\"");
+<STRING>\\\' strcat(literal,"\'");
+<STRING>\\r strcat(literal,"\r");
+<STRING>\\s strcat(literal," ");
+<STRING>\\t strcat(literal,"\t");
+<STRING>\\;
+<STRING>"#{" {
+    printf("String in\"\": %s\n", literal);
+	literal[0] = 0;
+    printf("+\n");
+	printf("(\n");
+    BEGIN(EXP_IN_STRING);
+	}
+<EXP_IN_STRING>"}" {
+    printf(").to_s\n");
+    printf("+\n");
+    BEGIN(STRING);
+    }
+<EXP_IN_STRING>"}\"" {
+    printf(").to_s\n");
+    BEGIN(INITIAL); 
+    }
+<STRING>\" { 
+    printf("String in \"\": %s\n", literal);
+    BEGIN(INITIAL);
+    }
+
+\' { literal[0] = 0;
+    BEGIN(STRING2);
+    }
+<STRING2>[^\\\n\']+ strcat(literal,yytext);
+<STRING2>\\n strcat(literal,"\n");
+<STRING2>\\\' strcat(literal,"\'");
+<STRING2>\' {
+    printf("String in \'\': %s\n", literal);
+    BEGIN(INITIAL);
+    }
+
 ";" printf(";\n");
 "." printf(".\n");
 "," printf(",\n");
@@ -108,34 +153,6 @@ nil printf("nil : keyword\n");
 [[:blank:]]+ printf("space\n");
 [\n]+ printf("next line\n");
 
-
-\" { strcpy(literal,"");
-    BEGIN(STRING);
-    }
-<STRING>[^\\\n\"]+ strcat(literal,yytext);
-<STRING>\\n strcat(literal,"\n");
-<STRING>\\\\ strcat(literal,"\\");
-<STRING>\\\" strcat(literal,"\"");
-<STRING>\\\' strcat(literal,"\'");
-<STRING>\\r strcat(literal,"\r");
-<STRING>\\s strcat(literal," ");
-<STRING>\\t strcat(literal,"\t");
-<STRING>\\;
-<STRING>\" { 
-    printf("String in \"\": %s\n", literal);
-    BEGIN(INITIAL);
-    }
-
-\' { strcpy(literal,"");
-    BEGIN(STRING2);
-    }
-<STRING2>[^\\\n\']+ strcat(literal,yytext);
-<STRING2>\\n strcat(literal,"\n");
-<STRING2>\\\' strcat(literal,"\'");
-<STRING2>\' {
-    printf("String in \'\': %s\n", literal);
-    BEGIN(INITIAL);
-    }
 . printf("Error, unexpected lexem %s !!!!!!\n", yytext);
 
 %%
@@ -153,6 +170,5 @@ void main(int argc, char* argv[])
         exit(1);
     }
     yylex();
-    system("pause");
 }
 
