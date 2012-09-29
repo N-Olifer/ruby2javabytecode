@@ -18,6 +18,7 @@ puts arr[1]
 
 a = 43_534
 b = 0x102_A
+bl = 0x102a
 c = 03_34
 d = 0b1_0000_1000_1011_1011
 
@@ -115,3 +116,4 @@ puts "this is string with exp#{2+3}"
 puts "this is string with exp#{4+5} ok"
 puts "this is string with global#$global ok"
 puts "this is string with global#$global"
+puts "this is string with symbolcode \123\123\123"

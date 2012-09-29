@@ -82,6 +82,11 @@ nil printf("nil\t\tkeyword\n");
 <STRING>\\r strcat(literal,"\r");
 <STRING>\\s strcat(literal," ");
 <STRING>\\t strcat(literal,"\t");
+<STRING>\\[0-9]+ {
+	int result;
+	sscanf(yytext+1,"%o",&result);
+	sprintf(literal + strlen(literal),"%c",result);
+    }
 <STRING>\\;
 <STRING>"#" {
     printf("String in\"\"\t\t%s\n", literal);
@@ -173,7 +178,7 @@ nil printf("nil\t\tkeyword\n");
 	    if(yytext[i] != '_')
             temp[len++] = yytext[i];
     temp[len] = '\0';
-	//uppercase
+	_strupr(temp);
 	sscanf(temp, "%X", &result);
     printf("%s => %d\t\thex constant\n", temp, result);
     }
