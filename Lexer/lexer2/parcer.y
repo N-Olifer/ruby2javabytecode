@@ -23,10 +23,23 @@ extern int yylex(void);
 %token ID_FUNC // С ! или ? на конце
 %token ID_VAR_FIELD // С @
 %token EQUAL
+%token NOTEQUAL
+%token OR
+%token AND
+%token NIL
+%token TRUE
+%token FALSE
 
+
+%left OR
+%left AND
+%left EQUAL NOTEQUAL
+%left '<' '>'
 %left '-' '+'
 %left '*' '/'
-%left UMINUS
+%left '!' UMINUS
+%left ']'
+
 %nonassoc ')'
 /*
 %type id
@@ -55,6 +68,7 @@ eln			: /*empty*/
 	
 id			: ID_CAP
 			| ID_LOW
+			| SELF
 			;
 	
 expr		: expr '+' eln expr
@@ -64,6 +78,10 @@ expr		: expr '+' eln expr
 			| expr '<' eln expr
 			| expr '>' eln expr
 			| expr EQUAL eln expr
+			| expr NOTEQUAL eln expr
+			| expr OR eln expr
+			| expr AND eln expr
+			| expr '!'
 			| expr '=' eln expr
 			| '-' expr %prec UMINUS
 			| '(' eln expr eln ')'
@@ -71,7 +89,9 @@ expr		: expr '+' eln expr
 			| STRING
 			| var_id
 			| method_call
-			| SELF
+			| NIL
+			| TRUE
+			| FALSE
 			;
 
 var_id		: var_id_simple
