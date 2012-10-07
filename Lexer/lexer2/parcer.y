@@ -45,6 +45,7 @@ extern int yylex(void);
 %left ']'
 
 %nonassoc ')'
+
 /*
 %type id
 %type eln
@@ -85,10 +86,11 @@ expr		: expr '+' eln expr
 			| expr NOTEQUAL eln expr
 			| expr OR eln expr
 			| expr AND eln expr
-			| expr '!'
+			| '!' expr
 			| expr '=' eln expr
 			| '-' expr %prec UMINUS
 			| '(' eln expr eln ')'
+			| expr '[' eln expr eln ']'
 			| INT
 			| STRING
 			| var_id
@@ -181,9 +183,6 @@ unless_stmt	: UNLESS eln expr eln THEN eln stmt_seq eln END
 			
 class_def	: CLASS eln ID_CAP '<' eln ID_CAP EOL stmt_seq eln END
 			| CLASS eln ID_CAP EOL stmt_seq eln END
-			;
-
-expr		: expr '[' eln expr eln ']'
 			;
 
 array		: '[' eln expr_seq eln ']'
