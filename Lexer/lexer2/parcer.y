@@ -29,7 +29,11 @@ extern int yylex(void);
 %token NIL
 %token TRUE
 %token FALSE
-
+%token IF
+%token ELSIF
+%token ELSE
+%token UNLESS
+%token THEN
 
 %left OR
 %left AND
@@ -56,8 +60,8 @@ extern int yylex(void);
 %type while_stmt
 %type until_stmt
 %type class_def
-%type program*/
-%type array
+%type program
+%type array*/
 %%
 
 program		: stmt_seq;
