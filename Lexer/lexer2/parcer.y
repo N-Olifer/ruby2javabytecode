@@ -7,6 +7,7 @@ extern int yylex(void);
 %}
 
 %token INT
+%token STRING
 %token EOL
 %token DEF
 %token END
@@ -43,99 +44,126 @@ extern int yylex(void);
 %type until_stmt
 %type class_def
 %type program*/
-
+%type array
 %%
 
-program: stmt_seq;
+program		: stmt_seq;
 
-eln: /*empty*/
-	| EOL 
-	;
+eln			: /*empty*/
+			| EOL 
+			;
 	
-id: ID_CAP
-	| ID_LOW
-	;
+id			: ID_CAP
+			| ID_LOW
+			;
 	
-expr: expr '+' eln expr
-	| expr '-' eln expr
-	| expr '*' eln expr
-	| expr '/' eln expr
-	| expr '<' eln expr
-	| expr '>' eln expr
-	| expr EQUAL eln expr
-	| expr '=' eln expr
-	| '-' expr %prec UMINUS
-	| '(' eln expr eln ')'
-	| INT
-	| var_id
-	| method_call
-	| SELF
-	;
+expr		: expr '+' eln expr
+			| expr '-' eln expr
+			| expr '*' eln expr
+			| expr '/' eln expr
+			| expr '<' eln expr
+			| expr '>' eln expr
+			| expr EQUAL eln expr
+			| expr '=' eln expr
+			| '-' expr %prec UMINUS
+			| '(' eln expr eln ')'
+			| INT
+			| STRING
+			| var_id
+			| method_call
+			| SELF
+			;
 
-var_id: var_id_simple
-	| var_id '.' var_id_simple
-	;
+var_id		: var_id_simple
+			| var_id '.' var_id_simple
+			;
 	
 var_id_simple: id
-	| ID_VAR_FIELD
-	;
+			| ID_VAR_FIELD
+			;
 	
-expr_seq: /* empty */
-	| expr_seqE
-	;
+expr_seq	: /* empty */
+			| expr_seqE
+			;
 	
-expr_seqE: expr
-	| expr_seq ',' expr
-	;
+expr_seqE	: expr
+			| expr_seq ',' expr
+			;
 
-stmt: expr
-	| method_def
-	| class_def
-	| while_stmt
-	| until_stmt
-	| RETURN expr_seq
-	;
+stmt		: expr
+			| method_def
+			| class_def
+			| while_stmt
+			| until_stmt
+			| RETURN expr_seq
+			;
 
-stmt_seq: /* empty */
-	| stmt_seqE
-	;
+stmt_seq	: /* empty */
+			| stmt_seqE
+			;
 
-stmt_seqE: stmt
-	| stmt_seq EOL stmt
-	;
+stmt_seqE	: stmt
+			| stmt_seq EOL stmt
+			;
 	
-method_call: method_id '(' expr_seq ')'
-	| id '.' method_call
-	;
+method_call	: method_id '(' expr_seq ')'
+			| id '.' method_call
+			;
 //???????????????????????
 	
-method_def: DEF eln method_id '(' method_def_param_seq eln ')' eln stmt_seq eln END
-	| DEF eln method_id method_def_param_seq EOL stmt_seq eln END
-	;
+method_def	: DEF eln method_id '(' method_def_param_seq eln ')' eln stmt_seq eln END
+			| DEF eln method_id method_def_param_seq EOL stmt_seq eln END
+			;
 
-method_id: id
-	| ID_FUNC
-	| SUPER
-	;
+method_id	: id
+			| ID_FUNC
+			| SUPER
+			;
 
 method_def_param_seq: /* empty */
-	| method_def_param_seqE
-	;
+			| method_def_param_seqE
+			;
 
 method_def_param_seqE: ID_LOW
-	| method_def_param_seq ',' eln ID_LOW
-	;
+			| method_def_param_seq ',' eln ID_LOW
+			;
 
-while_stmt: WHILE eln expr DO eln stmt_seq eln END
-	| WHILE eln '(' eln expr eln ')' EOL stmt_seq eln END
-	;
+while_stmt	: WHILE eln expr DO eln stmt_seq eln END
+			| WHILE eln '(' eln expr eln ')' EOL stmt_seq eln END
+			;
 	
-until_stmt: UNTIL eln expr DO eln stmt_seq eln END
-	| UNTIL eln '(' eln expr eln ')' EOL stmt_seq eln END
-	;
+until_stmt	: UNTIL eln expr DO eln stmt_seq eln END
+			| UNTIL eln '(' eln expr eln ')' EOL stmt_seq eln END
+			;
+			
+elseif_seq	: /* empty */
+			| ELSIF eln expr eln THEN stmt_seq eln elsif_seq
+			| ELSIF eln expr EOL stmt_seq eln elsif_seq
+			;
+			
+if_stmt		: IF eln expr eln THEN eln stmt_seq eln END
+			| IF eln expr EOL eln stmt_seq eln END
+			| IF eln expr eln THEN eln stmt_seq eln elseif_seq eln ELSE eln stmt_seq eln END
+			| IF eln expr EOL stmt_seq eln elseif_seq eln ELSE eln stmt_seq eln END
+			| IF eln expr eln THEN eln stmt_seq eln elseif_seq eln END
+			| IF eln expr EOL stmt_seq eln elseif_seq eln END
+			;
 
-class_def: CLASS eln ID_CAP '<' eln ID_CAP EOL stmt_seq eln END;
-	| CLASS eln ID_CAP EOL stmt_seq eln END;
+unless_stmt	: UNLESS eln expr eln THEN eln stmt_seq eln END
+			| UNLESS eln expr EOL stmt_seq eln END
+			| UNLESS eln expr eln THEN stmt_seq eln ELSE eln stmt_seq eln END
+			| UNLESS eln expr EOL stmt_seq eln ELSE eln stmt_seq eln END
+			;
+			
+class_def	: CLASS eln ID_CAP '<' eln ID_CAP EOL stmt_seq eln END
+			| CLASS eln ID_CAP EOL stmt_seq eln END
+			;
+
+expr		: expr '[' eln expr eln ']'
+			;
+
+array		: '[' eln expr_seq eln ']'
+			;
 
 %%
 
