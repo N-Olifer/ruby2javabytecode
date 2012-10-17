@@ -1,36 +1,206 @@
-Conflict in state 36 between rule 14 and token '-' resolved as reduce.
-Conflict in state 36 between rule 14 and token '+' resolved as reduce.
-Conflict in state 36 between rule 14 and token '*' resolved as reduce.
-Conflict in state 36 between rule 14 and token '/' resolved as reduce.
-Conflict in state 86 between rule 7 and token '-' resolved as reduce.
-Conflict in state 86 between rule 7 and token '+' resolved as reduce.
-Conflict in state 86 between rule 7 and token '*' resolved as shift.
-Conflict in state 86 between rule 7 and token '/' resolved as shift.
-Conflict in state 87 between rule 6 and token '-' resolved as reduce.
-Conflict in state 87 between rule 6 and token '+' resolved as reduce.
-Conflict in state 87 between rule 6 and token '*' resolved as shift.
-Conflict in state 87 between rule 6 and token '/' resolved as shift.
-Conflict in state 88 between rule 8 and token '-' resolved as reduce.
-Conflict in state 88 between rule 8 and token '+' resolved as reduce.
-Conflict in state 88 between rule 8 and token '*' resolved as reduce.
-Conflict in state 88 between rule 8 and token '/' resolved as reduce.
-Conflict in state 89 between rule 9 and token '-' resolved as reduce.
-Conflict in state 89 between rule 9 and token '+' resolved as reduce.
-Conflict in state 89 between rule 9 and token '*' resolved as reduce.
-Conflict in state 89 between rule 9 and token '/' resolved as reduce.
-State 15 contains 1 shift/reduce conflict.
-State 36 contains 4 shift/reduce conflicts.
-State 78 contains 1 shift/reduce conflict.
-State 80 contains 1 shift/reduce conflict.
-State 85 contains 8 shift/reduce conflicts.
-State 86 contains 4 shift/reduce conflicts.
-State 87 contains 4 shift/reduce conflicts.
-State 88 contains 4 shift/reduce conflicts.
-State 89 contains 4 shift/reduce conflicts.
-State 90 contains 8 shift/reduce conflicts.
-State 91 contains 8 shift/reduce conflicts.
-State 92 contains 8 shift/reduce conflicts.
-State 114 contains 1 shift/reduce conflict.
+Useless nonterminals:
+
+   elsif_seq
+   if_stmt
+   unless_stmt
+
+
+Terminals which are not used:
+
+   IF
+   ELSIF
+   ELSE
+   UNLESS
+   THEN
+
+
+Useless rules:
+
+#57    elsif_seq :	;
+#58    elsif_seq :	 ELSIF eln expr eln THEN stmt_seq eln elsif_seq;
+#59    elsif_seq :	 ELSIF eln expr EOL stmt_seq eln elsif_seq;
+#60    if_stmt :	 IF eln expr eln THEN eln stmt_seq eln END;
+#61    if_stmt :	 IF eln expr EOL eln stmt_seq eln END;
+#62    if_stmt :	 IF eln expr eln THEN eln stmt_seq eln elsif_seq eln ELSE eln stmt_seq eln END;
+#63    if_stmt :	 IF eln expr EOL stmt_seq eln elsif_seq eln ELSE eln stmt_seq eln END;
+#64    if_stmt :	 IF eln expr eln THEN eln stmt_seq eln elsif_seq eln END;
+#65    if_stmt :	 IF eln expr EOL stmt_seq eln elsif_seq eln END;
+#66    unless_stmt :	 UNLESS eln expr eln THEN eln stmt_seq eln END;
+#67    unless_stmt :	 UNLESS eln expr EOL stmt_seq eln END;
+#68    unless_stmt :	 UNLESS eln expr eln THEN stmt_seq eln ELSE eln stmt_seq eln END;
+#69    unless_stmt :	 UNLESS eln expr EOL stmt_seq eln ELSE eln stmt_seq eln END;
+
+
+Conflict in state 37 between rule 20 and token EQUAL resolved as reduce.
+Conflict in state 37 between rule 20 and token NOTEQUAL resolved as reduce.
+Conflict in state 37 between rule 20 and token OR resolved as reduce.
+Conflict in state 37 between rule 20 and token AND resolved as reduce.
+Conflict in state 37 between rule 20 and token '=' resolved as reduce.
+Conflict in state 37 between rule 20 and token '<' resolved as reduce.
+Conflict in state 37 between rule 20 and token '>' resolved as reduce.
+Conflict in state 37 between rule 20 and token '-' resolved as reduce.
+Conflict in state 37 between rule 20 and token '+' resolved as reduce.
+Conflict in state 37 between rule 20 and token '*' resolved as reduce.
+Conflict in state 37 between rule 20 and token '/' resolved as reduce.
+Conflict in state 37 between rule 20 and token '.' resolved as shift.
+Conflict in state 37 between rule 20 and token '[' resolved as shift.
+Conflict in state 38 between rule 18 and token EQUAL resolved as reduce.
+Conflict in state 38 between rule 18 and token NOTEQUAL resolved as reduce.
+Conflict in state 38 between rule 18 and token OR resolved as reduce.
+Conflict in state 38 between rule 18 and token AND resolved as reduce.
+Conflict in state 38 between rule 18 and token '=' resolved as reduce.
+Conflict in state 38 between rule 18 and token '<' resolved as reduce.
+Conflict in state 38 between rule 18 and token '>' resolved as reduce.
+Conflict in state 38 between rule 18 and token '-' resolved as reduce.
+Conflict in state 38 between rule 18 and token '+' resolved as reduce.
+Conflict in state 38 between rule 18 and token '*' resolved as reduce.
+Conflict in state 38 between rule 18 and token '/' resolved as reduce.
+Conflict in state 38 between rule 18 and token '.' resolved as shift.
+Conflict in state 38 between rule 18 and token '[' resolved as shift.
+Conflict in state 91 between rule 14 and token EQUAL resolved as reduce.
+Conflict in state 91 between rule 14 and token NOTEQUAL resolved as reduce.
+Conflict in state 91 between rule 14 and token OR resolved as reduce.
+Conflict in state 91 between rule 14 and token AND resolved as reduce.
+Conflict in state 91 between rule 14 and token '=' resolved as shift.
+Conflict in state 91 between rule 14 and token '<' resolved as shift.
+Conflict in state 91 between rule 14 and token '>' resolved as shift.
+Conflict in state 91 between rule 14 and token '-' resolved as shift.
+Conflict in state 91 between rule 14 and token '+' resolved as shift.
+Conflict in state 91 between rule 14 and token '*' resolved as shift.
+Conflict in state 91 between rule 14 and token '/' resolved as shift.
+Conflict in state 91 between rule 14 and token '.' resolved as shift.
+Conflict in state 91 between rule 14 and token '[' resolved as shift.
+Conflict in state 92 between rule 15 and token EQUAL resolved as reduce.
+Conflict in state 92 between rule 15 and token NOTEQUAL resolved as reduce.
+Conflict in state 92 between rule 15 and token OR resolved as reduce.
+Conflict in state 92 between rule 15 and token AND resolved as reduce.
+Conflict in state 92 between rule 15 and token '=' resolved as shift.
+Conflict in state 92 between rule 15 and token '<' resolved as shift.
+Conflict in state 92 between rule 15 and token '>' resolved as shift.
+Conflict in state 92 between rule 15 and token '-' resolved as shift.
+Conflict in state 92 between rule 15 and token '+' resolved as shift.
+Conflict in state 92 between rule 15 and token '*' resolved as shift.
+Conflict in state 92 between rule 15 and token '/' resolved as shift.
+Conflict in state 92 between rule 15 and token '.' resolved as shift.
+Conflict in state 92 between rule 15 and token '[' resolved as shift.
+Conflict in state 93 between rule 16 and token EQUAL resolved as shift.
+Conflict in state 93 between rule 16 and token NOTEQUAL resolved as shift.
+Conflict in state 93 between rule 16 and token OR resolved as reduce.
+Conflict in state 93 between rule 16 and token AND resolved as shift.
+Conflict in state 93 between rule 16 and token '=' resolved as shift.
+Conflict in state 93 between rule 16 and token '<' resolved as shift.
+Conflict in state 93 between rule 16 and token '>' resolved as shift.
+Conflict in state 93 between rule 16 and token '-' resolved as shift.
+Conflict in state 93 between rule 16 and token '+' resolved as shift.
+Conflict in state 93 between rule 16 and token '*' resolved as shift.
+Conflict in state 93 between rule 16 and token '/' resolved as shift.
+Conflict in state 93 between rule 16 and token '.' resolved as shift.
+Conflict in state 93 between rule 16 and token '[' resolved as shift.
+Conflict in state 94 between rule 17 and token EQUAL resolved as shift.
+Conflict in state 94 between rule 17 and token NOTEQUAL resolved as shift.
+Conflict in state 94 between rule 17 and token OR resolved as reduce.
+Conflict in state 94 between rule 17 and token AND resolved as reduce.
+Conflict in state 94 between rule 17 and token '=' resolved as shift.
+Conflict in state 94 between rule 17 and token '<' resolved as shift.
+Conflict in state 94 between rule 17 and token '>' resolved as shift.
+Conflict in state 94 between rule 17 and token '-' resolved as shift.
+Conflict in state 94 between rule 17 and token '+' resolved as shift.
+Conflict in state 94 between rule 17 and token '*' resolved as shift.
+Conflict in state 94 between rule 17 and token '/' resolved as shift.
+Conflict in state 94 between rule 17 and token '.' resolved as shift.
+Conflict in state 94 between rule 17 and token '[' resolved as shift.
+Conflict in state 95 between rule 19 and token EQUAL resolved as reduce.
+Conflict in state 95 between rule 19 and token NOTEQUAL resolved as reduce.
+Conflict in state 95 between rule 19 and token OR resolved as reduce.
+Conflict in state 95 between rule 19 and token AND resolved as reduce.
+Conflict in state 95 between rule 19 and token '=' resolved as shift.
+Conflict in state 95 between rule 19 and token '<' resolved as shift.
+Conflict in state 95 between rule 19 and token '>' resolved as shift.
+Conflict in state 95 between rule 19 and token '-' resolved as shift.
+Conflict in state 95 between rule 19 and token '+' resolved as shift.
+Conflict in state 95 between rule 19 and token '*' resolved as shift.
+Conflict in state 95 between rule 19 and token '/' resolved as shift.
+Conflict in state 95 between rule 19 and token '.' resolved as shift.
+Conflict in state 95 between rule 19 and token '[' resolved as shift.
+Conflict in state 96 between rule 12 and token EQUAL resolved as reduce.
+Conflict in state 96 between rule 12 and token NOTEQUAL resolved as reduce.
+Conflict in state 96 between rule 12 and token OR resolved as reduce.
+Conflict in state 96 between rule 12 and token AND resolved as reduce.
+Conflict in state 96 between rule 12 and token '=' resolved as reduce.
+Conflict in state 96 between rule 12 and token '<' resolved as reduce.
+Conflict in state 96 between rule 12 and token '>' resolved as reduce.
+Conflict in state 96 between rule 12 and token '-' resolved as shift.
+Conflict in state 96 between rule 12 and token '+' resolved as shift.
+Conflict in state 96 between rule 12 and token '*' resolved as shift.
+Conflict in state 96 between rule 12 and token '/' resolved as shift.
+Conflict in state 96 between rule 12 and token '.' resolved as shift.
+Conflict in state 96 between rule 12 and token '[' resolved as shift.
+Conflict in state 97 between rule 13 and token EQUAL resolved as reduce.
+Conflict in state 97 between rule 13 and token NOTEQUAL resolved as reduce.
+Conflict in state 97 between rule 13 and token OR resolved as reduce.
+Conflict in state 97 between rule 13 and token AND resolved as reduce.
+Conflict in state 97 between rule 13 and token '=' resolved as reduce.
+Conflict in state 97 between rule 13 and token '<' resolved as reduce.
+Conflict in state 97 between rule 13 and token '>' resolved as reduce.
+Conflict in state 97 between rule 13 and token '-' resolved as shift.
+Conflict in state 97 between rule 13 and token '+' resolved as shift.
+Conflict in state 97 between rule 13 and token '*' resolved as shift.
+Conflict in state 97 between rule 13 and token '/' resolved as shift.
+Conflict in state 97 between rule 13 and token '.' resolved as shift.
+Conflict in state 97 between rule 13 and token '[' resolved as shift.
+Conflict in state 98 between rule 9 and token EQUAL resolved as reduce.
+Conflict in state 98 between rule 9 and token NOTEQUAL resolved as reduce.
+Conflict in state 98 between rule 9 and token OR resolved as reduce.
+Conflict in state 98 between rule 9 and token AND resolved as reduce.
+Conflict in state 98 between rule 9 and token '=' resolved as reduce.
+Conflict in state 98 between rule 9 and token '<' resolved as reduce.
+Conflict in state 98 between rule 9 and token '>' resolved as reduce.
+Conflict in state 98 between rule 9 and token '-' resolved as reduce.
+Conflict in state 98 between rule 9 and token '+' resolved as reduce.
+Conflict in state 98 between rule 9 and token '*' resolved as shift.
+Conflict in state 98 between rule 9 and token '/' resolved as shift.
+Conflict in state 98 between rule 9 and token '.' resolved as shift.
+Conflict in state 98 between rule 9 and token '[' resolved as shift.
+Conflict in state 99 between rule 8 and token EQUAL resolved as reduce.
+Conflict in state 99 between rule 8 and token NOTEQUAL resolved as reduce.
+Conflict in state 99 between rule 8 and token OR resolved as reduce.
+Conflict in state 99 between rule 8 and token AND resolved as reduce.
+Conflict in state 99 between rule 8 and token '=' resolved as reduce.
+Conflict in state 99 between rule 8 and token '<' resolved as reduce.
+Conflict in state 99 between rule 8 and token '>' resolved as reduce.
+Conflict in state 99 between rule 8 and token '-' resolved as reduce.
+Conflict in state 99 between rule 8 and token '+' resolved as reduce.
+Conflict in state 99 between rule 8 and token '*' resolved as shift.
+Conflict in state 99 between rule 8 and token '/' resolved as shift.
+Conflict in state 99 between rule 8 and token '.' resolved as shift.
+Conflict in state 99 between rule 8 and token '[' resolved as shift.
+Conflict in state 100 between rule 10 and token EQUAL resolved as reduce.
+Conflict in state 100 between rule 10 and token NOTEQUAL resolved as reduce.
+Conflict in state 100 between rule 10 and token OR resolved as reduce.
+Conflict in state 100 between rule 10 and token AND resolved as reduce.
+Conflict in state 100 between rule 10 and token '=' resolved as reduce.
+Conflict in state 100 between rule 10 and token '<' resolved as reduce.
+Conflict in state 100 between rule 10 and token '>' resolved as reduce.
+Conflict in state 100 between rule 10 and token '-' resolved as reduce.
+Conflict in state 100 between rule 10 and token '+' resolved as reduce.
+Conflict in state 100 between rule 10 and token '*' resolved as reduce.
+Conflict in state 100 between rule 10 and token '/' resolved as reduce.
+Conflict in state 100 between rule 10 and token '.' resolved as shift.
+Conflict in state 100 between rule 10 and token '[' resolved as shift.
+Conflict in state 101 between rule 11 and token EQUAL resolved as reduce.
+Conflict in state 101 between rule 11 and token NOTEQUAL resolved as reduce.
+Conflict in state 101 between rule 11 and token OR resolved as reduce.
+Conflict in state 101 between rule 11 and token AND resolved as reduce.
+Conflict in state 101 between rule 11 and token '=' resolved as reduce.
+Conflict in state 101 between rule 11 and token '<' resolved as reduce.
+Conflict in state 101 between rule 11 and token '>' resolved as reduce.
+Conflict in state 101 between rule 11 and token '-' resolved as reduce.
+Conflict in state 101 between rule 11 and token '+' resolved as reduce.
+Conflict in state 101 between rule 11 and token '*' resolved as reduce.
+Conflict in state 101 between rule 11 and token '/' resolved as reduce.
+Conflict in state 101 between rule 11 and token '.' resolved as shift.
+Conflict in state 101 between rule 11 and token '[' resolved as shift.
+State 19 contains 1 shift/reduce conflict.
 
 Grammar
 rule 1    program -> stmt_seq
@@ -38,196 +208,205 @@ rule 2    eln ->		/* empty */
 rule 3    eln -> EOL
 rule 4    id -> ID_CAP
 rule 5    id -> ID_LOW
-rule 6    expr -> expr '+' eln expr
-rule 7    expr -> expr '-' eln expr
-rule 8    expr -> expr '*' eln expr
-rule 9    expr -> expr '/' eln expr
-rule 10   expr -> expr '<' eln expr
-rule 11   expr -> expr '>' eln expr
-rule 12   expr -> expr EQUAL eln expr
-rule 13   expr -> expr '=' eln expr
-rule 14   expr -> '-' expr
-rule 15   expr -> '(' eln expr eln ')'
-rule 16   expr -> INT
-rule 17   expr -> var_id
-rule 18   expr -> method_call
-rule 19   expr -> SELF
-rule 20   var_id -> var_id_simple
-rule 21   var_id -> var_id '.' var_id_simple
-rule 22   var_id_simple -> id
-rule 23   var_id_simple -> ID_VAR_FIELD
-rule 24   expr_seq ->		/* empty */
-rule 25   expr_seq -> expr_seqE
-rule 26   expr_seqE -> expr
-rule 27   expr_seqE -> expr_seq ',' expr
-rule 28   stmt -> expr
-rule 29   stmt -> method_def
-rule 30   stmt -> class_def
-rule 31   stmt -> while_stmt
-rule 32   stmt -> until_stmt
-rule 33   stmt -> RETURN expr_seq
-rule 34   stmt_seq ->		/* empty */
-rule 35   stmt_seq -> stmt_seqE
-rule 36   stmt_seqE -> stmt
-rule 37   stmt_seqE -> stmt_seq EOL stmt
-rule 38   method_call -> method_id '(' expr_seq ')'
-rule 39   method_call -> id '.' method_call
-rule 40   method_def -> DEF eln method_id '(' method_def_param_seq eln ')' eln stmt_seq eln END
-rule 41   method_def -> DEF eln method_id method_def_param_seq EOL stmt_seq eln END
-rule 42   method_id -> id
-rule 43   method_id -> ID_FUNC
-rule 44   method_id -> SUPER
-rule 45   method_def_param_seq ->		/* empty */
-rule 46   method_def_param_seq -> method_def_param_seqE
-rule 47   method_def_param_seqE -> ID_LOW
-rule 48   method_def_param_seqE -> method_def_param_seq ',' eln ID_LOW
-rule 49   while_stmt -> WHILE eln expr DO eln stmt_seq eln END
-rule 50   while_stmt -> WHILE eln '(' eln expr eln ')' EOL stmt_seq eln END
-rule 51   until_stmt -> UNTIL eln expr DO eln stmt_seq eln END
-rule 52   until_stmt -> UNTIL eln '(' eln expr eln ')' EOL stmt_seq eln END
-rule 53   class_def -> CLASS eln ID_CAP '<' eln ID_CAP EOL stmt_seq eln END
-rule 54   class_def -> CLASS eln ID_CAP EOL stmt_seq eln END
+rule 6    id -> ID_FUNC
+rule 7    id -> ID_VAR_FIELD
+rule 8    expr -> expr '+' eln expr
+rule 9    expr -> expr '-' eln expr
+rule 10   expr -> expr '*' eln expr
+rule 11   expr -> expr '/' eln expr
+rule 12   expr -> expr '<' eln expr
+rule 13   expr -> expr '>' eln expr
+rule 14   expr -> expr EQUAL eln expr
+rule 15   expr -> expr NOTEQUAL eln expr
+rule 16   expr -> expr OR eln expr
+rule 17   expr -> expr AND eln expr
+rule 18   expr -> '!' expr
+rule 19   expr -> expr '=' eln expr
+rule 20   expr -> '-' expr
+rule 21   expr -> '(' eln expr eln ')'
+rule 22   expr -> expr '[' eln expr eln ']'
+rule 23   expr -> '[' eln expr_seq eln ']'
+rule 24   expr -> INT
+rule 25   expr -> STRING
+rule 26   expr -> id
+rule 27   expr -> NIL
+rule 28   expr -> TRUE
+rule 29   expr -> FALSE
+rule 30   expr -> expr '.' id
+rule 31   expr -> expr '.' id '(' expr_seq ')'
+rule 32   expr -> SELF
+rule 33   expr -> SUPER
+rule 34   expr_seq ->		/* empty */
+rule 35   expr_seq -> expr_seqE
+rule 36   expr_seqE -> expr
+rule 37   expr_seqE -> expr_seq ',' expr
+rule 38   stmt ->		/* empty */
+rule 39   stmt -> expr
+rule 40   stmt -> method_def
+rule 41   stmt -> class_def
+rule 42   stmt -> while_stmt
+rule 43   stmt -> until_stmt
+rule 44   stmt -> RETURN expr_seq
+rule 45   stmt_seq -> stmt
+rule 46   stmt_seq -> stmt_seq EOL stmt
+rule 47   method_def -> DEF eln id '(' method_def_param_seq eln ')' stmt_seq END
+rule 48   method_def -> DEF eln id method_def_param_seq EOL stmt_seq END
+rule 49   method_def_param_seq ->		/* empty */
+rule 50   method_def_param_seq -> method_def_param_seqE
+rule 51   method_def_param_seqE -> ID_LOW
+rule 52   method_def_param_seqE -> method_def_param_seq ',' eln ID_LOW
+rule 53   while_stmt -> WHILE eln expr DO stmt_seq END
+rule 54   while_stmt -> WHILE eln '(' eln expr eln ')' EOL stmt_seq END
+rule 55   until_stmt -> UNTIL eln expr DO stmt_seq END
+rule 56   until_stmt -> UNTIL eln '(' eln expr eln ')' EOL stmt_seq END
+rule 70   class_def -> CLASS eln ID_CAP '<' eln ID_CAP EOL stmt_seq END
+rule 71   class_def -> CLASS eln ID_CAP EOL stmt_seq END
 
 Terminals, with rules where they appear
 
 $ (-1)
-'(' (40) 15 38 40 50 52
-')' (41) 15 38 40 50 52
-'*' (42) 8
-'+' (43) 6
-',' (44) 27 48
-'-' (45) 7 14
-'.' (46) 21 39
-'/' (47) 9
-'<' (60) 10 53
-'=' (61) 13
-'>' (62) 11
+'!' (33) 18
+'(' (40) 21 31 47 54 56
+')' (41) 21 31 47 54 56
+'*' (42) 10
+'+' (43) 8
+',' (44) 37 52
+'-' (45) 9 20
+'.' (46) 30 31
+'/' (47) 11
+'<' (60) 12 70
+'=' (61) 19
+'>' (62) 13
+'[' (91) 22 23
+']' (93) 22 23
 error (256)
-INT (258) 16
-EOL (259) 3 37 41 50 52 53 54
-DEF (260) 40 41
-END (261) 40 41 49 50 51 52 53 54
-WHILE (262) 49 50
-DO (263) 49 51
-UNTIL (264) 51 52
-CLASS (265) 53 54
-SELF (266) 19
-SUPER (267) 44
-RETURN (268) 33
-ID_CAP (269) 4 53 54
-ID_LOW (270) 5 47 48
-ID_FUNC (271) 43
-ID_VAR_FIELD (272) 23
-EQUAL (273) 12
-UMINUS (274)
+INT (258) 24
+STRING (259) 25
+EOL (260) 3 46 48 54 56 59 61 63 65 67 69 70 71
+DEF (261) 47 48
+END (262) 47 48 53 54 55 56 60 61 66 67 68 69 70 71
+WHILE (263) 53 54
+DO (264) 53 55
+UNTIL (265) 55 56
+CLASS (266) 70 71
+SELF (267) 32
+SUPER (268) 33
+RETURN (269) 44
+ID_CAP (270) 4 70 71
+ID_LOW (271) 5 51 52
+ID_FUNC (272) 6
+ID_VAR_FIELD (273) 7
+EQUAL (274) 14
+NOTEQUAL (275) 15
+OR (276) 16
+AND (277) 17
+NIL (278) 27
+TRUE (279) 28
+FALSE (280) 29
+IF (281) 60 61 62 63 64 65
+ELSIF (282) 58 59
+ELSE (283) 68 69
+UNLESS (284) 66 67 68 69
+THEN (285) 58 60 62 64 66 68
+UMINUS (286)
+UBR (287)
 
 Nonterminals, with rules where they appear
 
-program (31)
+program (47)
     on left: 1
-eln (32)
-    on left: 2 3, on right: 6 7 8 9 10 11 12 13 15 40 41 48 49 50 51
-    52 53 54
-id (33)
-    on left: 4 5, on right: 22 39 42
-expr (34)
-    on left: 6 7 8 9 10 11 12 13 14 15 16 17 18 19,
-    on right: 6 7 8 9 10 11 12 13 14 15 26 27 28 49 50 51 52
-var_id (35)
-    on left: 20 21, on right: 17 21
-var_id_simple (36)
-    on left: 22 23, on right: 20 21
-expr_seq (37)
-    on left: 24 25, on right: 27 33 38
-expr_seqE (38)
-    on left: 26 27, on right: 25
-stmt (39)
-    on left: 28 29 30 31 32 33, on right: 36 37
-stmt_seq (40)
-    on left: 34 35, on right: 1 37 40 41 49 50 51 52 53 54
-stmt_seqE (41)
+eln (48)
+    on left: 2 3, on right: 8 9 10 11 12 13 14 15 16 17 19 21 22 23
+    47 48 52 53 54 55 56 58 59 60 61 62 63 64 65 66 67 68 69 70 71
+id (49)
+    on left: 4 5 6 7, on right: 26 30 31 47 48
+expr (50)
+    on left: 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26
+    27 28 29 30 31 32 33, on right: 8 9 10 11 12 13 14 15 16 17 18
+    19 20 21 22 30 31 36 37 39 53 54 55 56 58 59 60 61 62 63 64 65
+    66 67 68 69
+expr_seq (51)
+    on left: 34 35, on right: 23 31 37 44
+expr_seqE (52)
     on left: 36 37, on right: 35
-method_call (42)
-    on left: 38 39, on right: 18 39
-method_def (43)
-    on left: 40 41, on right: 29
-method_id (44)
-    on left: 42 43 44, on right: 38 40 41
-method_def_param_seq (45)
-    on left: 45 46, on right: 40 41 48
-method_def_param_seqE (46)
-    on left: 47 48, on right: 46
-while_stmt (47)
-    on left: 49 50, on right: 31
-until_stmt (48)
-    on left: 51 52, on right: 32
-class_def (49)
-    on left: 53 54, on right: 30
+stmt (53)
+    on left: 38 39 40 41 42 43 44, on right: 45 46
+stmt_seq (54)
+    on left: 45 46, on right: 1 46 47 48 53 54 55 56 58 59 60 61 62
+    63 64 65 66 67 68 69 70 71
+method_def (55)
+    on left: 47 48, on right: 40
+method_def_param_seq (56)
+    on left: 49 50, on right: 47 48 52
+method_def_param_seqE (57)
+    on left: 51 52, on right: 50
+while_stmt (58)
+    on left: 53 54, on right: 42
+until_stmt (59)
+    on left: 55 56, on right: 43
+class_def (60)
+    on left: 70 71, on right: 41
 
 
 state 0
 
     INT 	shift, and go to state 1
-    DEF 	shift, and go to state 2
-    WHILE	shift, and go to state 3
-    UNTIL	shift, and go to state 4
-    CLASS	shift, and go to state 5
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    RETURN	shift, and go to state 8
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
+    STRING	shift, and go to state 2
+    DEF 	shift, and go to state 3
+    WHILE	shift, and go to state 4
+    UNTIL	shift, and go to state 5
+    CLASS	shift, and go to state 6
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    RETURN	shift, and go to state 9
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    $default	reduce using rule 34 (stmt_seq)
+    $default	reduce using rule 38 (stmt)
 
-    program	go to state 141
-    id  	go to state 15
-    expr	go to state 16
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    stmt	go to state 19
-    stmt_seq	go to state 20
-    stmt_seqE	go to state 21
-    method_call	go to state 22
-    method_def	go to state 23
-    method_id	go to state 24
-    while_stmt	go to state 25
-    until_stmt	go to state 26
-    class_def	go to state 27
+    program	go to state 144
+    id  	go to state 21
+    expr	go to state 22
+    stmt	go to state 23
+    stmt_seq	go to state 24
+    method_def	go to state 25
+    while_stmt	go to state 26
+    until_stmt	go to state 27
+    class_def	go to state 28
 
 
 
 state 1
 
-    expr  ->  INT .   (rule 16)
+    expr  ->  INT .   (rule 24)
 
-    $default	reduce using rule 16 (expr)
+    $default	reduce using rule 24 (expr)
 
 
 
 state 2
 
-    method_def  ->  DEF . eln method_id '(' method_def_param_seq eln ')' eln stmt_seq eln END   (rule 40)
-    method_def  ->  DEF . eln method_id method_def_param_seq EOL stmt_seq eln END   (rule 41)
+    expr  ->  STRING .   (rule 25)
 
-    EOL 	shift, and go to state 28
-
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 29
+    $default	reduce using rule 25 (expr)
 
 
 
 state 3
 
-    while_stmt  ->  WHILE . eln expr DO eln stmt_seq eln END   (rule 49)
-    while_stmt  ->  WHILE . eln '(' eln expr eln ')' EOL stmt_seq eln END   (rule 50)
+    method_def  ->  DEF . eln id '(' method_def_param_seq eln ')' stmt_seq END   (rule 47)
+    method_def  ->  DEF . eln id method_def_param_seq EOL stmt_seq END   (rule 48)
 
-    EOL 	shift, and go to state 28
+    EOL 	shift, and go to state 29
 
     $default	reduce using rule 2 (eln)
 
@@ -237,10 +416,10 @@ state 3
 
 state 4
 
-    until_stmt  ->  UNTIL . eln expr DO eln stmt_seq eln END   (rule 51)
-    until_stmt  ->  UNTIL . eln '(' eln expr eln ')' EOL stmt_seq eln END   (rule 52)
+    while_stmt  ->  WHILE . eln expr DO stmt_seq END   (rule 53)
+    while_stmt  ->  WHILE . eln '(' eln expr eln ')' EOL stmt_seq END   (rule 54)
 
-    EOL 	shift, and go to state 28
+    EOL 	shift, and go to state 29
 
     $default	reduce using rule 2 (eln)
 
@@ -250,10 +429,10 @@ state 4
 
 state 5
 
-    class_def  ->  CLASS . eln ID_CAP '<' eln ID_CAP EOL stmt_seq eln END   (rule 53)
-    class_def  ->  CLASS . eln ID_CAP EOL stmt_seq eln END   (rule 54)
+    until_stmt  ->  UNTIL . eln expr DO stmt_seq END   (rule 55)
+    until_stmt  ->  UNTIL . eln '(' eln expr eln ')' EOL stmt_seq END   (rule 56)
 
-    EOL 	shift, and go to state 28
+    EOL 	shift, and go to state 29
 
     $default	reduce using rule 2 (eln)
 
@@ -263,48 +442,63 @@ state 5
 
 state 6
 
-    expr  ->  SELF .   (rule 19)
+    class_def  ->  CLASS . eln ID_CAP '<' eln ID_CAP EOL stmt_seq END   (rule 70)
+    class_def  ->  CLASS . eln ID_CAP EOL stmt_seq END   (rule 71)
 
-    $default	reduce using rule 19 (expr)
+    EOL 	shift, and go to state 29
+
+    $default	reduce using rule 2 (eln)
+
+    eln 	go to state 33
 
 
 
 state 7
 
-    method_id  ->  SUPER .   (rule 44)
+    expr  ->  SELF .   (rule 32)
 
-    $default	reduce using rule 44 (method_id)
+    $default	reduce using rule 32 (expr)
 
 
 
 state 8
 
-    stmt  ->  RETURN . expr_seq   (rule 33)
+    expr  ->  SUPER .   (rule 33)
 
-    INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
-
-    $default	reduce using rule 24 (expr_seq)
-
-    id  	go to state 15
-    expr	go to state 33
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    expr_seq	go to state 34
-    expr_seqE	go to state 35
-    method_call	go to state 22
-    method_id	go to state 24
+    $default	reduce using rule 33 (expr)
 
 
 
 state 9
+
+    stmt  ->  RETURN . expr_seq   (rule 44)
+
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
+
+    $default	reduce using rule 34 (expr_seq)
+
+    id  	go to state 21
+    expr	go to state 34
+    expr_seq	go to state 35
+    expr_seqE	go to state 36
+
+
+
+state 10
 
     id  ->  ID_CAP .   (rule 4)
 
@@ -312,7 +506,7 @@ state 9
 
 
 
-state 10
+state 11
 
     id  ->  ID_LOW .   (rule 5)
 
@@ -320,191 +514,217 @@ state 10
 
 
 
-state 11
-
-    method_id  ->  ID_FUNC .   (rule 43)
-
-    $default	reduce using rule 43 (method_id)
-
-
-
 state 12
 
-    var_id_simple  ->  ID_VAR_FIELD .   (rule 23)
+    id  ->  ID_FUNC .   (rule 6)
 
-    $default	reduce using rule 23 (var_id_simple)
+    $default	reduce using rule 6 (id)
 
 
 
 state 13
 
-    expr  ->  '-' . expr   (rule 14)
+    id  ->  ID_VAR_FIELD .   (rule 7)
 
-    INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
-
-    id  	go to state 15
-    expr	go to state 36
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    method_call	go to state 22
-    method_id	go to state 24
+    $default	reduce using rule 7 (id)
 
 
 
 state 14
 
-    expr  ->  '(' . eln expr eln ')'   (rule 15)
+    expr  ->  NIL .   (rule 27)
 
-    EOL 	shift, and go to state 28
-
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 37
+    $default	reduce using rule 27 (expr)
 
 
 
 state 15
 
-    var_id_simple  ->  id .   (rule 22)
-    method_call  ->  id . '.' method_call   (rule 39)
-    method_id  ->  id .   (rule 42)
+    expr  ->  TRUE .   (rule 28)
 
-    '.' 	shift, and go to state 38
-
-    '(' 	reduce using rule 42 (method_id)
-    '.' 	[reduce using rule 22 (var_id_simple)]
-    $default	reduce using rule 22 (var_id_simple)
+    $default	reduce using rule 28 (expr)
 
 
 
 state 16
 
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
-    stmt  ->  expr .   (rule 28)
+    expr  ->  FALSE .   (rule 29)
 
-    EQUAL	shift, and go to state 39
-    '-' 	shift, and go to state 40
-    '+' 	shift, and go to state 41
-    '*' 	shift, and go to state 42
-    '/' 	shift, and go to state 43
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
-
-    $default	reduce using rule 28 (stmt)
+    $default	reduce using rule 29 (expr)
 
 
 
 state 17
 
-    expr  ->  var_id .   (rule 17)
-    var_id  ->  var_id . '.' var_id_simple   (rule 21)
+    expr  ->  '-' . expr   (rule 20)
 
-    '.' 	shift, and go to state 47
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    $default	reduce using rule 17 (expr)
+    id  	go to state 21
+    expr	go to state 37
 
 
 
 state 18
 
-    var_id  ->  var_id_simple .   (rule 20)
+    expr  ->  '!' . expr   (rule 18)
 
-    $default	reduce using rule 20 (var_id)
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
+
+    id  	go to state 21
+    expr	go to state 38
 
 
 
 state 19
 
-    stmt_seqE  ->  stmt .   (rule 36)
+    expr  ->  '[' . eln expr_seq eln ']'   (rule 23)
 
-    $default	reduce using rule 36 (stmt_seqE)
+    EOL 	shift, and go to state 29
+
+    EOL 	[reduce using rule 2 (eln)]
+    $default	reduce using rule 2 (eln)
+
+    eln 	go to state 39
 
 
 
 state 20
 
-    program  ->  stmt_seq .   (rule 1)
-    stmt_seqE  ->  stmt_seq . EOL stmt   (rule 37)
+    expr  ->  '(' . eln expr eln ')'   (rule 21)
 
-    EOL 	shift, and go to state 48
+    EOL 	shift, and go to state 29
 
-    $default	reduce using rule 1 (program)
+    $default	reduce using rule 2 (eln)
+
+    eln 	go to state 40
 
 
 
 state 21
 
-    stmt_seq  ->  stmt_seqE .   (rule 35)
+    expr  ->  id .   (rule 26)
 
-    $default	reduce using rule 35 (stmt_seq)
+    $default	reduce using rule 26 (expr)
 
 
 
 state 22
 
-    expr  ->  method_call .   (rule 18)
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+    stmt  ->  expr .   (rule 39)
 
-    $default	reduce using rule 18 (expr)
+    EQUAL	shift, and go to state 41
+    NOTEQUAL	shift, and go to state 42
+    OR  	shift, and go to state 43
+    AND 	shift, and go to state 44
+    '=' 	shift, and go to state 45
+    '<' 	shift, and go to state 46
+    '>' 	shift, and go to state 47
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
+
+    $default	reduce using rule 39 (stmt)
 
 
 
 state 23
 
-    stmt  ->  method_def .   (rule 29)
+    stmt_seq  ->  stmt .   (rule 45)
 
-    $default	reduce using rule 29 (stmt)
+    $default	reduce using rule 45 (stmt_seq)
 
 
 
 state 24
 
-    method_call  ->  method_id . '(' expr_seq ')'   (rule 38)
+    program  ->  stmt_seq .   (rule 1)
+    stmt_seq  ->  stmt_seq . EOL stmt   (rule 46)
 
-    '(' 	shift, and go to state 49
+    EOL 	shift, and go to state 54
+
+    $default	reduce using rule 1 (program)
 
 
 
 state 25
 
-    stmt  ->  while_stmt .   (rule 31)
+    stmt  ->  method_def .   (rule 40)
 
-    $default	reduce using rule 31 (stmt)
+    $default	reduce using rule 40 (stmt)
 
 
 
 state 26
 
-    stmt  ->  until_stmt .   (rule 32)
+    stmt  ->  while_stmt .   (rule 42)
 
-    $default	reduce using rule 32 (stmt)
+    $default	reduce using rule 42 (stmt)
 
 
 
 state 27
 
-    stmt  ->  class_def .   (rule 30)
+    stmt  ->  until_stmt .   (rule 43)
 
-    $default	reduce using rule 30 (stmt)
+    $default	reduce using rule 43 (stmt)
 
 
 
 state 28
+
+    stmt  ->  class_def .   (rule 41)
+
+    $default	reduce using rule 41 (stmt)
+
+
+
+state 29
 
     eln  ->  EOL .   (rule 3)
 
@@ -512,226 +732,245 @@ state 28
 
 
 
-state 29
-
-    method_def  ->  DEF eln . method_id '(' method_def_param_seq eln ')' eln stmt_seq eln END   (rule 40)
-    method_def  ->  DEF eln . method_id method_def_param_seq EOL stmt_seq eln END   (rule 41)
-
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-
-    id  	go to state 50
-    method_id	go to state 51
-
-
-
 state 30
 
-    while_stmt  ->  WHILE eln . expr DO eln stmt_seq eln END   (rule 49)
-    while_stmt  ->  WHILE eln . '(' eln expr eln ')' EOL stmt_seq eln END   (rule 50)
+    method_def  ->  DEF eln . id '(' method_def_param_seq eln ')' stmt_seq END   (rule 47)
+    method_def  ->  DEF eln . id method_def_param_seq EOL stmt_seq END   (rule 48)
 
-    INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 52
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
 
-    id  	go to state 15
-    expr	go to state 53
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    method_call	go to state 22
-    method_id	go to state 24
+    id  	go to state 55
 
 
 
 state 31
 
-    until_stmt  ->  UNTIL eln . expr DO eln stmt_seq eln END   (rule 51)
-    until_stmt  ->  UNTIL eln . '(' eln expr eln ')' EOL stmt_seq eln END   (rule 52)
+    while_stmt  ->  WHILE eln . expr DO stmt_seq END   (rule 53)
+    while_stmt  ->  WHILE eln . '(' eln expr eln ')' EOL stmt_seq END   (rule 54)
 
     INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 54
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 56
 
-    id  	go to state 15
-    expr	go to state 55
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    method_call	go to state 22
-    method_id	go to state 24
+    id  	go to state 21
+    expr	go to state 57
 
 
 
 state 32
 
-    class_def  ->  CLASS eln . ID_CAP '<' eln ID_CAP EOL stmt_seq eln END   (rule 53)
-    class_def  ->  CLASS eln . ID_CAP EOL stmt_seq eln END   (rule 54)
+    until_stmt  ->  UNTIL eln . expr DO stmt_seq END   (rule 55)
+    until_stmt  ->  UNTIL eln . '(' eln expr eln ')' EOL stmt_seq END   (rule 56)
 
-    ID_CAP	shift, and go to state 56
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 58
+
+    id  	go to state 21
+    expr	go to state 59
 
 
 
 state 33
 
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
-    expr_seqE  ->  expr .   (rule 26)
+    class_def  ->  CLASS eln . ID_CAP '<' eln ID_CAP EOL stmt_seq END   (rule 70)
+    class_def  ->  CLASS eln . ID_CAP EOL stmt_seq END   (rule 71)
 
-    EQUAL	shift, and go to state 39
-    '-' 	shift, and go to state 40
-    '+' 	shift, and go to state 41
-    '*' 	shift, and go to state 42
-    '/' 	shift, and go to state 43
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
-
-    $default	reduce using rule 26 (expr_seqE)
+    ID_CAP	shift, and go to state 60
 
 
 
 state 34
 
-    expr_seqE  ->  expr_seq . ',' expr   (rule 27)
-    stmt  ->  RETURN expr_seq .   (rule 33)
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+    expr_seqE  ->  expr .   (rule 36)
 
-    ',' 	shift, and go to state 57
+    EQUAL	shift, and go to state 41
+    NOTEQUAL	shift, and go to state 42
+    OR  	shift, and go to state 43
+    AND 	shift, and go to state 44
+    '=' 	shift, and go to state 45
+    '<' 	shift, and go to state 46
+    '>' 	shift, and go to state 47
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
 
-    $default	reduce using rule 33 (stmt)
+    $default	reduce using rule 36 (expr_seqE)
 
 
 
 state 35
 
-    expr_seq  ->  expr_seqE .   (rule 25)
+    expr_seqE  ->  expr_seq . ',' expr   (rule 37)
+    stmt  ->  RETURN expr_seq .   (rule 44)
 
-    $default	reduce using rule 25 (expr_seq)
+    ',' 	shift, and go to state 61
+
+    $default	reduce using rule 44 (stmt)
 
 
 
 state 36
 
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
-    expr  ->  '-' expr .   (rule 14)
+    expr_seq  ->  expr_seqE .   (rule 35)
 
-    EQUAL	shift, and go to state 39
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
-
-    EQUAL	[reduce using rule 14 (expr)]
-    '<' 	[reduce using rule 14 (expr)]
-    '>' 	[reduce using rule 14 (expr)]
-    '=' 	[reduce using rule 14 (expr)]
-    $default	reduce using rule 14 (expr)
+    $default	reduce using rule 35 (expr_seq)
 
 
 
 state 37
 
-    expr  ->  '(' eln . expr eln ')'   (rule 15)
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  '-' expr .   (rule 20)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
 
-    INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
 
-    id  	go to state 15
-    expr	go to state 58
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    method_call	go to state 22
-    method_id	go to state 24
+    $default	reduce using rule 20 (expr)
 
 
 
 state 38
 
-    method_call  ->  id '.' . method_call   (rule 39)
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  '!' expr .   (rule 18)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
 
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
 
-    id  	go to state 59
-    method_call	go to state 60
-    method_id	go to state 24
+    $default	reduce using rule 18 (expr)
 
 
 
 state 39
 
-    expr  ->  expr EQUAL . eln expr   (rule 12)
+    expr  ->  '[' eln . expr_seq eln ']'   (rule 23)
 
-    EOL 	shift, and go to state 28
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    $default	reduce using rule 2 (eln)
+    $default	reduce using rule 34 (expr_seq)
 
-    eln 	go to state 61
+    id  	go to state 21
+    expr	go to state 34
+    expr_seq	go to state 62
+    expr_seqE	go to state 36
 
 
 
 state 40
 
-    expr  ->  expr '-' . eln expr   (rule 7)
+    expr  ->  '(' eln . expr eln ')'   (rule 21)
 
-    EOL 	shift, and go to state 28
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 62
+    id  	go to state 21
+    expr	go to state 63
 
 
 
 state 41
 
-    expr  ->  expr '+' . eln expr   (rule 6)
+    expr  ->  expr EQUAL . eln expr   (rule 14)
 
-    EOL 	shift, and go to state 28
-
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 63
-
-
-
-state 42
-
-    expr  ->  expr '*' . eln expr   (rule 8)
-
-    EOL 	shift, and go to state 28
+    EOL 	shift, and go to state 29
 
     $default	reduce using rule 2 (eln)
 
@@ -739,11 +978,11 @@ state 42
 
 
 
-state 43
+state 42
 
-    expr  ->  expr '/' . eln expr   (rule 9)
+    expr  ->  expr NOTEQUAL . eln expr   (rule 15)
 
-    EOL 	shift, and go to state 28
+    EOL 	shift, and go to state 29
 
     $default	reduce using rule 2 (eln)
 
@@ -751,11 +990,11 @@ state 43
 
 
 
-state 44
+state 43
 
-    expr  ->  expr '<' . eln expr   (rule 10)
+    expr  ->  expr OR . eln expr   (rule 16)
 
-    EOL 	shift, and go to state 28
+    EOL 	shift, and go to state 29
 
     $default	reduce using rule 2 (eln)
 
@@ -763,11 +1002,11 @@ state 44
 
 
 
-state 45
+state 44
 
-    expr  ->  expr '>' . eln expr   (rule 11)
+    expr  ->  expr AND . eln expr   (rule 17)
 
-    EOL 	shift, and go to state 28
+    EOL 	shift, and go to state 29
 
     $default	reduce using rule 2 (eln)
 
@@ -775,11 +1014,11 @@ state 45
 
 
 
-state 46
+state 45
 
-    expr  ->  expr '=' . eln expr   (rule 13)
+    expr  ->  expr '=' . eln expr   (rule 19)
 
-    EOL 	shift, and go to state 28
+    EOL 	shift, and go to state 29
 
     $default	reduce using rule 2 (eln)
 
@@ -787,230 +1026,210 @@ state 46
 
 
 
+state 46
+
+    expr  ->  expr '<' . eln expr   (rule 12)
+
+    EOL 	shift, and go to state 29
+
+    $default	reduce using rule 2 (eln)
+
+    eln 	go to state 69
+
+
+
 state 47
 
-    var_id  ->  var_id '.' . var_id_simple   (rule 21)
+    expr  ->  expr '>' . eln expr   (rule 13)
 
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_VAR_FIELD	shift, and go to state 12
+    EOL 	shift, and go to state 29
 
-    id  	go to state 69
-    var_id_simple	go to state 70
+    $default	reduce using rule 2 (eln)
+
+    eln 	go to state 70
 
 
 
 state 48
 
-    stmt_seqE  ->  stmt_seq EOL . stmt   (rule 37)
+    expr  ->  expr '-' . eln expr   (rule 9)
 
-    INT 	shift, and go to state 1
-    DEF 	shift, and go to state 2
-    WHILE	shift, and go to state 3
-    UNTIL	shift, and go to state 4
-    CLASS	shift, and go to state 5
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    RETURN	shift, and go to state 8
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
+    EOL 	shift, and go to state 29
 
-    id  	go to state 15
-    expr	go to state 16
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    stmt	go to state 71
-    method_call	go to state 22
-    method_def	go to state 23
-    method_id	go to state 24
-    while_stmt	go to state 25
-    until_stmt	go to state 26
-    class_def	go to state 27
+    $default	reduce using rule 2 (eln)
+
+    eln 	go to state 71
 
 
 
 state 49
 
-    method_call  ->  method_id '(' . expr_seq ')'   (rule 38)
+    expr  ->  expr '+' . eln expr   (rule 8)
 
-    INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
+    EOL 	shift, and go to state 29
 
-    $default	reduce using rule 24 (expr_seq)
+    $default	reduce using rule 2 (eln)
 
-    id  	go to state 15
-    expr	go to state 33
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    expr_seq	go to state 72
-    expr_seqE	go to state 35
-    method_call	go to state 22
-    method_id	go to state 24
+    eln 	go to state 72
 
 
 
 state 50
 
-    method_id  ->  id .   (rule 42)
+    expr  ->  expr '*' . eln expr   (rule 10)
 
-    $default	reduce using rule 42 (method_id)
+    EOL 	shift, and go to state 29
+
+    $default	reduce using rule 2 (eln)
+
+    eln 	go to state 73
 
 
 
 state 51
 
-    method_def  ->  DEF eln method_id . '(' method_def_param_seq eln ')' eln stmt_seq eln END   (rule 40)
-    method_def  ->  DEF eln method_id . method_def_param_seq EOL stmt_seq eln END   (rule 41)
+    expr  ->  expr '/' . eln expr   (rule 11)
 
-    ID_LOW	shift, and go to state 73
-    '(' 	shift, and go to state 74
+    EOL 	shift, and go to state 29
 
-    $default	reduce using rule 45 (method_def_param_seq)
+    $default	reduce using rule 2 (eln)
 
-    method_def_param_seq	go to state 75
-    method_def_param_seqE	go to state 76
+    eln 	go to state 74
 
 
 
 state 52
 
-    expr  ->  '(' . eln expr eln ')'   (rule 15)
-    while_stmt  ->  WHILE eln '(' . eln expr eln ')' EOL stmt_seq eln END   (rule 50)
+    expr  ->  expr '.' . id   (rule 30)
+    expr  ->  expr '.' . id '(' expr_seq ')'   (rule 31)
 
-    EOL 	shift, and go to state 28
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
 
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 77
+    id  	go to state 75
 
 
 
 state 53
 
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
-    while_stmt  ->  WHILE eln expr . DO eln stmt_seq eln END   (rule 49)
+    expr  ->  expr '[' . eln expr eln ']'   (rule 22)
 
-    DO  	shift, and go to state 78
-    EQUAL	shift, and go to state 39
-    '-' 	shift, and go to state 40
-    '+' 	shift, and go to state 41
-    '*' 	shift, and go to state 42
-    '/' 	shift, and go to state 43
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
+    EOL 	shift, and go to state 29
+
+    $default	reduce using rule 2 (eln)
+
+    eln 	go to state 76
 
 
 
 state 54
 
-    expr  ->  '(' . eln expr eln ')'   (rule 15)
-    until_stmt  ->  UNTIL eln '(' . eln expr eln ')' EOL stmt_seq eln END   (rule 52)
+    stmt_seq  ->  stmt_seq EOL . stmt   (rule 46)
 
-    EOL 	shift, and go to state 28
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    DEF 	shift, and go to state 3
+    WHILE	shift, and go to state 4
+    UNTIL	shift, and go to state 5
+    CLASS	shift, and go to state 6
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    RETURN	shift, and go to state 9
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    $default	reduce using rule 2 (eln)
+    $default	reduce using rule 38 (stmt)
 
-    eln 	go to state 79
+    id  	go to state 21
+    expr	go to state 22
+    stmt	go to state 77
+    method_def	go to state 25
+    while_stmt	go to state 26
+    until_stmt	go to state 27
+    class_def	go to state 28
 
 
 
 state 55
 
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
-    until_stmt  ->  UNTIL eln expr . DO eln stmt_seq eln END   (rule 51)
+    method_def  ->  DEF eln id . '(' method_def_param_seq eln ')' stmt_seq END   (rule 47)
+    method_def  ->  DEF eln id . method_def_param_seq EOL stmt_seq END   (rule 48)
 
-    DO  	shift, and go to state 80
-    EQUAL	shift, and go to state 39
-    '-' 	shift, and go to state 40
-    '+' 	shift, and go to state 41
-    '*' 	shift, and go to state 42
-    '/' 	shift, and go to state 43
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
+    ID_LOW	shift, and go to state 78
+    '(' 	shift, and go to state 79
+
+    $default	reduce using rule 49 (method_def_param_seq)
+
+    method_def_param_seq	go to state 80
+    method_def_param_seqE	go to state 81
 
 
 
 state 56
 
-    class_def  ->  CLASS eln ID_CAP . '<' eln ID_CAP EOL stmt_seq eln END   (rule 53)
-    class_def  ->  CLASS eln ID_CAP . EOL stmt_seq eln END   (rule 54)
+    expr  ->  '(' . eln expr eln ')'   (rule 21)
+    while_stmt  ->  WHILE eln '(' . eln expr eln ')' EOL stmt_seq END   (rule 54)
 
-    EOL 	shift, and go to state 81
-    '<' 	shift, and go to state 82
+    EOL 	shift, and go to state 29
+
+    $default	reduce using rule 2 (eln)
+
+    eln 	go to state 82
 
 
 
 state 57
 
-    expr_seqE  ->  expr_seq ',' . expr   (rule 27)
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+    while_stmt  ->  WHILE eln expr . DO stmt_seq END   (rule 53)
 
-    INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
-
-    id  	go to state 15
-    expr	go to state 83
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    method_call	go to state 22
-    method_id	go to state 24
+    DO  	shift, and go to state 83
+    EQUAL	shift, and go to state 41
+    NOTEQUAL	shift, and go to state 42
+    OR  	shift, and go to state 43
+    AND 	shift, and go to state 44
+    '=' 	shift, and go to state 45
+    '<' 	shift, and go to state 46
+    '>' 	shift, and go to state 47
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
 
 
 
 state 58
 
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
-    expr  ->  '(' eln expr . eln ')'   (rule 15)
+    expr  ->  '(' . eln expr eln ')'   (rule 21)
+    until_stmt  ->  UNTIL eln '(' . eln expr eln ')' EOL stmt_seq END   (rule 56)
 
-    EOL 	shift, and go to state 28
-    EQUAL	shift, and go to state 39
-    '-' 	shift, and go to state 40
-    '+' 	shift, and go to state 41
-    '*' 	shift, and go to state 42
-    '/' 	shift, and go to state 43
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
+    EOL 	shift, and go to state 29
 
     $default	reduce using rule 2 (eln)
 
@@ -1020,881 +1239,656 @@ state 58
 
 state 59
 
-    method_call  ->  id . '.' method_call   (rule 39)
-    method_id  ->  id .   (rule 42)
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+    until_stmt  ->  UNTIL eln expr . DO stmt_seq END   (rule 55)
 
-    '.' 	shift, and go to state 38
-
-    $default	reduce using rule 42 (method_id)
+    DO  	shift, and go to state 85
+    EQUAL	shift, and go to state 41
+    NOTEQUAL	shift, and go to state 42
+    OR  	shift, and go to state 43
+    AND 	shift, and go to state 44
+    '=' 	shift, and go to state 45
+    '<' 	shift, and go to state 46
+    '>' 	shift, and go to state 47
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
 
 
 
 state 60
 
-    method_call  ->  id '.' method_call .   (rule 39)
+    class_def  ->  CLASS eln ID_CAP . '<' eln ID_CAP EOL stmt_seq END   (rule 70)
+    class_def  ->  CLASS eln ID_CAP . EOL stmt_seq END   (rule 71)
 
-    $default	reduce using rule 39 (method_call)
+    EOL 	shift, and go to state 86
+    '<' 	shift, and go to state 87
 
 
 
 state 61
 
-    expr  ->  expr EQUAL eln . expr   (rule 12)
+    expr_seqE  ->  expr_seq ',' . expr   (rule 37)
 
     INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    id  	go to state 15
-    expr	go to state 85
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    method_call	go to state 22
-    method_id	go to state 24
+    id  	go to state 21
+    expr	go to state 88
 
 
 
 state 62
 
-    expr  ->  expr '-' eln . expr   (rule 7)
+    expr  ->  '[' eln expr_seq . eln ']'   (rule 23)
+    expr_seqE  ->  expr_seq . ',' expr   (rule 37)
 
-    INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
+    EOL 	shift, and go to state 29
+    ',' 	shift, and go to state 61
 
-    id  	go to state 15
-    expr	go to state 86
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    method_call	go to state 22
-    method_id	go to state 24
+    $default	reduce using rule 2 (eln)
+
+    eln 	go to state 89
 
 
 
 state 63
 
-    expr  ->  expr '+' eln . expr   (rule 6)
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  '(' eln expr . eln ')'   (rule 21)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
 
-    INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
+    EOL 	shift, and go to state 29
+    EQUAL	shift, and go to state 41
+    NOTEQUAL	shift, and go to state 42
+    OR  	shift, and go to state 43
+    AND 	shift, and go to state 44
+    '=' 	shift, and go to state 45
+    '<' 	shift, and go to state 46
+    '>' 	shift, and go to state 47
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
 
-    id  	go to state 15
-    expr	go to state 87
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    method_call	go to state 22
-    method_id	go to state 24
+    $default	reduce using rule 2 (eln)
+
+    eln 	go to state 90
 
 
 
 state 64
 
-    expr  ->  expr '*' eln . expr   (rule 8)
+    expr  ->  expr EQUAL eln . expr   (rule 14)
 
     INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    id  	go to state 15
-    expr	go to state 88
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    method_call	go to state 22
-    method_id	go to state 24
+    id  	go to state 21
+    expr	go to state 91
 
 
 
 state 65
 
-    expr  ->  expr '/' eln . expr   (rule 9)
+    expr  ->  expr NOTEQUAL eln . expr   (rule 15)
 
     INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    id  	go to state 15
-    expr	go to state 89
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    method_call	go to state 22
-    method_id	go to state 24
+    id  	go to state 21
+    expr	go to state 92
 
 
 
 state 66
 
-    expr  ->  expr '<' eln . expr   (rule 10)
+    expr  ->  expr OR eln . expr   (rule 16)
 
     INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    id  	go to state 15
-    expr	go to state 90
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    method_call	go to state 22
-    method_id	go to state 24
+    id  	go to state 21
+    expr	go to state 93
 
 
 
 state 67
 
-    expr  ->  expr '>' eln . expr   (rule 11)
+    expr  ->  expr AND eln . expr   (rule 17)
 
     INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    id  	go to state 15
-    expr	go to state 91
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    method_call	go to state 22
-    method_id	go to state 24
+    id  	go to state 21
+    expr	go to state 94
 
 
 
 state 68
 
-    expr  ->  expr '=' eln . expr   (rule 13)
+    expr  ->  expr '=' eln . expr   (rule 19)
 
     INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    id  	go to state 15
-    expr	go to state 92
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    method_call	go to state 22
-    method_id	go to state 24
+    id  	go to state 21
+    expr	go to state 95
 
 
 
 state 69
 
-    var_id_simple  ->  id .   (rule 22)
+    expr  ->  expr '<' eln . expr   (rule 12)
 
-    $default	reduce using rule 22 (var_id_simple)
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
+
+    id  	go to state 21
+    expr	go to state 96
 
 
 
 state 70
 
-    var_id  ->  var_id '.' var_id_simple .   (rule 21)
+    expr  ->  expr '>' eln . expr   (rule 13)
 
-    $default	reduce using rule 21 (var_id)
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
+
+    id  	go to state 21
+    expr	go to state 97
 
 
 
 state 71
 
-    stmt_seqE  ->  stmt_seq EOL stmt .   (rule 37)
+    expr  ->  expr '-' eln . expr   (rule 9)
 
-    $default	reduce using rule 37 (stmt_seqE)
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
+
+    id  	go to state 21
+    expr	go to state 98
 
 
 
 state 72
 
-    expr_seqE  ->  expr_seq . ',' expr   (rule 27)
-    method_call  ->  method_id '(' expr_seq . ')'   (rule 38)
+    expr  ->  expr '+' eln . expr   (rule 8)
 
-    ')' 	shift, and go to state 93
-    ',' 	shift, and go to state 57
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
+
+    id  	go to state 21
+    expr	go to state 99
 
 
 
 state 73
 
-    method_def_param_seqE  ->  ID_LOW .   (rule 47)
+    expr  ->  expr '*' eln . expr   (rule 10)
 
-    $default	reduce using rule 47 (method_def_param_seqE)
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
+
+    id  	go to state 21
+    expr	go to state 100
 
 
 
 state 74
 
-    method_def  ->  DEF eln method_id '(' . method_def_param_seq eln ')' eln stmt_seq eln END   (rule 40)
+    expr  ->  expr '/' eln . expr   (rule 11)
 
-    ID_LOW	shift, and go to state 73
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    $default	reduce using rule 45 (method_def_param_seq)
-
-    method_def_param_seq	go to state 94
-    method_def_param_seqE	go to state 76
+    id  	go to state 21
+    expr	go to state 101
 
 
 
 state 75
 
-    method_def  ->  DEF eln method_id method_def_param_seq . EOL stmt_seq eln END   (rule 41)
-    method_def_param_seqE  ->  method_def_param_seq . ',' eln ID_LOW   (rule 48)
+    expr  ->  expr '.' id .   (rule 30)
+    expr  ->  expr '.' id . '(' expr_seq ')'   (rule 31)
 
-    EOL 	shift, and go to state 95
-    ',' 	shift, and go to state 96
+    '(' 	shift, and go to state 102
+
+    $default	reduce using rule 30 (expr)
 
 
 
 state 76
 
-    method_def_param_seq  ->  method_def_param_seqE .   (rule 46)
+    expr  ->  expr '[' eln . expr eln ']'   (rule 22)
 
-    $default	reduce using rule 46 (method_def_param_seq)
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
+
+    id  	go to state 21
+    expr	go to state 103
 
 
 
 state 77
 
-    expr  ->  '(' eln . expr eln ')'   (rule 15)
-    while_stmt  ->  WHILE eln '(' eln . expr eln ')' EOL stmt_seq eln END   (rule 50)
+    stmt_seq  ->  stmt_seq EOL stmt .   (rule 46)
 
-    INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
-
-    id  	go to state 15
-    expr	go to state 97
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    method_call	go to state 22
-    method_id	go to state 24
+    $default	reduce using rule 46 (stmt_seq)
 
 
 
 state 78
 
-    while_stmt  ->  WHILE eln expr DO . eln stmt_seq eln END   (rule 49)
+    method_def_param_seqE  ->  ID_LOW .   (rule 51)
 
-    EOL 	shift, and go to state 28
-
-    EOL 	[reduce using rule 2 (eln)]
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 98
+    $default	reduce using rule 51 (method_def_param_seqE)
 
 
 
 state 79
 
-    expr  ->  '(' eln . expr eln ')'   (rule 15)
-    until_stmt  ->  UNTIL eln '(' eln . expr eln ')' EOL stmt_seq eln END   (rule 52)
+    method_def  ->  DEF eln id '(' . method_def_param_seq eln ')' stmt_seq END   (rule 47)
 
-    INT 	shift, and go to state 1
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
+    ID_LOW	shift, and go to state 78
 
-    id  	go to state 15
-    expr	go to state 99
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    method_call	go to state 22
-    method_id	go to state 24
+    $default	reduce using rule 49 (method_def_param_seq)
+
+    method_def_param_seq	go to state 104
+    method_def_param_seqE	go to state 81
 
 
 
 state 80
 
-    until_stmt  ->  UNTIL eln expr DO . eln stmt_seq eln END   (rule 51)
+    method_def  ->  DEF eln id method_def_param_seq . EOL stmt_seq END   (rule 48)
+    method_def_param_seqE  ->  method_def_param_seq . ',' eln ID_LOW   (rule 52)
 
-    EOL 	shift, and go to state 28
-
-    EOL 	[reduce using rule 2 (eln)]
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 100
+    EOL 	shift, and go to state 105
+    ',' 	shift, and go to state 106
 
 
 
 state 81
 
-    class_def  ->  CLASS eln ID_CAP EOL . stmt_seq eln END   (rule 54)
+    method_def_param_seq  ->  method_def_param_seqE .   (rule 50)
 
-    INT 	shift, and go to state 1
-    DEF 	shift, and go to state 2
-    WHILE	shift, and go to state 3
-    UNTIL	shift, and go to state 4
-    CLASS	shift, and go to state 5
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    RETURN	shift, and go to state 8
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
-
-    $default	reduce using rule 34 (stmt_seq)
-
-    id  	go to state 15
-    expr	go to state 16
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    stmt	go to state 19
-    stmt_seq	go to state 101
-    stmt_seqE	go to state 21
-    method_call	go to state 22
-    method_def	go to state 23
-    method_id	go to state 24
-    while_stmt	go to state 25
-    until_stmt	go to state 26
-    class_def	go to state 27
+    $default	reduce using rule 50 (method_def_param_seq)
 
 
 
 state 82
 
-    class_def  ->  CLASS eln ID_CAP '<' . eln ID_CAP EOL stmt_seq eln END   (rule 53)
+    expr  ->  '(' eln . expr eln ')'   (rule 21)
+    while_stmt  ->  WHILE eln '(' eln . expr eln ')' EOL stmt_seq END   (rule 54)
 
-    EOL 	shift, and go to state 28
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 102
+    id  	go to state 21
+    expr	go to state 107
 
 
 
 state 83
 
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
-    expr_seqE  ->  expr_seq ',' expr .   (rule 27)
+    while_stmt  ->  WHILE eln expr DO . stmt_seq END   (rule 53)
 
-    EQUAL	shift, and go to state 39
-    '-' 	shift, and go to state 40
-    '+' 	shift, and go to state 41
-    '*' 	shift, and go to state 42
-    '/' 	shift, and go to state 43
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    DEF 	shift, and go to state 3
+    WHILE	shift, and go to state 4
+    UNTIL	shift, and go to state 5
+    CLASS	shift, and go to state 6
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    RETURN	shift, and go to state 9
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    $default	reduce using rule 27 (expr_seqE)
+    $default	reduce using rule 38 (stmt)
+
+    id  	go to state 21
+    expr	go to state 22
+    stmt	go to state 23
+    stmt_seq	go to state 108
+    method_def	go to state 25
+    while_stmt	go to state 26
+    until_stmt	go to state 27
+    class_def	go to state 28
 
 
 
 state 84
 
-    expr  ->  '(' eln expr eln . ')'   (rule 15)
+    expr  ->  '(' eln . expr eln ')'   (rule 21)
+    until_stmt  ->  UNTIL eln '(' eln . expr eln ')' EOL stmt_seq END   (rule 56)
 
-    ')' 	shift, and go to state 103
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
+
+    id  	go to state 21
+    expr	go to state 109
 
 
 
 state 85
 
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr EQUAL eln expr .   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
+    until_stmt  ->  UNTIL eln expr DO . stmt_seq END   (rule 55)
 
-    EQUAL	shift, and go to state 39
-    '-' 	shift, and go to state 40
-    '+' 	shift, and go to state 41
-    '*' 	shift, and go to state 42
-    '/' 	shift, and go to state 43
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    DEF 	shift, and go to state 3
+    WHILE	shift, and go to state 4
+    UNTIL	shift, and go to state 5
+    CLASS	shift, and go to state 6
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    RETURN	shift, and go to state 9
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    EQUAL	[reduce using rule 12 (expr)]
-    '-' 	[reduce using rule 12 (expr)]
-    '+' 	[reduce using rule 12 (expr)]
-    '*' 	[reduce using rule 12 (expr)]
-    '/' 	[reduce using rule 12 (expr)]
-    '<' 	[reduce using rule 12 (expr)]
-    '>' 	[reduce using rule 12 (expr)]
-    '=' 	[reduce using rule 12 (expr)]
-    $default	reduce using rule 12 (expr)
+    $default	reduce using rule 38 (stmt)
+
+    id  	go to state 21
+    expr	go to state 22
+    stmt	go to state 23
+    stmt_seq	go to state 110
+    method_def	go to state 25
+    while_stmt	go to state 26
+    until_stmt	go to state 27
+    class_def	go to state 28
 
 
 
 state 86
 
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr '-' eln expr .   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
+    class_def  ->  CLASS eln ID_CAP EOL . stmt_seq END   (rule 71)
 
-    EQUAL	shift, and go to state 39
-    '*' 	shift, and go to state 42
-    '/' 	shift, and go to state 43
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    DEF 	shift, and go to state 3
+    WHILE	shift, and go to state 4
+    UNTIL	shift, and go to state 5
+    CLASS	shift, and go to state 6
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    RETURN	shift, and go to state 9
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
 
-    EQUAL	[reduce using rule 7 (expr)]
-    '<' 	[reduce using rule 7 (expr)]
-    '>' 	[reduce using rule 7 (expr)]
-    '=' 	[reduce using rule 7 (expr)]
-    $default	reduce using rule 7 (expr)
+    $default	reduce using rule 38 (stmt)
+
+    id  	go to state 21
+    expr	go to state 22
+    stmt	go to state 23
+    stmt_seq	go to state 111
+    method_def	go to state 25
+    while_stmt	go to state 26
+    until_stmt	go to state 27
+    class_def	go to state 28
 
 
 
 state 87
 
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr '+' eln expr .   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
+    class_def  ->  CLASS eln ID_CAP '<' . eln ID_CAP EOL stmt_seq END   (rule 70)
 
-    EQUAL	shift, and go to state 39
-    '*' 	shift, and go to state 42
-    '/' 	shift, and go to state 43
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
-
-    EQUAL	[reduce using rule 6 (expr)]
-    '<' 	[reduce using rule 6 (expr)]
-    '>' 	[reduce using rule 6 (expr)]
-    '=' 	[reduce using rule 6 (expr)]
-    $default	reduce using rule 6 (expr)
-
-
-
-state 88
-
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr '*' eln expr .   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
-
-    EQUAL	shift, and go to state 39
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
-
-    EQUAL	[reduce using rule 8 (expr)]
-    '<' 	[reduce using rule 8 (expr)]
-    '>' 	[reduce using rule 8 (expr)]
-    '=' 	[reduce using rule 8 (expr)]
-    $default	reduce using rule 8 (expr)
-
-
-
-state 89
-
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr '/' eln expr .   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
-
-    EQUAL	shift, and go to state 39
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
-
-    EQUAL	[reduce using rule 9 (expr)]
-    '<' 	[reduce using rule 9 (expr)]
-    '>' 	[reduce using rule 9 (expr)]
-    '=' 	[reduce using rule 9 (expr)]
-    $default	reduce using rule 9 (expr)
-
-
-
-state 90
-
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr '<' eln expr .   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
-
-    EQUAL	shift, and go to state 39
-    '-' 	shift, and go to state 40
-    '+' 	shift, and go to state 41
-    '*' 	shift, and go to state 42
-    '/' 	shift, and go to state 43
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
-
-    EQUAL	[reduce using rule 10 (expr)]
-    '-' 	[reduce using rule 10 (expr)]
-    '+' 	[reduce using rule 10 (expr)]
-    '*' 	[reduce using rule 10 (expr)]
-    '/' 	[reduce using rule 10 (expr)]
-    '<' 	[reduce using rule 10 (expr)]
-    '>' 	[reduce using rule 10 (expr)]
-    '=' 	[reduce using rule 10 (expr)]
-    $default	reduce using rule 10 (expr)
-
-
-
-state 91
-
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr '>' eln expr .   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
-
-    EQUAL	shift, and go to state 39
-    '-' 	shift, and go to state 40
-    '+' 	shift, and go to state 41
-    '*' 	shift, and go to state 42
-    '/' 	shift, and go to state 43
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
-
-    EQUAL	[reduce using rule 11 (expr)]
-    '-' 	[reduce using rule 11 (expr)]
-    '+' 	[reduce using rule 11 (expr)]
-    '*' 	[reduce using rule 11 (expr)]
-    '/' 	[reduce using rule 11 (expr)]
-    '<' 	[reduce using rule 11 (expr)]
-    '>' 	[reduce using rule 11 (expr)]
-    '=' 	[reduce using rule 11 (expr)]
-    $default	reduce using rule 11 (expr)
-
-
-
-state 92
-
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
-    expr  ->  expr '=' eln expr .   (rule 13)
-
-    EQUAL	shift, and go to state 39
-    '-' 	shift, and go to state 40
-    '+' 	shift, and go to state 41
-    '*' 	shift, and go to state 42
-    '/' 	shift, and go to state 43
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
-
-    EQUAL	[reduce using rule 13 (expr)]
-    '-' 	[reduce using rule 13 (expr)]
-    '+' 	[reduce using rule 13 (expr)]
-    '*' 	[reduce using rule 13 (expr)]
-    '/' 	[reduce using rule 13 (expr)]
-    '<' 	[reduce using rule 13 (expr)]
-    '>' 	[reduce using rule 13 (expr)]
-    '=' 	[reduce using rule 13 (expr)]
-    $default	reduce using rule 13 (expr)
-
-
-
-state 93
-
-    method_call  ->  method_id '(' expr_seq ')' .   (rule 38)
-
-    $default	reduce using rule 38 (method_call)
-
-
-
-state 94
-
-    method_def  ->  DEF eln method_id '(' method_def_param_seq . eln ')' eln stmt_seq eln END   (rule 40)
-    method_def_param_seqE  ->  method_def_param_seq . ',' eln ID_LOW   (rule 48)
-
-    EOL 	shift, and go to state 28
-    ',' 	shift, and go to state 96
-
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 104
-
-
-
-state 95
-
-    method_def  ->  DEF eln method_id method_def_param_seq EOL . stmt_seq eln END   (rule 41)
-
-    INT 	shift, and go to state 1
-    DEF 	shift, and go to state 2
-    WHILE	shift, and go to state 3
-    UNTIL	shift, and go to state 4
-    CLASS	shift, and go to state 5
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    RETURN	shift, and go to state 8
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
-
-    $default	reduce using rule 34 (stmt_seq)
-
-    id  	go to state 15
-    expr	go to state 16
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    stmt	go to state 19
-    stmt_seq	go to state 105
-    stmt_seqE	go to state 21
-    method_call	go to state 22
-    method_def	go to state 23
-    method_id	go to state 24
-    while_stmt	go to state 25
-    until_stmt	go to state 26
-    class_def	go to state 27
-
-
-
-state 96
-
-    method_def_param_seqE  ->  method_def_param_seq ',' . eln ID_LOW   (rule 48)
-
-    EOL 	shift, and go to state 28
-
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 106
-
-
-
-state 97
-
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
-    expr  ->  '(' eln expr . eln ')'   (rule 15)
-    while_stmt  ->  WHILE eln '(' eln expr . eln ')' EOL stmt_seq eln END   (rule 50)
-
-    EOL 	shift, and go to state 28
-    EQUAL	shift, and go to state 39
-    '-' 	shift, and go to state 40
-    '+' 	shift, and go to state 41
-    '*' 	shift, and go to state 42
-    '/' 	shift, and go to state 43
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
-
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 107
-
-
-
-state 98
-
-    while_stmt  ->  WHILE eln expr DO eln . stmt_seq eln END   (rule 49)
-
-    INT 	shift, and go to state 1
-    DEF 	shift, and go to state 2
-    WHILE	shift, and go to state 3
-    UNTIL	shift, and go to state 4
-    CLASS	shift, and go to state 5
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    RETURN	shift, and go to state 8
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
-
-    $default	reduce using rule 34 (stmt_seq)
-
-    id  	go to state 15
-    expr	go to state 16
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    stmt	go to state 19
-    stmt_seq	go to state 108
-    stmt_seqE	go to state 21
-    method_call	go to state 22
-    method_def	go to state 23
-    method_id	go to state 24
-    while_stmt	go to state 25
-    until_stmt	go to state 26
-    class_def	go to state 27
-
-
-
-state 99
-
-    expr  ->  expr . '+' eln expr   (rule 6)
-    expr  ->  expr . '-' eln expr   (rule 7)
-    expr  ->  expr . '*' eln expr   (rule 8)
-    expr  ->  expr . '/' eln expr   (rule 9)
-    expr  ->  expr . '<' eln expr   (rule 10)
-    expr  ->  expr . '>' eln expr   (rule 11)
-    expr  ->  expr . EQUAL eln expr   (rule 12)
-    expr  ->  expr . '=' eln expr   (rule 13)
-    expr  ->  '(' eln expr . eln ')'   (rule 15)
-    until_stmt  ->  UNTIL eln '(' eln expr . eln ')' EOL stmt_seq eln END   (rule 52)
-
-    EOL 	shift, and go to state 28
-    EQUAL	shift, and go to state 39
-    '-' 	shift, and go to state 40
-    '+' 	shift, and go to state 41
-    '*' 	shift, and go to state 42
-    '/' 	shift, and go to state 43
-    '<' 	shift, and go to state 44
-    '>' 	shift, and go to state 45
-    '=' 	shift, and go to state 46
-
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 109
-
-
-
-state 100
-
-    until_stmt  ->  UNTIL eln expr DO eln . stmt_seq eln END   (rule 51)
-
-    INT 	shift, and go to state 1
-    DEF 	shift, and go to state 2
-    WHILE	shift, and go to state 3
-    UNTIL	shift, and go to state 4
-    CLASS	shift, and go to state 5
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    RETURN	shift, and go to state 8
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
-
-    $default	reduce using rule 34 (stmt_seq)
-
-    id  	go to state 15
-    expr	go to state 16
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    stmt	go to state 19
-    stmt_seq	go to state 110
-    stmt_seqE	go to state 21
-    method_call	go to state 22
-    method_def	go to state 23
-    method_id	go to state 24
-    while_stmt	go to state 25
-    until_stmt	go to state 26
-    class_def	go to state 27
-
-
-
-state 101
-
-    stmt_seqE  ->  stmt_seq . EOL stmt   (rule 37)
-    class_def  ->  CLASS eln ID_CAP EOL stmt_seq . eln END   (rule 54)
-
-    EOL 	shift, and go to state 111
+    EOL 	shift, and go to state 29
 
     $default	reduce using rule 2 (eln)
 
@@ -1902,88 +1896,550 @@ state 101
 
 
 
-state 102
+state 88
 
-    class_def  ->  CLASS eln ID_CAP '<' eln . ID_CAP EOL stmt_seq eln END   (rule 53)
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+    expr_seqE  ->  expr_seq ',' expr .   (rule 37)
 
-    ID_CAP	shift, and go to state 113
+    EQUAL	shift, and go to state 41
+    NOTEQUAL	shift, and go to state 42
+    OR  	shift, and go to state 43
+    AND 	shift, and go to state 44
+    '=' 	shift, and go to state 45
+    '<' 	shift, and go to state 46
+    '>' 	shift, and go to state 47
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
+
+    $default	reduce using rule 37 (expr_seqE)
 
 
 
-state 103
+state 89
 
-    expr  ->  '(' eln expr eln ')' .   (rule 15)
+    expr  ->  '[' eln expr_seq eln . ']'   (rule 23)
 
-    $default	reduce using rule 15 (expr)
+    ']' 	shift, and go to state 113
 
 
 
-state 104
+state 90
 
-    method_def  ->  DEF eln method_id '(' method_def_param_seq eln . ')' eln stmt_seq eln END   (rule 40)
+    expr  ->  '(' eln expr eln . ')'   (rule 21)
 
     ')' 	shift, and go to state 114
 
 
 
-state 105
+state 91
 
-    stmt_seqE  ->  stmt_seq . EOL stmt   (rule 37)
-    method_def  ->  DEF eln method_id method_def_param_seq EOL stmt_seq . eln END   (rule 41)
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr EQUAL eln expr .   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
 
-    EOL 	shift, and go to state 111
+    '=' 	shift, and go to state 45
+    '<' 	shift, and go to state 46
+    '>' 	shift, and go to state 47
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
+
+    $default	reduce using rule 14 (expr)
+
+
+
+state 92
+
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr NOTEQUAL eln expr .   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+
+    '=' 	shift, and go to state 45
+    '<' 	shift, and go to state 46
+    '>' 	shift, and go to state 47
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
+
+    $default	reduce using rule 15 (expr)
+
+
+
+state 93
+
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr OR eln expr .   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+
+    EQUAL	shift, and go to state 41
+    NOTEQUAL	shift, and go to state 42
+    AND 	shift, and go to state 44
+    '=' 	shift, and go to state 45
+    '<' 	shift, and go to state 46
+    '>' 	shift, and go to state 47
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
+
+    $default	reduce using rule 16 (expr)
+
+
+
+state 94
+
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr AND eln expr .   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+
+    EQUAL	shift, and go to state 41
+    NOTEQUAL	shift, and go to state 42
+    '=' 	shift, and go to state 45
+    '<' 	shift, and go to state 46
+    '>' 	shift, and go to state 47
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
+
+    $default	reduce using rule 17 (expr)
+
+
+
+state 95
+
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr '=' eln expr .   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+
+    '=' 	shift, and go to state 45
+    '<' 	shift, and go to state 46
+    '>' 	shift, and go to state 47
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
+
+    $default	reduce using rule 19 (expr)
+
+
+
+state 96
+
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr '<' eln expr .   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
+
+    $default	reduce using rule 12 (expr)
+
+
+
+state 97
+
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr '>' eln expr .   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
+
+    $default	reduce using rule 13 (expr)
+
+
+
+state 98
+
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr '-' eln expr .   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
+
+    $default	reduce using rule 9 (expr)
+
+
+
+state 99
+
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr '+' eln expr .   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
+
+    $default	reduce using rule 8 (expr)
+
+
+
+state 100
+
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr '*' eln expr .   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
+
+    $default	reduce using rule 10 (expr)
+
+
+
+state 101
+
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr '/' eln expr .   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
+
+    $default	reduce using rule 11 (expr)
+
+
+
+state 102
+
+    expr  ->  expr '.' id '(' . expr_seq ')'   (rule 31)
+
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
+
+    $default	reduce using rule 34 (expr_seq)
+
+    id  	go to state 21
+    expr	go to state 34
+    expr_seq	go to state 115
+    expr_seqE	go to state 36
+
+
+
+state 103
+
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr '[' eln expr . eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+
+    EOL 	shift, and go to state 29
+    EQUAL	shift, and go to state 41
+    NOTEQUAL	shift, and go to state 42
+    OR  	shift, and go to state 43
+    AND 	shift, and go to state 44
+    '=' 	shift, and go to state 45
+    '<' 	shift, and go to state 46
+    '>' 	shift, and go to state 47
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
 
     $default	reduce using rule 2 (eln)
 
-    eln 	go to state 115
+    eln 	go to state 116
+
+
+
+state 104
+
+    method_def  ->  DEF eln id '(' method_def_param_seq . eln ')' stmt_seq END   (rule 47)
+    method_def_param_seqE  ->  method_def_param_seq . ',' eln ID_LOW   (rule 52)
+
+    EOL 	shift, and go to state 29
+    ',' 	shift, and go to state 106
+
+    $default	reduce using rule 2 (eln)
+
+    eln 	go to state 117
+
+
+
+state 105
+
+    method_def  ->  DEF eln id method_def_param_seq EOL . stmt_seq END   (rule 48)
+
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    DEF 	shift, and go to state 3
+    WHILE	shift, and go to state 4
+    UNTIL	shift, and go to state 5
+    CLASS	shift, and go to state 6
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    RETURN	shift, and go to state 9
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
+
+    $default	reduce using rule 38 (stmt)
+
+    id  	go to state 21
+    expr	go to state 22
+    stmt	go to state 23
+    stmt_seq	go to state 118
+    method_def	go to state 25
+    while_stmt	go to state 26
+    until_stmt	go to state 27
+    class_def	go to state 28
 
 
 
 state 106
 
-    method_def_param_seqE  ->  method_def_param_seq ',' eln . ID_LOW   (rule 48)
+    method_def_param_seqE  ->  method_def_param_seq ',' . eln ID_LOW   (rule 52)
 
-    ID_LOW	shift, and go to state 116
+    EOL 	shift, and go to state 29
+
+    $default	reduce using rule 2 (eln)
+
+    eln 	go to state 119
 
 
 
 state 107
 
-    expr  ->  '(' eln expr eln . ')'   (rule 15)
-    while_stmt  ->  WHILE eln '(' eln expr eln . ')' EOL stmt_seq eln END   (rule 50)
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  '(' eln expr . eln ')'   (rule 21)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+    while_stmt  ->  WHILE eln '(' eln expr . eln ')' EOL stmt_seq END   (rule 54)
 
-    ')' 	shift, and go to state 117
-
-
-
-state 108
-
-    stmt_seqE  ->  stmt_seq . EOL stmt   (rule 37)
-    while_stmt  ->  WHILE eln expr DO eln stmt_seq . eln END   (rule 49)
-
-    EOL 	shift, and go to state 111
-
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 118
-
-
-
-state 109
-
-    expr  ->  '(' eln expr eln . ')'   (rule 15)
-    until_stmt  ->  UNTIL eln '(' eln expr eln . ')' EOL stmt_seq eln END   (rule 52)
-
-    ')' 	shift, and go to state 119
-
-
-
-state 110
-
-    stmt_seqE  ->  stmt_seq . EOL stmt   (rule 37)
-    until_stmt  ->  UNTIL eln expr DO eln stmt_seq . eln END   (rule 51)
-
-    EOL 	shift, and go to state 111
+    EOL 	shift, and go to state 29
+    EQUAL	shift, and go to state 41
+    NOTEQUAL	shift, and go to state 42
+    OR  	shift, and go to state 43
+    AND 	shift, and go to state 44
+    '=' 	shift, and go to state 45
+    '<' 	shift, and go to state 46
+    '>' 	shift, and go to state 47
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
 
     $default	reduce using rule 2 (eln)
 
@@ -1991,433 +2447,484 @@ state 110
 
 
 
+state 108
+
+    stmt_seq  ->  stmt_seq . EOL stmt   (rule 46)
+    while_stmt  ->  WHILE eln expr DO stmt_seq . END   (rule 53)
+
+    EOL 	shift, and go to state 54
+    END 	shift, and go to state 121
+
+
+
+state 109
+
+    expr  ->  expr . '+' eln expr   (rule 8)
+    expr  ->  expr . '-' eln expr   (rule 9)
+    expr  ->  expr . '*' eln expr   (rule 10)
+    expr  ->  expr . '/' eln expr   (rule 11)
+    expr  ->  expr . '<' eln expr   (rule 12)
+    expr  ->  expr . '>' eln expr   (rule 13)
+    expr  ->  expr . EQUAL eln expr   (rule 14)
+    expr  ->  expr . NOTEQUAL eln expr   (rule 15)
+    expr  ->  expr . OR eln expr   (rule 16)
+    expr  ->  expr . AND eln expr   (rule 17)
+    expr  ->  expr . '=' eln expr   (rule 19)
+    expr  ->  '(' eln expr . eln ')'   (rule 21)
+    expr  ->  expr . '[' eln expr eln ']'   (rule 22)
+    expr  ->  expr . '.' id   (rule 30)
+    expr  ->  expr . '.' id '(' expr_seq ')'   (rule 31)
+    until_stmt  ->  UNTIL eln '(' eln expr . eln ')' EOL stmt_seq END   (rule 56)
+
+    EOL 	shift, and go to state 29
+    EQUAL	shift, and go to state 41
+    NOTEQUAL	shift, and go to state 42
+    OR  	shift, and go to state 43
+    AND 	shift, and go to state 44
+    '=' 	shift, and go to state 45
+    '<' 	shift, and go to state 46
+    '>' 	shift, and go to state 47
+    '-' 	shift, and go to state 48
+    '+' 	shift, and go to state 49
+    '*' 	shift, and go to state 50
+    '/' 	shift, and go to state 51
+    '.' 	shift, and go to state 52
+    '[' 	shift, and go to state 53
+
+    $default	reduce using rule 2 (eln)
+
+    eln 	go to state 122
+
+
+
+state 110
+
+    stmt_seq  ->  stmt_seq . EOL stmt   (rule 46)
+    until_stmt  ->  UNTIL eln expr DO stmt_seq . END   (rule 55)
+
+    EOL 	shift, and go to state 54
+    END 	shift, and go to state 123
+
+
+
 state 111
 
-    eln  ->  EOL .   (rule 3)
-    stmt_seqE  ->  stmt_seq EOL . stmt   (rule 37)
+    stmt_seq  ->  stmt_seq . EOL stmt   (rule 46)
+    class_def  ->  CLASS eln ID_CAP EOL stmt_seq . END   (rule 71)
 
-    INT 	shift, and go to state 1
-    DEF 	shift, and go to state 2
-    WHILE	shift, and go to state 3
-    UNTIL	shift, and go to state 4
-    CLASS	shift, and go to state 5
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    RETURN	shift, and go to state 8
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
-
-    $default	reduce using rule 3 (eln)
-
-    id  	go to state 15
-    expr	go to state 16
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    stmt	go to state 71
-    method_call	go to state 22
-    method_def	go to state 23
-    method_id	go to state 24
-    while_stmt	go to state 25
-    until_stmt	go to state 26
-    class_def	go to state 27
+    EOL 	shift, and go to state 54
+    END 	shift, and go to state 124
 
 
 
 state 112
 
-    class_def  ->  CLASS eln ID_CAP EOL stmt_seq eln . END   (rule 54)
+    class_def  ->  CLASS eln ID_CAP '<' eln . ID_CAP EOL stmt_seq END   (rule 70)
 
-    END 	shift, and go to state 121
+    ID_CAP	shift, and go to state 125
 
 
 
 state 113
 
-    class_def  ->  CLASS eln ID_CAP '<' eln ID_CAP . EOL stmt_seq eln END   (rule 53)
+    expr  ->  '[' eln expr_seq eln ']' .   (rule 23)
 
-    EOL 	shift, and go to state 122
+    $default	reduce using rule 23 (expr)
 
 
 
 state 114
 
-    method_def  ->  DEF eln method_id '(' method_def_param_seq eln ')' . eln stmt_seq eln END   (rule 40)
+    expr  ->  '(' eln expr eln ')' .   (rule 21)
 
-    EOL 	shift, and go to state 28
-
-    EOL 	[reduce using rule 2 (eln)]
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 123
+    $default	reduce using rule 21 (expr)
 
 
 
 state 115
 
-    method_def  ->  DEF eln method_id method_def_param_seq EOL stmt_seq eln . END   (rule 41)
+    expr  ->  expr '.' id '(' expr_seq . ')'   (rule 31)
+    expr_seqE  ->  expr_seq . ',' expr   (rule 37)
 
-    END 	shift, and go to state 124
+    ')' 	shift, and go to state 126
+    ',' 	shift, and go to state 61
 
 
 
 state 116
 
-    method_def_param_seqE  ->  method_def_param_seq ',' eln ID_LOW .   (rule 48)
+    expr  ->  expr '[' eln expr eln . ']'   (rule 22)
 
-    $default	reduce using rule 48 (method_def_param_seqE)
+    ']' 	shift, and go to state 127
 
 
 
 state 117
 
-    expr  ->  '(' eln expr eln ')' .   (rule 15)
-    while_stmt  ->  WHILE eln '(' eln expr eln ')' . EOL stmt_seq eln END   (rule 50)
+    method_def  ->  DEF eln id '(' method_def_param_seq eln . ')' stmt_seq END   (rule 47)
 
-    EOL 	shift, and go to state 125
-
-    $default	reduce using rule 15 (expr)
+    ')' 	shift, and go to state 128
 
 
 
 state 118
 
-    while_stmt  ->  WHILE eln expr DO eln stmt_seq eln . END   (rule 49)
+    stmt_seq  ->  stmt_seq . EOL stmt   (rule 46)
+    method_def  ->  DEF eln id method_def_param_seq EOL stmt_seq . END   (rule 48)
 
-    END 	shift, and go to state 126
+    EOL 	shift, and go to state 54
+    END 	shift, and go to state 129
 
 
 
 state 119
 
-    expr  ->  '(' eln expr eln ')' .   (rule 15)
-    until_stmt  ->  UNTIL eln '(' eln expr eln ')' . EOL stmt_seq eln END   (rule 52)
+    method_def_param_seqE  ->  method_def_param_seq ',' eln . ID_LOW   (rule 52)
 
-    EOL 	shift, and go to state 127
-
-    $default	reduce using rule 15 (expr)
+    ID_LOW	shift, and go to state 130
 
 
 
 state 120
 
-    until_stmt  ->  UNTIL eln expr DO eln stmt_seq eln . END   (rule 51)
+    expr  ->  '(' eln expr eln . ')'   (rule 21)
+    while_stmt  ->  WHILE eln '(' eln expr eln . ')' EOL stmt_seq END   (rule 54)
 
-    END 	shift, and go to state 128
+    ')' 	shift, and go to state 131
 
 
 
 state 121
 
-    class_def  ->  CLASS eln ID_CAP EOL stmt_seq eln END .   (rule 54)
+    while_stmt  ->  WHILE eln expr DO stmt_seq END .   (rule 53)
 
-    $default	reduce using rule 54 (class_def)
+    $default	reduce using rule 53 (while_stmt)
 
 
 
 state 122
 
-    class_def  ->  CLASS eln ID_CAP '<' eln ID_CAP EOL . stmt_seq eln END   (rule 53)
+    expr  ->  '(' eln expr eln . ')'   (rule 21)
+    until_stmt  ->  UNTIL eln '(' eln expr eln . ')' EOL stmt_seq END   (rule 56)
 
-    INT 	shift, and go to state 1
-    DEF 	shift, and go to state 2
-    WHILE	shift, and go to state 3
-    UNTIL	shift, and go to state 4
-    CLASS	shift, and go to state 5
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    RETURN	shift, and go to state 8
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
-
-    $default	reduce using rule 34 (stmt_seq)
-
-    id  	go to state 15
-    expr	go to state 16
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    stmt	go to state 19
-    stmt_seq	go to state 129
-    stmt_seqE	go to state 21
-    method_call	go to state 22
-    method_def	go to state 23
-    method_id	go to state 24
-    while_stmt	go to state 25
-    until_stmt	go to state 26
-    class_def	go to state 27
+    ')' 	shift, and go to state 132
 
 
 
 state 123
 
-    method_def  ->  DEF eln method_id '(' method_def_param_seq eln ')' eln . stmt_seq eln END   (rule 40)
+    until_stmt  ->  UNTIL eln expr DO stmt_seq END .   (rule 55)
 
-    INT 	shift, and go to state 1
-    DEF 	shift, and go to state 2
-    WHILE	shift, and go to state 3
-    UNTIL	shift, and go to state 4
-    CLASS	shift, and go to state 5
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    RETURN	shift, and go to state 8
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
-
-    $default	reduce using rule 34 (stmt_seq)
-
-    id  	go to state 15
-    expr	go to state 16
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    stmt	go to state 19
-    stmt_seq	go to state 130
-    stmt_seqE	go to state 21
-    method_call	go to state 22
-    method_def	go to state 23
-    method_id	go to state 24
-    while_stmt	go to state 25
-    until_stmt	go to state 26
-    class_def	go to state 27
+    $default	reduce using rule 55 (until_stmt)
 
 
 
 state 124
 
-    method_def  ->  DEF eln method_id method_def_param_seq EOL stmt_seq eln END .   (rule 41)
+    class_def  ->  CLASS eln ID_CAP EOL stmt_seq END .   (rule 71)
 
-    $default	reduce using rule 41 (method_def)
+    $default	reduce using rule 71 (class_def)
 
 
 
 state 125
 
-    while_stmt  ->  WHILE eln '(' eln expr eln ')' EOL . stmt_seq eln END   (rule 50)
+    class_def  ->  CLASS eln ID_CAP '<' eln ID_CAP . EOL stmt_seq END   (rule 70)
 
-    INT 	shift, and go to state 1
-    DEF 	shift, and go to state 2
-    WHILE	shift, and go to state 3
-    UNTIL	shift, and go to state 4
-    CLASS	shift, and go to state 5
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    RETURN	shift, and go to state 8
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
-
-    $default	reduce using rule 34 (stmt_seq)
-
-    id  	go to state 15
-    expr	go to state 16
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    stmt	go to state 19
-    stmt_seq	go to state 131
-    stmt_seqE	go to state 21
-    method_call	go to state 22
-    method_def	go to state 23
-    method_id	go to state 24
-    while_stmt	go to state 25
-    until_stmt	go to state 26
-    class_def	go to state 27
+    EOL 	shift, and go to state 133
 
 
 
 state 126
 
-    while_stmt  ->  WHILE eln expr DO eln stmt_seq eln END .   (rule 49)
+    expr  ->  expr '.' id '(' expr_seq ')' .   (rule 31)
 
-    $default	reduce using rule 49 (while_stmt)
+    $default	reduce using rule 31 (expr)
 
 
 
 state 127
 
-    until_stmt  ->  UNTIL eln '(' eln expr eln ')' EOL . stmt_seq eln END   (rule 52)
+    expr  ->  expr '[' eln expr eln ']' .   (rule 22)
 
-    INT 	shift, and go to state 1
-    DEF 	shift, and go to state 2
-    WHILE	shift, and go to state 3
-    UNTIL	shift, and go to state 4
-    CLASS	shift, and go to state 5
-    SELF	shift, and go to state 6
-    SUPER	shift, and go to state 7
-    RETURN	shift, and go to state 8
-    ID_CAP	shift, and go to state 9
-    ID_LOW	shift, and go to state 10
-    ID_FUNC	shift, and go to state 11
-    ID_VAR_FIELD	shift, and go to state 12
-    '-' 	shift, and go to state 13
-    '(' 	shift, and go to state 14
-
-    $default	reduce using rule 34 (stmt_seq)
-
-    id  	go to state 15
-    expr	go to state 16
-    var_id	go to state 17
-    var_id_simple	go to state 18
-    stmt	go to state 19
-    stmt_seq	go to state 132
-    stmt_seqE	go to state 21
-    method_call	go to state 22
-    method_def	go to state 23
-    method_id	go to state 24
-    while_stmt	go to state 25
-    until_stmt	go to state 26
-    class_def	go to state 27
+    $default	reduce using rule 22 (expr)
 
 
 
 state 128
 
-    until_stmt  ->  UNTIL eln expr DO eln stmt_seq eln END .   (rule 51)
+    method_def  ->  DEF eln id '(' method_def_param_seq eln ')' . stmt_seq END   (rule 47)
 
-    $default	reduce using rule 51 (until_stmt)
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    DEF 	shift, and go to state 3
+    WHILE	shift, and go to state 4
+    UNTIL	shift, and go to state 5
+    CLASS	shift, and go to state 6
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    RETURN	shift, and go to state 9
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
+
+    $default	reduce using rule 38 (stmt)
+
+    id  	go to state 21
+    expr	go to state 22
+    stmt	go to state 23
+    stmt_seq	go to state 134
+    method_def	go to state 25
+    while_stmt	go to state 26
+    until_stmt	go to state 27
+    class_def	go to state 28
 
 
 
 state 129
 
-    stmt_seqE  ->  stmt_seq . EOL stmt   (rule 37)
-    class_def  ->  CLASS eln ID_CAP '<' eln ID_CAP EOL stmt_seq . eln END   (rule 53)
+    method_def  ->  DEF eln id method_def_param_seq EOL stmt_seq END .   (rule 48)
 
-    EOL 	shift, and go to state 111
-
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 133
+    $default	reduce using rule 48 (method_def)
 
 
 
 state 130
 
-    stmt_seqE  ->  stmt_seq . EOL stmt   (rule 37)
-    method_def  ->  DEF eln method_id '(' method_def_param_seq eln ')' eln stmt_seq . eln END   (rule 40)
+    method_def_param_seqE  ->  method_def_param_seq ',' eln ID_LOW .   (rule 52)
 
-    EOL 	shift, and go to state 111
-
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 134
+    $default	reduce using rule 52 (method_def_param_seqE)
 
 
 
 state 131
 
-    stmt_seqE  ->  stmt_seq . EOL stmt   (rule 37)
-    while_stmt  ->  WHILE eln '(' eln expr eln ')' EOL stmt_seq . eln END   (rule 50)
+    expr  ->  '(' eln expr eln ')' .   (rule 21)
+    while_stmt  ->  WHILE eln '(' eln expr eln ')' . EOL stmt_seq END   (rule 54)
 
-    EOL 	shift, and go to state 111
+    EOL 	shift, and go to state 135
 
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 135
+    $default	reduce using rule 21 (expr)
 
 
 
 state 132
 
-    stmt_seqE  ->  stmt_seq . EOL stmt   (rule 37)
-    until_stmt  ->  UNTIL eln '(' eln expr eln ')' EOL stmt_seq . eln END   (rule 52)
+    expr  ->  '(' eln expr eln ')' .   (rule 21)
+    until_stmt  ->  UNTIL eln '(' eln expr eln ')' . EOL stmt_seq END   (rule 56)
 
-    EOL 	shift, and go to state 111
+    EOL 	shift, and go to state 136
 
-    $default	reduce using rule 2 (eln)
-
-    eln 	go to state 136
+    $default	reduce using rule 21 (expr)
 
 
 
 state 133
 
-    class_def  ->  CLASS eln ID_CAP '<' eln ID_CAP EOL stmt_seq eln . END   (rule 53)
+    class_def  ->  CLASS eln ID_CAP '<' eln ID_CAP EOL . stmt_seq END   (rule 70)
 
-    END 	shift, and go to state 137
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    DEF 	shift, and go to state 3
+    WHILE	shift, and go to state 4
+    UNTIL	shift, and go to state 5
+    CLASS	shift, and go to state 6
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    RETURN	shift, and go to state 9
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
+
+    $default	reduce using rule 38 (stmt)
+
+    id  	go to state 21
+    expr	go to state 22
+    stmt	go to state 23
+    stmt_seq	go to state 137
+    method_def	go to state 25
+    while_stmt	go to state 26
+    until_stmt	go to state 27
+    class_def	go to state 28
 
 
 
 state 134
 
-    method_def  ->  DEF eln method_id '(' method_def_param_seq eln ')' eln stmt_seq eln . END   (rule 40)
+    stmt_seq  ->  stmt_seq . EOL stmt   (rule 46)
+    method_def  ->  DEF eln id '(' method_def_param_seq eln ')' stmt_seq . END   (rule 47)
 
+    EOL 	shift, and go to state 54
     END 	shift, and go to state 138
 
 
 
 state 135
 
-    while_stmt  ->  WHILE eln '(' eln expr eln ')' EOL stmt_seq eln . END   (rule 50)
+    while_stmt  ->  WHILE eln '(' eln expr eln ')' EOL . stmt_seq END   (rule 54)
 
-    END 	shift, and go to state 139
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    DEF 	shift, and go to state 3
+    WHILE	shift, and go to state 4
+    UNTIL	shift, and go to state 5
+    CLASS	shift, and go to state 6
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    RETURN	shift, and go to state 9
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
+
+    $default	reduce using rule 38 (stmt)
+
+    id  	go to state 21
+    expr	go to state 22
+    stmt	go to state 23
+    stmt_seq	go to state 139
+    method_def	go to state 25
+    while_stmt	go to state 26
+    until_stmt	go to state 27
+    class_def	go to state 28
 
 
 
 state 136
 
-    until_stmt  ->  UNTIL eln '(' eln expr eln ')' EOL stmt_seq eln . END   (rule 52)
+    until_stmt  ->  UNTIL eln '(' eln expr eln ')' EOL . stmt_seq END   (rule 56)
 
-    END 	shift, and go to state 140
+    INT 	shift, and go to state 1
+    STRING	shift, and go to state 2
+    DEF 	shift, and go to state 3
+    WHILE	shift, and go to state 4
+    UNTIL	shift, and go to state 5
+    CLASS	shift, and go to state 6
+    SELF	shift, and go to state 7
+    SUPER	shift, and go to state 8
+    RETURN	shift, and go to state 9
+    ID_CAP	shift, and go to state 10
+    ID_LOW	shift, and go to state 11
+    ID_FUNC	shift, and go to state 12
+    ID_VAR_FIELD	shift, and go to state 13
+    NIL 	shift, and go to state 14
+    TRUE	shift, and go to state 15
+    FALSE	shift, and go to state 16
+    '-' 	shift, and go to state 17
+    '!' 	shift, and go to state 18
+    '[' 	shift, and go to state 19
+    '(' 	shift, and go to state 20
+
+    $default	reduce using rule 38 (stmt)
+
+    id  	go to state 21
+    expr	go to state 22
+    stmt	go to state 23
+    stmt_seq	go to state 140
+    method_def	go to state 25
+    while_stmt	go to state 26
+    until_stmt	go to state 27
+    class_def	go to state 28
 
 
 
 state 137
 
-    class_def  ->  CLASS eln ID_CAP '<' eln ID_CAP EOL stmt_seq eln END .   (rule 53)
+    stmt_seq  ->  stmt_seq . EOL stmt   (rule 46)
+    class_def  ->  CLASS eln ID_CAP '<' eln ID_CAP EOL stmt_seq . END   (rule 70)
 
-    $default	reduce using rule 53 (class_def)
+    EOL 	shift, and go to state 54
+    END 	shift, and go to state 141
 
 
 
 state 138
 
-    method_def  ->  DEF eln method_id '(' method_def_param_seq eln ')' eln stmt_seq eln END .   (rule 40)
+    method_def  ->  DEF eln id '(' method_def_param_seq eln ')' stmt_seq END .   (rule 47)
 
-    $default	reduce using rule 40 (method_def)
+    $default	reduce using rule 47 (method_def)
 
 
 
 state 139
 
-    while_stmt  ->  WHILE eln '(' eln expr eln ')' EOL stmt_seq eln END .   (rule 50)
+    stmt_seq  ->  stmt_seq . EOL stmt   (rule 46)
+    while_stmt  ->  WHILE eln '(' eln expr eln ')' EOL stmt_seq . END   (rule 54)
 
-    $default	reduce using rule 50 (while_stmt)
+    EOL 	shift, and go to state 54
+    END 	shift, and go to state 142
 
 
 
 state 140
 
-    until_stmt  ->  UNTIL eln '(' eln expr eln ')' EOL stmt_seq eln END .   (rule 52)
+    stmt_seq  ->  stmt_seq . EOL stmt   (rule 46)
+    until_stmt  ->  UNTIL eln '(' eln expr eln ')' EOL stmt_seq . END   (rule 56)
 
-    $default	reduce using rule 52 (until_stmt)
+    EOL 	shift, and go to state 54
+    END 	shift, and go to state 143
 
 
 
 state 141
 
-    $   	go to state 142
+    class_def  ->  CLASS eln ID_CAP '<' eln ID_CAP EOL stmt_seq END .   (rule 70)
+
+    $default	reduce using rule 70 (class_def)
 
 
 
 state 142
 
-    $   	go to state 143
+    while_stmt  ->  WHILE eln '(' eln expr eln ')' EOL stmt_seq END .   (rule 54)
+
+    $default	reduce using rule 54 (while_stmt)
 
 
 
 state 143
+
+    until_stmt  ->  UNTIL eln '(' eln expr eln ')' EOL stmt_seq END .   (rule 56)
+
+    $default	reduce using rule 56 (until_stmt)
+
+
+
+state 144
+
+    $   	go to state 145
+
+
+
+state 145
+
+    $   	go to state 146
+
+
+
+state 146
 
     $default	accept

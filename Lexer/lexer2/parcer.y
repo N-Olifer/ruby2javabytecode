@@ -38,13 +38,17 @@ extern int yylex(void);
 %left OR
 %left AND
 %left EQUAL NOTEQUAL
+%right '='
 %left '<' '>'
 %left '-' '+'
 %left '*' '/'
 %left '!' UMINUS
-%left ']'
+%left '.'
+%left ']' '['
+%nonassoc UBR
 
 %nonassoc ')'
+
 
 /*
 %type id
@@ -73,7 +77,8 @@ eln			: /*empty*/
 	
 id			: ID_CAP
 			| ID_LOW
-			| SELF
+			| ID_FUNC
+			| ID_VAR_FIELD
 			;
 	
 expr		: expr '+' eln expr
@@ -91,21 +96,17 @@ expr		: expr '+' eln expr
 			| '-' expr %prec UMINUS
 			| '(' eln expr eln ')'
 			| expr '[' eln expr eln ']'
+			| '[' eln expr_seq eln ']' %prec UBR
 			| INT
 			| STRING
-			| var_id
-			| method_call
+			| id
 			| NIL
 			| TRUE
 			| FALSE
-			;
-
-var_id		: var_id_simple
-			| var_id '.' var_id_simple
-			;
-	
-var_id_simple: id
-			| ID_VAR_FIELD
+			| expr '.' id
+			| expr '.' id '(' expr_seq ')'
+			| SELF
+			| SUPER
 			;
 	
 expr_seq	: /* empty */
@@ -116,7 +117,8 @@ expr_seqE	: expr
 			| expr_seq ',' expr
 			;
 
-stmt		: expr
+stmt		: /*empty*/
+			| expr
 			| method_def
 			| class_def
 			| while_stmt
@@ -124,26 +126,12 @@ stmt		: expr
 			| RETURN expr_seq
 			;
 
-stmt_seq	: /* empty */
-			| stmt_seqE
-			;
-
-stmt_seqE	: stmt
+stmt_seq    : stmt
 			| stmt_seq EOL stmt
 			;
 	
-method_call	: method_id '(' expr_seq ')'
-			| id '.' method_call
-			;
-//???????????????????????
-	
-method_def	: DEF eln method_id '(' method_def_param_seq eln ')' eln stmt_seq eln END
-			| DEF eln method_id method_def_param_seq EOL stmt_seq eln END
-			;
-
-method_id	: id
-			| ID_FUNC
-			| SUPER
+method_def	: DEF eln id '(' method_def_param_seq eln ')'  stmt_seq  END
+			| DEF eln id method_def_param_seq EOL stmt_seq END
 			;
 
 method_def_param_seq: /* empty */
@@ -154,25 +142,25 @@ method_def_param_seqE: ID_LOW
 			| method_def_param_seq ',' eln ID_LOW
 			;
 
-while_stmt	: WHILE eln expr DO eln stmt_seq eln END
-			| WHILE eln '(' eln expr eln ')' EOL stmt_seq eln END
+while_stmt	: WHILE eln expr DO stmt_seq END
+			| WHILE eln '(' eln expr eln ')' EOL stmt_seq END
 			;
 	
-until_stmt	: UNTIL eln expr DO eln stmt_seq eln END
-			| UNTIL eln '(' eln expr eln ')' EOL stmt_seq eln END
+until_stmt	: UNTIL eln expr DO stmt_seq END
+			| UNTIL eln '(' eln expr eln ')' EOL stmt_seq END
 			;
 			
-elseif_seq	: /* empty */
+elsif_seq	: /* empty */
 			| ELSIF eln expr eln THEN stmt_seq eln elsif_seq
 			| ELSIF eln expr EOL stmt_seq eln elsif_seq
 			;
 			
 if_stmt		: IF eln expr eln THEN eln stmt_seq eln END
 			| IF eln expr EOL eln stmt_seq eln END
-			| IF eln expr eln THEN eln stmt_seq eln elseif_seq eln ELSE eln stmt_seq eln END
-			| IF eln expr EOL stmt_seq eln elseif_seq eln ELSE eln stmt_seq eln END
-			| IF eln expr eln THEN eln stmt_seq eln elseif_seq eln END
-			| IF eln expr EOL stmt_seq eln elseif_seq eln END
+			| IF eln expr eln THEN eln stmt_seq eln elsif_seq eln ELSE eln stmt_seq eln END
+			| IF eln expr EOL stmt_seq eln elsif_seq eln ELSE eln stmt_seq eln END
+			| IF eln expr eln THEN eln stmt_seq eln elsif_seq eln END
+			| IF eln expr EOL stmt_seq eln elsif_seq eln END
 			;
 
 unless_stmt	: UNLESS eln expr eln THEN eln stmt_seq eln END
@@ -181,12 +169,10 @@ unless_stmt	: UNLESS eln expr eln THEN eln stmt_seq eln END
 			| UNLESS eln expr EOL stmt_seq eln ELSE eln stmt_seq eln END
 			;
 			
-class_def	: CLASS eln ID_CAP '<' eln ID_CAP EOL stmt_seq eln END
-			| CLASS eln ID_CAP EOL stmt_seq eln END
+class_def	: CLASS eln ID_CAP '<' eln ID_CAP EOL stmt_seq END
+			| CLASS eln ID_CAP EOL stmt_seq END
 			;
 
-array		: '[' eln expr_seq eln ']'
-			;
 
 %%
 
