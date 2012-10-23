@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <malloc.h>
+
 void yyerror(char const *s);
 extern int yylex(void);
 
@@ -69,6 +70,8 @@ extern int yylex(void);
 %type array*/
 %%
 
+
+
 program		: stmt_seq;
 
 eln			: /*empty*/
@@ -124,6 +127,8 @@ stmt		: /*empty*/
 			| while_stmt
 			| until_stmt
 			| RETURN expr_seq
+			| if_stmt
+			| unless_stmt
 			;
 
 stmt_seq    : stmt
@@ -149,24 +154,21 @@ while_stmt	: WHILE eln expr DO stmt_seq END
 until_stmt	: UNTIL eln expr DO stmt_seq END
 			| UNTIL eln '(' eln expr eln ')' EOL stmt_seq END
 			;
-			
+
 elsif_seq	: /* empty */
-			| ELSIF eln expr eln THEN stmt_seq eln elsif_seq
-			| ELSIF eln expr EOL stmt_seq eln elsif_seq
+			| elsif_seqE
+			;
+					
+elsif_seqE	: ELSIF expr THEN stmt_seq
+			| elsif_seqE ELSIF expr THEN stmt_seq 
 			;
 			
-if_stmt		: IF eln expr eln THEN eln stmt_seq eln END
-			| IF eln expr EOL eln stmt_seq eln END
-			| IF eln expr eln THEN eln stmt_seq eln elsif_seq eln ELSE eln stmt_seq eln END
-			| IF eln expr EOL stmt_seq eln elsif_seq eln ELSE eln stmt_seq eln END
-			| IF eln expr eln THEN eln stmt_seq eln elsif_seq eln END
-			| IF eln expr EOL stmt_seq eln elsif_seq eln END
+if_stmt		: IF eln expr eln THEN stmt_seq elsif_seq END
+			| IF eln expr eln THEN stmt_seq elsif_seq ELSE stmt_seq END
 			;
 
-unless_stmt	: UNLESS eln expr eln THEN eln stmt_seq eln END
-			| UNLESS eln expr EOL stmt_seq eln END
-			| UNLESS eln expr eln THEN stmt_seq eln ELSE eln stmt_seq eln END
-			| UNLESS eln expr EOL stmt_seq eln ELSE eln stmt_seq eln END
+unless_stmt	: UNLESS eln expr eln THEN stmt_seq END
+			| UNLESS eln expr eln THEN stmt_seq ELSE stmt_seq END
 			;
 			
 class_def	: CLASS eln ID_CAP '<' eln ID_CAP EOL stmt_seq END
@@ -175,7 +177,7 @@ class_def	: CLASS eln ID_CAP '<' eln ID_CAP EOL stmt_seq END
 
 
 %%
-
+%error-verbose
 void yyerror(char const *s)
 {
  printf("%s",s);
