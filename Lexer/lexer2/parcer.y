@@ -98,13 +98,13 @@ struct ExprNode* createBracketsExpr(struct ExprNode* expression)
 	return result;
 } 
 
-struct ExprNode* createQBracketsExpr(struct ExprNode* expression)
+struct ExprNode* createQBracketsExpr(struct ExprNode* left, struct ExprNode* right)
 {
 	struct ExprNode* result = (struct ExprNode*)malloc(sizeof(struct ExprNode));
 	
 	result->type = eQBrackets;
-	result->left = expression;
-	result->right = NULL;
+	result->left = left;
+	result->right = right;
 	result->list = NULL;
 	result->next = NULL;
 	result->id = NULL;
@@ -249,6 +249,7 @@ struct StmtNode* createReturnStmt(struct ExprNode* value)
 	result->type = eReturn;
 	result->block = NULL;
 	result->expr = value;
+	result->params = NULL;
 	result->next = NULL;
 
 	
@@ -479,10 +480,10 @@ expr		: expr '+' expr { $$ = createBinExpr(ePlus, $1, $3); }
 			| '(' EOL expr ')' { $$ = createBracketsExpr($3); }
 			| '(' EOL expr EOL ')' { $$ = createBracketsExpr($3); }
 			
-			| expr '[' expr ']' { $$ = createQBracketsExpr($3); }
-			| expr '[' expr EOL ']' { $$ = createQBracketsExpr($3); }
-			| expr '[' EOL expr ']' { $$ = createQBracketsExpr($4); }
-			| expr '[' EOL expr EOL ']' { $$ = createQBracketsExpr($4); }
+			| expr '[' expr ']' { $$ = createQBracketsExpr($1, $3); }
+			| expr '[' expr EOL ']' { $$ = createQBracketsExpr($1, $3); }
+			| expr '[' EOL expr ']' { $$ = createQBracketsExpr($1, $4); }
+			| expr '[' EOL expr EOL ']' { $$ = createQBracketsExpr($1, $4); }
 			
 			| '[' EOL expr_seqE ']' %prec UBR { $$ = createQBracketsInitExpr($3); }
 			| '[' EOL expr_seqE EOL ']' %prec UBR { $$ = createQBracketsInitExpr($3); }
@@ -504,6 +505,14 @@ expr		: expr '+' expr { $$ = createBinExpr(ePlus, $1, $3); }
 			| expr '.' ID '(' EOL expr_seqE ')' { $$ = createFieldAccExpr($1, $3, $6); }
 			| expr '.' ID '(' EOL expr_seqE EOL ')' { $$ = createFieldAccExpr($1, $3, $6); }
 			| expr '.' ID '(' expr_seqE EOL ')' { $$ = createFieldAccExpr($1, $3, $5); }
+			
+			| expr '.' EOL ID { $$ = createFieldAccExpr($1, $4, NULL); }
+			| expr '.' EOL ID '(' ')' { $$ = createFieldAccExpr($1, $4, NULL); }
+			| expr '.' EOL ID '(' expr_seqE ')' { $$ = createFieldAccExpr($1, $4, $6); }
+			| expr '.' EOL ID '(' EOL expr_seqE ')' { $$ = createFieldAccExpr($1, $4, $7); }
+			| expr '.' EOL ID '(' EOL expr_seqE EOL ')' { $$ = createFieldAccExpr($1, $4, $7); }
+			| expr '.' EOL ID '(' expr_seqE EOL ')' { $$ = createFieldAccExpr($1, $4, $6); }
+
 
 			| ID { $$ = createFieldAccExpr(NULL, $1, NULL); }
 			| ID '(' ')' { $$ = createFieldAccExpr(NULL, $1, NULL); }
@@ -512,8 +521,13 @@ expr		: expr '+' expr { $$ = createBinExpr(ePlus, $1, $3); }
 			| ID '(' EOL expr_seqE EOL ')' { $$ = createFieldAccExpr(NULL, $1, $4); }
 			| ID '(' expr_seqE EOL ')' { $$ = createFieldAccExpr(NULL, $1, $3); }
 			| SELF { $$ = createSelfExpr(); }
+			
 			| SUPER { $$ = createSuperExpr(NULL); }
-			| SUPER '(' expr_seq ')' { $$ = createSelfExpr($3); }
+			| SUPER '(' ')' { $$ = createSuperExpr(NULL); }
+			| SUPER '(' expr_seqE ')' { $$ = createSuperExpr($3); }
+			| SUPER '(' EOL expr_seqE ')' { $$ = createSuperExpr($4); }
+			| SUPER '(' EOL expr_seqE EOL ')' { $$ = createSuperExpr($4); }
+			| SUPER '(' expr_seqE EOL ')' { $$ = createSuperExpr($3); }
 			;
 	
 expr_seq	: /* empty */ { $$ = createExprSeq(NULL); }
@@ -533,6 +547,7 @@ stmt		: expr { $$ = createStmt(eExpr, $1, NULL); }
 			| while_stmt { $$ = $1; }
 			| until_stmt { $$ = $1; }
 			| RETURN expr { $$ = createReturnStmt($2); }
+			| RETURN { $$ = createReturnStmt(NULL); }
 			;
 
 
@@ -546,9 +561,14 @@ stmt_seqE    : stmt { $$ = createStmtSeq($1); }
 			;
 	
 method_def	: DEF EOL ID '(' method_def_param_seq EOL ')' stmt_seq  END { $$ = createMethodDefStmt($3, $5, $8); }
+			| DEF EOL ID '(' method_def_param_seq EOL ')' EOL stmt_seq  END { $$ = createMethodDefStmt($3, $5, $9); }
+			| DEF EOL ID '(' method_def_param_seq ')' stmt_seq  END { $$ = createMethodDefStmt($3, $5, $7); }
+			| DEF EOL ID '(' method_def_param_seq ')' EOL stmt_seq  END { $$ = createMethodDefStmt($3, $5, $8); }
 			| DEF EOL ID method_def_param_seq EOL stmt_seq END { $$ = createMethodDefStmt($3, $4, $6); }
 			| DEF ID '(' method_def_param_seq ')' stmt_seq END { $$ = createMethodDefStmt($2, $4, $6); }
 			| DEF ID '(' method_def_param_seq ')' EOL stmt_seq END { $$ = createMethodDefStmt($2, $4, $7); }
+			| DEF ID '(' method_def_param_seq EOL ')' stmt_seq END { $$ = createMethodDefStmt($2, $4, $7); }
+			| DEF ID '(' method_def_param_seq EOL ')' EOL stmt_seq END { $$ = createMethodDefStmt($2, $4, $8); }
 			| DEF ID method_def_param_seq EOL stmt_seq END { $$ = createMethodDefStmt($2, $3, $5); }
 			;
 
@@ -568,6 +588,11 @@ while_stmt	: WHILE EOL expr DO stmt_seq END { $$ = createStmt(eWhile, $3, $5); }
 			| WHILE expr DO stmt_seq END { $$ = createStmt(eWhile, $2, $4); }
 			| WHILE EOL expr DO EOL stmt_seq END { $$ = createStmt(eWhile, $3, $6); }
 			| WHILE expr DO EOL stmt_seq END { $$ = createStmt(eWhile, $2, $5); }
+			
+			| WHILE EOL expr EOL DO stmt_seq END { $$ = createStmt(eWhile, $3, $6); }
+			| WHILE expr EOL DO stmt_seq END { $$ = createStmt(eWhile, $2, $5); }
+			| WHILE EOL expr EOL DO EOL stmt_seq END { $$ = createStmt(eWhile, $3, $7); }
+			| WHILE expr EOL DO EOL stmt_seq END { $$ = createStmt(eWhile, $2, $6); }
 
 			| WHILE EOL '(' EOL expr EOL ')' EOL stmt_seq END { $$ = createStmt(eWhile, $5, $9); }
 			| WHILE EOL '(' EOL expr ')' EOL stmt_seq END { $$ = createStmt(eWhile, $5, $8); }
@@ -585,6 +610,11 @@ until_stmt	: UNTIL EOL expr DO stmt_seq END { $$ = createStmt(eUntil, $3, $5); }
 			| UNTIL expr DO stmt_seq END { $$ = createStmt(eUntil, $2, $4); }
 			| UNTIL EOL expr DO EOL stmt_seq END { $$ = createStmt(eUntil, $3, $6); }
 			| UNTIL expr DO EOL stmt_seq END { $$ = createStmt(eUntil, $2, $5); }
+			
+			| UNTIL EOL expr EOL DO stmt_seq END { $$ = createStmt(eUntil, $3, $6); }
+			| UNTIL expr EOL DO stmt_seq END { $$ = createStmt(eUntil, $2, $5); }
+			| UNTIL EOL expr EOL DO EOL stmt_seq END { $$ = createStmt(eUntil, $3, $7); }
+			| UNTIL expr EOL DO EOL stmt_seq END { $$ = createStmt(eUntil, $2, $6); }
 
 			| UNTIL EOL '(' EOL expr EOL ')' EOL stmt_seq END { $$ = createStmt(eUntil, $5, $9); }
 			| UNTIL EOL '(' EOL expr ')' EOL stmt_seq END { $$ = createStmt(eUntil, $5, $8); }

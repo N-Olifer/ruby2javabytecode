@@ -239,8 +239,10 @@ nil return NIL;
 	return ID;
 }
 
-[[:blank:]]+
 [\n]+ return EOL;
+[\n]+([[:blank:]]+|[\n]+)+ return EOL;
+
+[[:blank:]]+
 
 . printf("Error, unexpected lexem %s !!!!!!\n", yytext);
 

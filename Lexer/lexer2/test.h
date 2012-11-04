@@ -324,9 +324,14 @@ void printExprSeqNode(struct ExprSeqNode* node)
 
 void test123(struct ProgramNode* rootNode)
 {
-
+	if(!rootNode)
+	{
+		puts("err");
+		getchar();
+		return;
+	}
 	freopen("dot.txt", "w", stdout);
-	printf("digraph G{rankdir=LR; node[shape=\"rectangle\",style=\"rounded\",fillcolor=\"lightgrey\"] \n");
+	printf("digraph G{rankdir=LR; node[shape=\"rectangle\",style=\"rounded, filled\",fillcolor=\"lightgrey\"] \n");
 	printProgramName(rootNode);
 	printProgram(rootNode);
 	printf("}");
