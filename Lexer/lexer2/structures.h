@@ -79,6 +79,9 @@ struct StmtNode
 	struct MethodDefParamSeqNode* params; // Параметры объявляемой функции
 	
 	struct StmtNode* next; // Следующий в списке
+	
+	struct StmtSeqNode *elseStmtBlock;	//Блок операторов для else в операторе if
+	struct ElsifSeqNode *elsifList;		//Блок операторов elsif в операторе if
 };
 
 // Последовательность операторов
@@ -106,6 +109,19 @@ struct MethodDefParamNode
 struct ProgramNode
 {
 	struct StmtSeqNode* body; // Тело всей программы
+};
+
+struct ElsifNode
+{
+	struct ExprNode *expr;
+	struct StmtSeqNode *block;
+	struct ElsifNode *next;
+};
+
+struct ElsifSeqNode
+{
+	struct ElsifNode *first;
+	struct ElsifNode *last;
 };
 
 #endif 

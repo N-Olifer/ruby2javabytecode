@@ -18,7 +18,7 @@
     <ClCompile Include="lex.yy.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="parcer_tab.c">
+    <ClCompile Include="parser_tab.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,5 +29,10 @@
     <ClInclude Include="test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="parser.y">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

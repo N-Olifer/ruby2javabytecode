@@ -20,6 +20,10 @@ void printMethodDefParamSeqNodeName(struct MethodDefParamSeqNode* node);
 void printMethodDefParamSeqNode(struct MethodDefParamSeqNode* node);
 void printMethodDefParamNodeName(struct MethodDefParamNode* node);
 
+void printElsifNodeName(struct ElsifNode *node);
+void printElsifNode(struct ElsifNode *node);
+void printElsifSeqNodeName(struct ElsifSeqNode *node);
+void printElsifSeqNode(struct ElsifSeqNode *node);
 void stmtTypeToStr(enum StmtNodeType type, char *str)
 {
 	switch(type)
@@ -149,6 +153,8 @@ void printStmtNodeName(struct StmtNode* node)
 	}
 	else if(node->type == eWhile)
 		strcat(strcat(text, itoa((int)node, buf, 10)), "[label = while]");
+	else if(node->type == eIf)
+		strcat(strcat(text, itoa((int)node, buf, 10)), "[label = if]");
 	else
 		strcat(strcat(strcat(strcat(text, itoa((int)node, buf, 10)), "[label = "), type), "]");
 	printf(text);
@@ -159,6 +165,10 @@ void printStmtNodeName(struct StmtNode* node)
 		printStmtSeqNodeName(node->block);
 	if(node->params != NULL)
 		printMethodDefParamSeqNodeName(node->params);
+	if(node->elseStmtBlock != NULL)
+		printStmtSeqNodeName(node->elseStmtBlock);
+	if(node->elsifList != NULL)
+		printElsifSeqNodeName(node->elsifList);
 
 }
 void printStmtNode(struct StmtNode* node)
@@ -181,6 +191,16 @@ void printStmtNode(struct StmtNode* node)
 	{
 		printConnect((int)node, (int)node->block);
 		printStmtSeqNode(node->block);
+	}
+	if(node->elseStmtBlock != NULL)
+	{
+		printConnect((int)node, (int)node->elseStmtBlock);
+		printStmtSeqNode(node->elseStmtBlock);
+	}
+	if(node->elsifList != NULL)
+	{
+		printConnect((int)node, (int)node->elsifList);
+		printElsifSeqNode(node->elsifList);
 	}
 }
 
@@ -321,7 +341,65 @@ void printExprSeqNode(struct ExprSeqNode* node)
 		current = current->next;
 	}
 }
+void printElsifNodeName(struct ElsifNode *node)
+{
+	char buf[10];
+	char text[150] = "";
 
+	strcat(strcat(strcat(strcat(text, itoa((int)node, buf, 10)), "[label = "), "elsif"), "]");
+	printf(text);
+
+	if(node->expr)
+		printExprNodeName(node->expr);
+	if(node->block)
+		printStmtSeqNodeName(node->block);
+	if(node->next)
+		printElsifNodeName(node->next);
+}
+void printElsifNode(struct ElsifNode *node)
+{
+	if(node->block)
+	{
+		printConnect((int)node, (int)node->block);
+		printStmtSeqNode(node->block);
+	}
+	if(node->expr)
+	{
+		printConnect((int)node, (int)node->expr);
+		printExprNode(node->expr);
+	}
+	if(node->next)
+	{
+		printConnect((int)node, (int)node->next);
+		printElsifNode(node->next);
+	}
+}
+void printElsifSeqNodeName(struct ElsifSeqNode *node)
+{
+	char buf[10];
+	char text[150] = "";
+	struct ElsifNode* current = node->first;
+	strcat(strcat(strcat(strcat(text, itoa((int)node, buf, 10)), "[label = "), "elsif_seq"), "]");
+
+	printf(text);
+
+	while(current)
+	{
+		printElsifNodeName(current);
+		current = current->next;
+	}
+}
+void printElsifSeqNode(struct ElsifSeqNode *node)
+{
+	struct ElsifNode* current = node->first;
+
+	while(current)
+	{
+		printConnect((int)node, (int)current);
+		printElsifNode(current);
+		current = current->next;
+	}
+}
 void test123(struct ProgramNode* rootNode)
 {
 	if(!rootNode)

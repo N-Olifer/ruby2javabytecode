@@ -2,7 +2,7 @@
 	#include <stdio.h> 
 	#include <locale.h>
 	#include <string.h>
-	#include "parcer_tab.h"
+	#include "parser_tab.h"
 	#include "structures.h"
 	#include "test.h"
 	
@@ -64,7 +64,7 @@ then return THEN;
 while return WHILE;
 until return UNTIL;
 do return DO;
-unless return UNLESS;
+
 
 false return FALSE;
 true return TRUE;

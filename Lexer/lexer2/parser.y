@@ -239,6 +239,8 @@ struct StmtNode* createStmt(enum StmtNodeType type, struct ExprNode* expression,
 	result->expr = expression;
 	result->params = NULL;
 	result->next = NULL;
+	result->elseStmtBlock = NULL;
+	result->elsifList = NULL;
 	return result;
 }
 
@@ -251,8 +253,8 @@ struct StmtNode* createReturnStmt(struct ExprNode* value)
 	result->expr = value;
 	result->params = NULL;
 	result->next = NULL;
-
-	
+	result->elseStmtBlock = NULL;
+	result->elsifList = NULL;
 	return result;
 }
 
@@ -269,15 +271,12 @@ struct StmtSeqNode* createStmtSeq(struct StmtNode* first)
 struct StmtSeqNode* addStmtToSeq(struct StmtSeqNode* seq, struct StmtNode* statement)
 {
 	if(seq->last != NULL)
-	{
 		seq->last->next = statement;
-		seq->last = statement;
-	}
 	else
-	{	
 		seq->first = statement;
-		seq->last = statement;
-	}
+		
+	seq->last = statement;
+	
 	return seq;
 }
 
@@ -290,7 +289,8 @@ struct StmtNode* createMethodDefStmt(char* id, struct MethodDefParamSeqNode* par
 	result->expr = NULL;
 	result->type = eMethodDef;
 	result->next = NULL;
-	
+	result->elseStmtBlock = NULL;
+	result->elsifList = NULL;
 	return result;
 }
 
@@ -340,7 +340,8 @@ struct StmtNode* createClassDef(char* name, char* parent, struct StmtSeqNode* bo
 	result->expr = NULL;
 	result->type = eClassDef;
 	result->next = NULL;
-	
+	result->elseStmtBlock = NULL;
+	result->elsifList = NULL;
 	return result;
 }
 
@@ -353,6 +354,55 @@ struct ProgramNode* createProgram(struct StmtSeqNode* body)
 	return result;
 }
 
+struct ElsifSeqNode* createElsifSeq(struct ExprNode *expression, struct StmtSeqNode *stmtSeqBlock)
+{
+	struct ElsifSeqNode *result = (struct ElsifSeqNode*)malloc(sizeof(struct ElsifSeqNode));
+	
+	result->first = (struct ElsifNode*)malloc(sizeof(struct ElsifNode));
+	result->first->expr = expression;
+	result->first->block = stmtSeqBlock;
+	result->first->next = NULL;
+	
+	result->last = result->first;
+	
+	//addToElsifSeq(result, expression, stmtSeqBlock);
+	
+	return result;
+}
+struct ElsifSeqNode* addToElsifSeq(struct ElsifSeqNode *seq, struct ExprNode *expression, struct StmtSeqNode *stmtSeqBlock)
+{
+	if(seq->first != NULL)
+	{
+		seq->last->next = (struct ElsifNode*)malloc(sizeof(struct ElsifNode));
+		seq->last->next->expr = expression;
+		seq->last->next->block = stmtSeqBlock;
+		seq->last->next->next = NULL;
+		seq->last = seq->last->next;
+	}
+	else
+	{
+		seq->first = (struct ElsifNode*)malloc(sizeof(struct ElsifNode));
+		seq->first->expr = expression;
+		seq->first->block = stmtSeqBlock;
+		seq->first->next = NULL;
+		seq->last = seq->first;
+	}
+	
+	return seq;
+}
+struct StmtNode* createIfStmt(struct ExprNode *expression, struct StmtSeqNode* ifBlock, struct ElsifSeqNode* elsifBlock, struct StmtSeqNode* elseBlock)
+{
+	struct StmtNode* result = (struct StmtNode*)malloc(sizeof(struct StmtNode));
+	
+	result->type = eIf;
+	result->expr = expression;
+	result->block = ifBlock;
+	result->elseStmtBlock = elseBlock;
+	result->elsifList = elsifBlock;
+	result->params = NULL;
+	result->next = NULL;
+	return result;
+}
 
 %}
 
@@ -369,10 +419,11 @@ struct ProgramNode* createProgram(struct StmtSeqNode* body)
 	struct MethodDefParamSeqNode* uMethodDefParamSeq;
 	struct MethodDefParamNode* uMethodDefParam;
 	struct ProgramNode* uProgram;
+	struct ElsifSeqNode *uElsifSeq;
 }
 
 %type <uExpr> expr
-%type <uExprSeq> expr_seq
+//%type <uExprSeq> expr_seq
 %type <uExprSeq> expr_seqE
 %type <uStmt> stmt
 %type <uStmtSeq> stmt_seq
@@ -384,6 +435,10 @@ struct ProgramNode* createProgram(struct StmtSeqNode* body)
 %type <uStmt> while_stmt
 %type <uStmt> until_stmt
 %type <uStmt> class_def
+%type <uStmt> if_stmt
+//%type <uStmt> unless_def
+%type <uElsifSeq> elsif_seq
+%type <uElsifSeq> elsif_seqE
 %type <uProgram> program
 
 %token <uId> INT
@@ -399,7 +454,6 @@ struct ProgramNode* createProgram(struct StmtSeqNode* body)
 %token SUPER
 %token RETURN
 %token <uId> ID
-%token SPACE_BRACKET
 %token EQUAL
 %token NOTEQUAL
 %token OR
@@ -410,7 +464,7 @@ struct ProgramNode* createProgram(struct StmtSeqNode* body)
 %token IF
 %token ELSIF
 %token ELSE
-%token UNLESS
+//%token UNLESS
 %token THEN
 
 %left EOL
@@ -530,15 +584,13 @@ expr		: expr '+' expr { $$ = createBinExpr(ePlus, $1, $3); }
 			| SUPER '(' expr_seqE EOL ')' { $$ = createSuperExpr($3); }
 			;
 	
-expr_seq	: /* empty */ { $$ = createExprSeq(NULL); }
-			| expr_seqE { $$ = $1; }
-			;
+//expr_seq	: /* empty */ { $$ = createExprSeq(NULL); }
+//			| expr_seqE { $$ = $1; }
+//			;
 	
 expr_seqE	: expr { $$ = createExprSeq($1); }
 			| expr_seqE ',' expr { $$ = addExprToSeq($1, $3); }
 			| expr_seqE ',' EOL expr { $$ = addExprToSeq($1, $4); }
-			//| if_stmt
-			//| unless_stmt
 			;
 
 stmt		: expr { $$ = createStmt(eExpr, $1, NULL); }
@@ -546,6 +598,7 @@ stmt		: expr { $$ = createStmt(eExpr, $1, NULL); }
 			| class_def { $$ = $1; }
 			| while_stmt { $$ = $1; }
 			| until_stmt { $$ = $1; }
+			| if_stmt { $$ = $1; }
 			| RETURN expr { $$ = createReturnStmt($2); }
 			| RETURN { $$ = createReturnStmt(NULL); }
 			;
@@ -555,7 +608,7 @@ stmt_seq    : /*empty*/ { $$ = NULL; }
 			| stmt_seqE { $$ = $1; }
 			;
 			
-stmt_seqE    : stmt { $$ = createStmtSeq($1); }
+stmt_seqE   : stmt { $$ = createStmtSeq($1); }
 			| stmt_seqE EOL stmt { $$ = addStmtToSeq($1, $3); }
 			| stmt_seqE EOL { $$ = $1; }
 			;
@@ -628,24 +681,6 @@ until_stmt	: UNTIL EOL expr DO stmt_seq END { $$ = createStmt(eUntil, $3, $5); }
 			| UNTIL '(' expr ')' EOL stmt_seq END { $$ = createStmt(eUntil, $3, $6); }
 			;
 			
-//elsif_seq	: /* empty */
-//			| ELSIF eln expr eln THEN stmt_seq eln elsif_seq
-//			| ELSIF eln expr EOL stmt_seq eln elsif_seq
-//			;
-			
-//if_stmt		: IF eln expr eln THEN eln stmt_seq eln END
-//			| IF eln expr EOL eln stmt_seq eln END
-//			| IF eln expr eln THEN eln stmt_seq eln elsif_seq eln ELSE eln stmt_seq eln END
-//			| IF eln expr EOL stmt_seq eln elsif_seq eln ELSE eln stmt_seq eln END
-//			| IF eln expr eln THEN eln stmt_seq eln elsif_seq eln END
-//			| IF eln expr EOL stmt_seq eln elsif_seq eln END
-//			;
-
-//unless_stmt	: UNLESS eln expr eln THEN eln stmt_seq eln END
-//			| UNLESS eln expr EOL stmt_seq eln END
-//			| UNLESS eln expr eln THEN stmt_seq eln ELSE eln stmt_seq eln END
-//			| UNLESS eln expr EOL stmt_seq eln ELSE eln stmt_seq eln END
-//			;
 			
 class_def	: CLASS EOL ID '<' EOL ID EOL stmt_seq END { $$ = createClassDef($3, $6, $8); }
 			| CLASS EOL ID '<' ID EOL stmt_seq END { $$ = createClassDef($3, $5, $7); }
@@ -656,25 +691,25 @@ class_def	: CLASS EOL ID '<' EOL ID EOL stmt_seq END { $$ = createClassDef($3, $
 			| CLASS ID EOL stmt_seq END { $$ = createClassDef($2, NULL, $4); }
 			;
 
-elsif_seq	: /* empty */
-			| elsif_seqE
+elsif_seq	: /* empty */ { $$ = NULL }
+			| elsif_seqE { $$ = $1 }
 			;
 					
-elsif_seqE	: ELSIF expr THEN stmt_seq
-			| elsif_seqE ELSIF expr THEN stmt_seq 
+elsif_seqE	: ELSIF expr THEN stmt_seq { $$ = createElsifSeq($2, $4) }
+			| elsif_seqE ELSIF expr THEN stmt_seq { $$ = addToElsifSeq($1, $3, $5) }
 			;
 			
-if_stmt		: IF EOL expr EOL THEN stmt_seq elsif_seq END
-			| IF EOL expr EOL THEN stmt_seq elsif_seq ELSE stmt_seq END
+if_stmt		: IF expr THEN stmt_seq elsif_seq END { $$ = createIfStmt($2, $4, $5, NULL) }
+			| IF expr THEN stmt_seq elsif_seq ELSE stmt_seq END { $$ = createIfStmt($2, $4, $5, $7) }
 			;
 
-unless_stmt	: UNLESS EOL expr EOL THEN stmt_seq END
-			| UNLESS EOL expr EOL THEN stmt_seq ELSE stmt_seq END
+//unless_stmt	: UNLESS EOL expr EOL THEN stmt_seq END
+//			| UNLESS EOL expr EOL THEN stmt_seq ELSE stmt_seq END
 
 			
 %%
 void yyerror(char const *s)
 {
- printf("%s !!!!!!11",s);
+ printf("%s !",s);
 }
 
