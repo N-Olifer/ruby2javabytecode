@@ -1,0 +1,6 @@
+if a == 11 then a = 12 end
+if a == 21 then a = 22 else a = 23 end
+if a == 31 then a = 32 elsif a == 33 then a = 34 end
+if a == 41 then a = 42 elsif a == 43 then a = 44 else a = 45 end
+if a == 51 then a = 52 elsif a == 53 then a = 54 elsif a == 55 then a = 56 end
+if a == 61 then a = 62 elsif a == 63 then a = 64 elsif a == 65 then a = 66 else a = -67 end
