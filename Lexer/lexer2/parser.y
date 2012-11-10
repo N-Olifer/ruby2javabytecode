@@ -364,9 +364,7 @@ struct ElsifSeqNode* createElsifSeq(struct ExprNode *expression, struct StmtSeqN
 	result->first->next = NULL;
 	
 	result->last = result->first;
-	
-	//addToElsifSeq(result, expression, stmtSeqBlock);
-	
+		
 	return result;
 }
 struct ElsifSeqNode* addToElsifSeq(struct ElsifSeqNode *seq, struct ExprNode *expression, struct StmtSeqNode *stmtSeqBlock)
@@ -404,6 +402,20 @@ struct StmtNode* createIfStmt(struct ExprNode *expression, struct StmtSeqNode* i
 	return result;
 }
 
+struct StmtNode* createUnlessStmt(struct ExprNode *expression, struct StmtSeqNode* unlessBlock, struct StmtSeqNode* elseBlock)
+{
+	struct StmtNode* result = (struct StmtNode*)malloc(sizeof(struct StmtNode));
+	
+	result->type = eUnless;
+	result->expr = expression;
+	result->block = unlessBlock;
+	result->elseStmtBlock = elseBlock;
+	result->elsifList = NULL;
+	result->params = NULL;
+	result->next = NULL;
+	return result;
+}
+
 %}
 
 
@@ -423,7 +435,6 @@ struct StmtNode* createIfStmt(struct ExprNode *expression, struct StmtSeqNode* i
 }
 
 %type <uExpr> expr
-//%type <uExprSeq> expr_seq
 %type <uExprSeq> expr_seqE
 %type <uStmt> stmt
 %type <uStmtSeq> stmt_seq
@@ -436,7 +447,7 @@ struct StmtNode* createIfStmt(struct ExprNode *expression, struct StmtSeqNode* i
 %type <uStmt> until_stmt
 %type <uStmt> class_def
 %type <uStmt> if_stmt
-//%type <uStmt> unless_def
+%type <uStmt> unless_stmt
 %type <uElsifSeq> elsif_seq
 %type <uElsifSeq> elsif_seqE
 %type <uProgram> program
@@ -464,7 +475,7 @@ struct StmtNode* createIfStmt(struct ExprNode *expression, struct StmtSeqNode* i
 %token IF
 %token ELSIF
 %token ELSE
-//%token UNLESS
+%token UNLESS
 %token THEN
 
 %left EOL
@@ -584,10 +595,6 @@ expr		: expr '+' expr { $$ = createBinExpr(ePlus, $1, $3); }
 			| SUPER '(' expr_seqE EOL ')' { $$ = createSuperExpr($3); }
 			;
 	
-//expr_seq	: /* empty */ { $$ = createExprSeq(NULL); }
-//			| expr_seqE { $$ = $1; }
-//			;
-	
 expr_seqE	: expr { $$ = createExprSeq($1); }
 			| expr_seqE ',' expr { $$ = addExprToSeq($1, $3); }
 			| expr_seqE ',' EOL expr { $$ = addExprToSeq($1, $4); }
@@ -599,6 +606,7 @@ stmt		: expr { $$ = createStmt(eExpr, $1, NULL); }
 			| while_stmt { $$ = $1; }
 			| until_stmt { $$ = $1; }
 			| if_stmt { $$ = $1; }
+			| unless_stmt { $$ = $1; }
 			| RETURN expr { $$ = createReturnStmt($2); }
 			| RETURN { $$ = createReturnStmt(NULL); }
 			;
@@ -703,8 +711,8 @@ if_stmt		: IF expr THEN stmt_seq elsif_seq END { $$ = createIfStmt($2, $4, $5, N
 			| IF expr THEN stmt_seq elsif_seq ELSE stmt_seq END { $$ = createIfStmt($2, $4, $5, $7) }
 			;
 
-//unless_stmt	: UNLESS EOL expr EOL THEN stmt_seq END
-//			| UNLESS EOL expr EOL THEN stmt_seq ELSE stmt_seq END
+unless_stmt	: UNLESS expr THEN stmt_seq END { $$ = createUnlessStmt($2, $4, NULL) }
+			| UNLESS expr THEN stmt_seq ELSE stmt_seq END { $$ = createUnlessStmt($2, $4, $6) }
 
 			
 %%

@@ -371,7 +371,6 @@ void printElsifNode(struct ElsifNode *node)
 	if(node->next)
 	{
 		printConnect((int)node, (int)node->next);
-		printElsifNode(node->next);
 	}
 }
 void printElsifSeqNodeName(struct ElsifSeqNode *node)
