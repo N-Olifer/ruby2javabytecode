@@ -705,15 +705,75 @@ elsif_seq	: /* empty */ { $$ = NULL }
 					
 elsif_seqE	: ELSIF expr THEN stmt_seq { $$ = createElsifSeq($2, $4) }
 			| elsif_seqE ELSIF expr THEN stmt_seq { $$ = addToElsifSeq($1, $3, $5) }
+			
+			| ELSIF EOL expr THEN stmt_seq { $$ = createElsifSeq($3, $5) }
+			| ELSIF expr EOL THEN stmt_seq { $$ = createElsifSeq($2, $5) }
+			| ELSIF EOL expr EOL THEN stmt_seq { $$ = createElsifSeq($3, $6) }
+			
+			| elsif_seqE ELSIF EOL expr THEN stmt_seq { $$ = addToElsifSeq($1, $4, $6) }
+			| elsif_seqE ELSIF expr EOL THEN stmt_seq { $$ = addToElsifSeq($1, $3, $6) }
+			| elsif_seqE ELSIF EOL expr EOL THEN stmt_seq { $$ = addToElsifSeq($1, $4, $7) }
+
+			| ELSIF expr THEN EOL stmt_seq { $$ = createElsifSeq($2, $5) }
+			| ELSIF expr EOL THEN EOL stmt_seq { $$ = createElsifSeq($2, $6) }
+			| ELSIF EOL expr THEN EOL stmt_seq { $$ = createElsifSeq($3, $6) }
+			| ELSIF EOL expr EOL THEN EOL stmt_seq { $$ = createElsifSeq($3, $7) }
+
+			| elsif_seqE ELSIF expr THEN EOL stmt_seq { $$ = addToElsifSeq($1, $3, $6) }
+			| elsif_seqE ELSIF expr EOL THEN EOL stmt_seq { $$ = addToElsifSeq($1, $3, $7) }
+			| elsif_seqE ELSIF EOL expr THEN EOL stmt_seq { $$ = addToElsifSeq($1, $4, $7) }
+			| elsif_seqE ELSIF EOL expr EOL THEN EOL stmt_seq { $$ = addToElsifSeq($1, $4, $8) }
 			;
 			
 if_stmt		: IF expr THEN stmt_seq elsif_seq END { $$ = createIfStmt($2, $4, $5, NULL) }
 			| IF expr THEN stmt_seq elsif_seq ELSE stmt_seq END { $$ = createIfStmt($2, $4, $5, $7) }
+			
+			| IF EOL expr THEN stmt_seq elsif_seq END { $$ = createIfStmt($3, $5, $6, NULL) }
+			| IF expr EOL THEN stmt_seq elsif_seq END { $$ = createIfStmt($2, $5, $6, NULL) }
+			| IF EOL expr EOL THEN stmt_seq elsif_seq END { $$ = createIfStmt($3, $6, $7, NULL) }
+			
+			| IF EOL expr THEN stmt_seq elsif_seq ELSE stmt_seq END { $$ = createIfStmt($3, $5, $6, $8) }
+			| IF expr EOL THEN stmt_seq elsif_seq ELSE stmt_seq END { $$ = createIfStmt($2, $5, $6, $8) }
+			| IF EOL expr EOL THEN stmt_seq elsif_seq ELSE stmt_seq END { $$ = createIfStmt($3, $6, $7, $9) }
+			
+			| IF expr THEN EOL stmt_seq elsif_seq END { $$ = createIfStmt($2, $5, $6, NULL) }
+			| IF EOL expr THEN EOL stmt_seq elsif_seq END { $$ = createIfStmt($3, $6, $7, NULL) }
+			| IF expr EOL THEN EOL stmt_seq elsif_seq END { $$ = createIfStmt($2, $6, $7, NULL) }
+			| IF EOL expr EOL THEN EOL stmt_seq elsif_seq END { $$ = createIfStmt($3, $7, $8, NULL) }
+			
+			| IF expr THEN stmt_seq elsif_seq ELSE EOL stmt_seq END { $$ = createIfStmt($2, $4, $5, $8) }
+			| IF expr THEN EOL stmt_seq elsif_seq ELSE EOL stmt_seq END { $$ = createIfStmt($2, $5, $6, $9) }
+			| IF expr EOL THEN stmt_seq elsif_seq ELSE EOL stmt_seq END { $$ = createIfStmt($2, $5, $6, $9) }
+			| IF EOL expr THEN stmt_seq elsif_seq ELSE EOL stmt_seq END { $$ = createIfStmt($3, $5, $6, $9) }
+			| IF EOL expr EOL THEN stmt_seq elsif_seq ELSE EOL stmt_seq END { $$ = createIfStmt($3, $6, $7, $10) }
+			| IF EOL expr THEN EOL stmt_seq elsif_seq ELSE EOL stmt_seq END { $$ = createIfStmt($3, $6, $7, $10) }			
+			| IF EOL expr EOL THEN EOL stmt_seq elsif_seq ELSE EOL stmt_seq END { $$ = createIfStmt($3, $7, $8, $11) }
 			;
 
 unless_stmt	: UNLESS expr THEN stmt_seq END { $$ = createUnlessStmt($2, $4, NULL) }
 			| UNLESS expr THEN stmt_seq ELSE stmt_seq END { $$ = createUnlessStmt($2, $4, $6) }
-
+			
+			| UNLESS EOL expr THEN stmt_seq END { $$ = createUnlessStmt($3, $5, NULL) }
+			| UNLESS expr EOL THEN stmt_seq END { $$ = createUnlessStmt($2, $5, NULL) }
+			| UNLESS EOL expr EOL THEN stmt_seq END { $$ = createUnlessStmt($3, $6, NULL) }
+			
+			| UNLESS EOL expr THEN stmt_seq ELSE stmt_seq END { $$ = createUnlessStmt($3, $5, $7) }
+			| UNLESS expr EOL THEN stmt_seq ELSE stmt_seq END { $$ = createUnlessStmt($2, $5, $7) }
+			| UNLESS EOL expr EOL THEN stmt_seq ELSE stmt_seq END { $$ = createUnlessStmt($3, $6, $8) }
+			
+			| UNLESS expr THEN EOL stmt_seq END { $$ = createUnlessStmt($2, $5, NULL) }
+			| UNLESS expr EOL THEN EOL stmt_seq END { $$ = createUnlessStmt($2, $6, NULL) }
+			| UNLESS EOL expr THEN EOL stmt_seq END { $$ = createUnlessStmt($3, $6, NULL) }
+			| UNLESS EOL expr EOL THEN EOL stmt_seq END { $$ = createUnlessStmt($3, $7, NULL) }
+			
+			| UNLESS expr THEN stmt_seq ELSE EOL stmt_seq END { $$ = createUnlessStmt($2, $4, $7) }
+			| UNLESS expr THEN EOL stmt_seq ELSE EOL stmt_seq END { $$ = createUnlessStmt($2, $5, $8) }
+			| UNLESS expr EOL THEN stmt_seq ELSE EOL stmt_seq END { $$ = createUnlessStmt($2, $5, $8) }
+			| UNLESS EOL expr THEN stmt_seq ELSE EOL stmt_seq END { $$ = createUnlessStmt($3, $5, $8) }
+			| UNLESS expr EOL THEN EOL stmt_seq ELSE EOL stmt_seq END { $$ = createUnlessStmt($2, $6, $9) }
+			| UNLESS EOL expr THEN EOL stmt_seq ELSE EOL stmt_seq END { $$ = createUnlessStmt($3, $6, $9) }
+			| UNLESS EOL expr EOL THEN EOL stmt_seq ELSE EOL stmt_seq END { $$ = createUnlessStmt($3, $7, $10) }
+			;
 			
 %%
 void yyerror(char const *s)
