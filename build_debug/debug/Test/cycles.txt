@@ -1,0 +1,18 @@
+
+
+a
+
+i = 3
+
+while a < 10 do
+  a = 1
+  b / 4
+  
+  until (as || true || false) do
+	a = 3
+	a = 1
+	21312
+  end
+end
+
+i = 3

@@ -1,0 +1,16 @@
+a = 4 + 1
+
+def func ( a, b ) 
+ a = 1
+  b = 1
+  puts(a)
+  puts() 
+  
+  def function2 ()
+		ff = 3
+		ff = 5
+		end
+  
+  
+  end
+  

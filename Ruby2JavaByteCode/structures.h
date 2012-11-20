@@ -1,6 +1,7 @@
 #ifndef STRUCTURES_H
 #define STRUCTURES_H
 
+
 // Тип выражения
 enum ExprNodeType
 {
@@ -27,7 +28,7 @@ enum ExprNodeType
 	eFieldAcc,
 	eSuper,
 	eSelf,
-	eNil,
+    eNil
 };
 
 // Тип оператора

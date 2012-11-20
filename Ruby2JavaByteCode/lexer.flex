@@ -2,15 +2,14 @@
 	#include <stdio.h> 
 	#include <locale.h>
 	#include <string.h>
-	#include "parser_tab.h"
+    #include "parser_tab.h"
 	#include "structures.h"
 	#include "test.h"
-	
-	struct ProgramNode* root;
 %} 
 
 %option noyywrap 
 %option never-interactive
+%option outfile="lex.yy.cpp"
 
 IDENTIFIER [A-Za-z_][A-Za-z_0-9]*
 
@@ -248,18 +247,5 @@ nil return NIL;
 
 %%
 
-void main(int argc, char* argv[])
-{
-    if (argc < 2)
-    {
-        yyin = fopen("test1.txt", "r");
-    }
-    else if((yyin = fopen(argv[1], "r")) == 0)
-    {
-        printf("Can't read file %s\n", argv[1]);
-        exit(1);
-    }
-	yyparse();
-	test123(root);
-}
+
 

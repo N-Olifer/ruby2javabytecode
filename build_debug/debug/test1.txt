@@ -1,0 +1,42 @@
+class EpicClass
+  def meth1()
+    a = 5
+    puts (a)
+
+  end
+
+  def BigMeth()
+    puts("aaa")
+  end
+
+  def func (aAw, er)
+    puts (aAw)
+    puts (er)
+  end
+end
+
+class
+EpicChild <
+    EpicClass
+  def childMeth()
+    field = 5
+    Field2 = 6
+    Field2 = 56
+
+  end
+
+  def func (aAw, er)
+    super (aAw, 
+	er)
+  end
+end
+
+asd.Meth()
+asd.func(
+a,
+b, b1,
+
+c
+)
+
+ puts (field.to_s + Field2.to_s)

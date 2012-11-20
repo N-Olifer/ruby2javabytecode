@@ -3,9 +3,9 @@
 #include <malloc.h>
 #include "structures.h"
 
-void yyerror(char const *s);
-extern int parse(void);
-extern struct ProgramNode* root;
+void yyerror(const char *s);
+extern int yylex(void);
+struct ProgramNode* root;
 
 struct ExprNode* createBinExpr(enum ExprNodeType type, struct ExprNode* left, struct ExprNode* right)
 {
@@ -417,8 +417,6 @@ struct StmtNode* createUnlessStmt(struct ExprNode *expression, struct StmtSeqNod
 }
 
 %}
-
-
 %union
 {
 	int uInt;
@@ -452,7 +450,7 @@ struct StmtNode* createUnlessStmt(struct ExprNode *expression, struct StmtSeqNod
 %type <uElsifSeq> elsif_seqE
 %type <uProgram> program
 
-%token <uId> INT
+%token <uInt> INT
 %token <uString> STRING
 %token EOL
 %token DEF
@@ -776,8 +774,8 @@ unless_stmt	: UNLESS expr THEN stmt_seq END { $$ = createUnlessStmt($2, $4, NULL
 			;
 			
 %%
-void yyerror(char const *s)
+void yyerror(const char *s)
 {
- printf("%s !",s);
+    printf("%s !",s);
 }
 
