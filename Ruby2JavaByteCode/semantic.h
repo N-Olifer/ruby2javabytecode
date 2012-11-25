@@ -1,202 +1,233 @@
-//#ifndef SEMANTICSTRUCTURES_H
-//#define SEMANTICSTRUCTURES_H
-//#include <QString.h>
-//#include <qlinkedlist.h>
-//#include <QTextStream.h>>
-//#include "SemanticTables.h"
+#ifndef SEMANTICSTRUCTURES_H
+#define SEMANTICSTRUCTURES_H
+#include <QString.h>
+#include <qlinkedlist.h>
+#include <QTextStream.h>>
+#include "SemanticTables.h"
+#include "structures.h"
 
-//class AttributedNode;
-//class AttrProgramNode;
-//class AttrStmt;
-//class AttrClassDef;
-//class AttrMethodDefStmt;
-//class AttrMethodDefParam;
-//class AttrCycleStmt;
-//class AttrExpr;
-//class AttrBinExpr;
-//class AttrUnExpr;
-//class AttrClassPropertyAcc;
-//class AttrMethodCall;
-//class AttrFieldAcc;
-//class AttrConstExpr;
-
-
-//class Semantics
-//{
-//public:
-//    AttrProgramNode* root;
-//    QHash<QString,TableClass> classTable;
-
-//    void doSemantics();
-//};
-
-//class AttributedNode
-//{
-//public:
-//    virtual void check() = 0;
-//    virtual void doSemantics() = 0;
-//    virtual void fromStructure(void* structure) = 0;
-//    virtual void dotPrint(QTextStream & out) = 0;
-//};
+class AttributedNode;
+class AttrProgram;
+class AttrStmt;
+class AttrClassDef;
+class AttrMethodDef;
+class AttrMethodDefParam;
+class AttrCycleStmt;
+class AttrExprStmt;
+class AttrExpr;
+class AttrBinExpr;
+class AttrUnExpr;
+class AttrClassPropertyAcc;
+class AttrMethodCall;
+class AttrFieldAcc;
+class AttrConstExpr;
 
 
-//class AttrStmt : public AttributedNode
-//{
-//public:
+class Semantics
+{
+public:
+    Semantics(ProgramNode* root);
 
-//};
+    AttrProgram* root;
+    QHash<QString, SemanticClass> classTable;
 
+    static void fillStmtList(StmtSeqNode* seq, QLinkedList<AttrStmt*> & list);
+    void doSemantics();
+    void dotPrint(QTextStream & out);
+};
 
-//class AttrProgramNode : public AttributedNode
-//{
-//public:
-//    QLinkedList<AttrStmt*> body;
-
-//    void check();
-//    void doSemantics();
-//    void fromStructure(void* structure);
-//    void dotPrint(QTextStream & out);
-//};
-
-
-//class AttrClassDef : public AttrStmt
-//{
-//public:
-//    QString id;
-//    QString parentId;
-
-//    void check();
-//    void doSemantics();
-//    void fromStructure(void* structure);
-//    void dotPrint(QTextStream & out);
-//};
+class AttributedNode
+{
+public:
+    virtual void check() = 0;
+    virtual void doSemantics() = 0;
+    virtual void dotPrint(QTextStream & out) = 0;
+    void dotPrintStmtSeq(QLinkedList<AttrStmt*> seq, QTextStream & out);
+    void dotPrintExprSeq(QLinkedList<AttrExpr*> seq, QTextStream & out);
+};
 
 
-//class AttrMethodDefStmt : public AttrStmt
-//{
-//public:
-//    QString id;
-//    QLinkedList<AttrMethodDefParam*> params;
-//    QLinkedList<AttrStmt*> block;
+class AttrStmt : public AttributedNode
+{
+public:
+    static AttrStmt* fromParserNode(StmtNode* node);
 
-//    void check();
-//    void doSemantics();
-//    void fromStructure(void* structure);
-//    void dotPrint(QTextStream & out);
-//};
+};
 
 
-//class AttrMethodDefParam : public AttributedNode
-//{
-//    QString id;
+class AttrProgram : public AttributedNode
+{
+public:
+    QLinkedList<AttrStmt*> body;
 
-//    void check();
-//    void doSemantics();
-//    void fromStructure(void* structure);
-//    void dotPrint(QTextStream & out);
-//};
-
-
-//class AttrCycleStmt : public AttrStmt
-//{
-//public:
-//    QLinkedList<AttrStmt*> block;
-//    AttrExpr* expr;
-
-//    void check();
-//    void doSemantics();
-//    void fromStructure(void* structure);
-//    void dotPrint(QTextStream & out);
-//};
+    static AttrProgram* fromParserNode(ProgramNode* node);
+    void check();
+    void doSemantics();
+    void dotPrint(QTextStream & out);
+};
 
 
-//class AttrExpr : public AttributedNode
-//{
-//public:
-//    //enum ExprNodeType type; // Тип
-//    int value;
-//    QString str;
-//    QLinkedList<AttrExpr*> list;
-//};
+class AttrClassDef : public AttrStmt
+{
+public:
+    QString id;
+    QString parentId;
+    QLinkedList<AttrStmt*> body;
+
+    static AttrClassDef* fromParserNode(StmtNode* node);
+    void check();
+    void doSemantics();
+    void dotPrint(QTextStream & out);
+};
 
 
-//class AttrBinExpr : public AttrExpr
-//{
-//public:
-//    AttrExpr* left;
-//    AttrExpr* right;
+class AttrMethodDef : public AttrStmt
+{
+public:
+    QString id;
+    QLinkedList<AttrMethodDefParam*> params;
+    QLinkedList<AttrStmt*> body;
 
-//    void check();
-//    void doSemantics();
-//    void fromStructure(void* structure);
-//    void dotPrint(QTextStream & out);
-//};
-
-
-//class AttrUnExpr : public AttrExpr
-//{
-//public:
-//    AttrExpr* expr;
-
-//    void check();
-//    void doSemantics();
-//    void fromStructure(void* structure);
-//    void dotPrint(QTextStream & out);
-//};
+    static AttrMethodDef* fromParserNode(StmtNode* node);
+    void check();
+    void doSemantics();
+    void dotPrint(QTextStream & out);
+};
 
 
-//class AttrClassPropertyAcc : public AttrExpr
-//{
-//public:
-//    QString id;
-//    AttrExpr* left;
+class AttrMethodDefParam : public AttributedNode
+{
+public:
+    QString id;
 
-//};
-
-
-//class AttrMethodCall : public AttrClassPropertyAcc
-//{
-//public:
-//    QLinkedList<AttrExpr*> arguments;
-
-//    void check();
-//    void doSemantics();
-//    void fromStructure(void* structure);
-//    void dotPrint(QTextStream & out);
-//};
+    static AttrMethodDefParam* fromParserNode(MethodDefParamNode* node);
+    void check();
+    void doSemantics();
+    void dotPrint(QTextStream & out);
+};
 
 
-//class AttrFieldAcc : public AttrClassPropertyAcc
-//{
-//public:
-//    int number;
+class AttrCycleStmt : public AttrStmt
+{
+public:
+    enum
+    {
+        cycleWhile,
+        cycleUntil
+    } cycleType;
 
-//    void check();
-//    void doSemantics();
-//    void fromStructure(void* structure);
-//    void dotPrint(QTextStream & out);
-//};
+    QLinkedList<AttrStmt*> block;
+    AttrExpr* expr;
 
+    static AttrCycleStmt* fromParserNode(StmtNode* node);
+    void check();
+    void doSemantics();
+    void dotPrint(QTextStream & out);
+};
 
-//class AttrConstExpr : public AttrExpr
-//{
-//public:
-//    enum
-//    {
-//        tInt,
-//        tStr,
-//        tBool
-//    } type;
+class AttrReturnStmt : public AttrStmt
+{
+public:
+    AttrExpr* expr;
 
-//    QString str;
-//    int value;
-
-//    void check();
-//    void doSemantics();
-//    void fromStructure(void* structure);
-//    void dotPrint(QTextStream & out);
-//};
+    static AttrReturnStmt* fromParserNode(StmtNode* node);
+    void check();
+    void doSemantics();
+    void dotPrint(QTextStream & out);
+};
 
 
+class AttrExprStmt : public AttrStmt
+{
+public:
+    AttrExpr* expr;
 
-//#endif // SEMANTICSTRUCTURES_H
+    static AttrExprStmt* fromParserNode(StmtNode* node);
+    void check();
+    void doSemantics();
+    void dotPrint(QTextStream & out);
+};
+
+
+class AttrExpr : public AttributedNode
+{
+public:
+    ExprNodeType type;
+
+    static AttrExpr* fromParserNode(ExprNode* node);
+};
+
+
+class AttrBinExpr : public AttrExpr
+{
+public:
+    AttrExpr* left;
+    AttrExpr* right;
+
+    static AttrBinExpr* fromParserNode(ExprNode* node);
+    void check();
+    void doSemantics();
+    void dotPrint(QTextStream & out);
+};
+
+
+class AttrUnExpr : public AttrExpr
+{
+public:
+    AttrExpr* expr;
+
+    static AttrUnExpr* fromParserNode(ExprNode* node);
+    void check();
+    void doSemantics();
+    void dotPrint(QTextStream & out);
+};
+
+
+class AttrClassPropertyAcc : public AttrExpr
+{
+public:
+    QString id;
+    AttrExpr* left;
+};
+
+
+class AttrMethodCall : public AttrClassPropertyAcc
+{
+public:
+    QLinkedList<AttrExpr*> arguments;
+
+    static AttrMethodCall* fromParserNode(ExprNode* node);
+    void check();
+    void doSemantics();
+    void dotPrint(QTextStream & out);
+};
+
+
+class AttrFieldAcc : public AttrClassPropertyAcc
+{
+public:
+    int number;
+
+    static AttrFieldAcc* fromParserNode(ExprNode* node);
+    void check();
+    void doSemantics();
+    void dotPrint(QTextStream & out);
+};
+
+
+class AttrConstExpr : public AttrExpr
+{
+public:
+
+    QString str;
+    int value;
+
+    static AttrConstExpr* fromParserNode(ExprNode* node);
+    void check();
+    void doSemantics();
+    void dotPrint(QTextStream & out);
+};
+
+
+
+#endif // SEMANTICSTRUCTURES_H

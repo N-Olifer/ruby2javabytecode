@@ -8,7 +8,7 @@ enum ExprNodeType
 	eInt,
 	eBool,
 	eString,
-	eId,
+//	eId,
 	eAssign,
 	ePlus,
 	eMinus,
@@ -26,6 +26,7 @@ enum ExprNodeType
 	eQBrackets,
 	eQBracketsInit,
 	eFieldAcc,
+    eMethodCall,
 	eSuper,
 	eSelf,
     eNil

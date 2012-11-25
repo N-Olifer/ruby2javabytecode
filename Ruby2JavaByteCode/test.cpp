@@ -41,8 +41,8 @@ void exprTypeToStr(enum ExprNodeType type, char* str)
             strcpy(str, "bool"); break;
         case eString:
             strcpy(str, "string"); break;
-        case eId:
-            strcpy(str, "id"); break;
+       // case eId:
+       //     strcpy(str, "id"); break;
         case eAssign:
             strcpy(str, "assign"); break;
         case ePlus:
@@ -254,6 +254,8 @@ void printExprNodeName(struct ExprNode* node)
         strcat(strcat(strcat(strcat(text, itoa((int)node, buf, 10)), "[label = "), itoa(node->value, buf2, 10)), "]");
     else if(node->type == eFieldAcc)
         strcat(strcat(strcat(strcat(text, itoa((int)node, buf, 10)), "[label = "), node->id), "]");
+    else if(node->type == eMethodCall)
+        strcat(strcat(strcat(strcat(text, itoa((int)node, buf, 10)), "[label = \"call "), node->id), "()\"]");
     else if(node->type == eBool)
     {
         if(node->value)

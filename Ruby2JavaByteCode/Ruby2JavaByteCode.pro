@@ -18,7 +18,8 @@ TEMPLATE = app
 SOURCES += main.cpp \
     test.cpp \
     parser_tab.cpp \
-    lex.yy.cpp
+    lex.yy.cpp \
+    semantic.cpp
 
 HEADERS += \
     test.h \
@@ -26,3 +27,6 @@ HEADERS += \
     parser_tab.h \
     semantic.h \
     semanticTables.h
+
+OTHER_FILES += \
+    parser.y

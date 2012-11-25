@@ -37,7 +37,7 @@ struct ExprNode* createUnExpr(enum ExprNodeType type, struct ExprNode* left)
 	return result;
 } 
 
-struct ExprNode* createIdExpr(char* idStr)
+/*struct ExprNode* createIdExpr(char* idStr)
 {
 	struct ExprNode* result = (struct ExprNode*)malloc(sizeof(struct ExprNode));
 	
@@ -50,7 +50,7 @@ struct ExprNode* createIdExpr(char* idStr)
 	result->str = NULL;
 	
 	return result;
-} 
+} */
 
 struct ExprNode* createIntExpr(int value)
 {
@@ -128,11 +128,26 @@ struct ExprNode* createQBracketsInitExpr(struct ExprSeqNode* expressions)
 	return result;
 }
 
-struct ExprNode* createFieldAccExpr(struct ExprNode* left, char* idStr, struct ExprSeqNode* params)
+struct ExprNode* createFieldAccExpr(struct ExprNode* left, char* idStr)
 {
 	struct ExprNode* result = (struct ExprNode*)malloc(sizeof(struct ExprNode));
 	
 	result->type = eFieldAcc;
+	result->left = left;
+	result->list = NULL;
+	result->right = NULL;
+	result->next = NULL;
+	result->id = idStr;
+	result->str = NULL;
+	
+	return result;
+}
+
+struct ExprNode* createMethodCallExpr(struct ExprNode* left, char* idStr, struct ExprSeqNode* params)
+{
+	struct ExprNode* result = (struct ExprNode*)malloc(sizeof(struct ExprNode));
+	
+	result->type = eMethodCall;
 	result->left = left;
 	result->list = params;
 	result->right = NULL;
@@ -561,31 +576,30 @@ expr		: expr '+' expr { $$ = createBinExpr(ePlus, $1, $3); }
 			| NIL { $$ = createNilExpr(); }
 			| TRUE { $$ = createBoolExpr(1); }
 			| FALSE { $$ = createBoolExpr(0); }
-			| expr '.' ID { $$ = createFieldAccExpr($1, $3, NULL); }
+			| expr '.' ID { $$ = createFieldAccExpr($1, $3); }
 
-			| expr '.' ID '(' ')' { $$ = createFieldAccExpr($1, $3, NULL); }
-			| expr '.' ID '(' expr_seqE ')' { $$ = createFieldAccExpr($1, $3, $5); }
-			| expr '.' ID '(' EOL expr_seqE ')' { $$ = createFieldAccExpr($1, $3, $6); }
-			| expr '.' ID '(' EOL expr_seqE EOL ')' { $$ = createFieldAccExpr($1, $3, $6); }
-			| expr '.' ID '(' expr_seqE EOL ')' { $$ = createFieldAccExpr($1, $3, $5); }
+			| expr '.' ID '(' ')' { $$ = createMethodCallExpr($1, $3, NULL); }
+			| expr '.' ID '(' expr_seqE ')' { $$ = createMethodCallExpr($1, $3, $5); }
+			| expr '.' ID '(' EOL expr_seqE ')' { $$ = createMethodCallExpr($1, $3, $6); }
+			| expr '.' ID '(' EOL expr_seqE EOL ')' { $$ = createMethodCallExpr($1, $3, $6); }
+			| expr '.' ID '(' expr_seqE EOL ')' { $$ = createMethodCallExpr($1, $3, $5); }
 			
-			| expr '.' EOL ID { $$ = createFieldAccExpr($1, $4, NULL); }
-			| expr '.' EOL ID '(' ')' { $$ = createFieldAccExpr($1, $4, NULL); }
-			| expr '.' EOL ID '(' expr_seqE ')' { $$ = createFieldAccExpr($1, $4, $6); }
-			| expr '.' EOL ID '(' EOL expr_seqE ')' { $$ = createFieldAccExpr($1, $4, $7); }
-			| expr '.' EOL ID '(' EOL expr_seqE EOL ')' { $$ = createFieldAccExpr($1, $4, $7); }
-			| expr '.' EOL ID '(' expr_seqE EOL ')' { $$ = createFieldAccExpr($1, $4, $6); }
+			| expr '.' EOL ID { $$ = createFieldAccExpr($1, $4); }
+			| expr '.' EOL ID '(' ')' { $$ = createMethodCallExpr($1, $4, NULL); }
+			| expr '.' EOL ID '(' expr_seqE ')' { $$ = createMethodCallExpr($1, $4, $6); }
+			| expr '.' EOL ID '(' EOL expr_seqE ')' { $$ = createMethodCallExpr($1, $4, $7); }
+			| expr '.' EOL ID '(' EOL expr_seqE EOL ')' { $$ = createMethodCallExpr($1, $4, $7); }
+			| expr '.' EOL ID '(' expr_seqE EOL ')' { $$ = createMethodCallExpr($1, $4, $6); }
 
 
-			| ID { $$ = createFieldAccExpr(NULL, $1, NULL); }
-			| ID '(' ')' { $$ = createFieldAccExpr(NULL, $1, NULL); }
-			| ID '(' expr_seqE ')' { $$ = createFieldAccExpr(NULL, $1, $3); }
-			| ID '(' EOL expr_seqE ')' { $$ = createFieldAccExpr(NULL, $1, $4); }
-			| ID '(' EOL expr_seqE EOL ')' { $$ = createFieldAccExpr(NULL, $1, $4); }
-			| ID '(' expr_seqE EOL ')' { $$ = createFieldAccExpr(NULL, $1, $3); }
+			| ID { $$ = createFieldAccExpr(NULL, $1); }
+			| ID '(' ')' { $$ = createMethodCallExpr(NULL, $1, NULL); }
+			| ID '(' expr_seqE ')' { $$ = createMethodCallExpr(NULL, $1, $3); }
+			| ID '(' EOL expr_seqE ')' { $$ = createMethodCallExpr(NULL, $1, $4); }
+			| ID '(' EOL expr_seqE EOL ')' { $$ = createMethodCallExpr(NULL, $1, $4); }
+			| ID '(' expr_seqE EOL ')' { $$ = createMethodCallExpr(NULL, $1, $3); }
 			| SELF { $$ = createSelfExpr(); }
 			
-			| SUPER { $$ = createSuperExpr(NULL); }
 			| SUPER '(' ')' { $$ = createSuperExpr(NULL); }
 			| SUPER '(' expr_seqE ')' { $$ = createSuperExpr($3); }
 			| SUPER '(' EOL expr_seqE ')' { $$ = createSuperExpr($4); }

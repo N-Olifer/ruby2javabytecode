@@ -29,6 +29,6 @@ void printElsifSeqNode(struct ElsifSeqNode *node);
 
 
 void printTree(struct ProgramNode* rootNode);
-
+void exprTypeToStr(enum ExprNodeType type, char* str);
 
 #endif

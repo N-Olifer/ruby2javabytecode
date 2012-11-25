@@ -3,11 +3,10 @@
 #include <qmap.h>
 #include <qhash.h>
 
-
-class TableClass;
-class TableConst;
-class TableMethod;
-class TableVar;
+class SemanticClass;
+class SemanticConst;
+class SemanticMethod;
+class SemanticVar;
 
 
 enum ConstType
@@ -22,15 +21,15 @@ enum ConstType
 };
 
 
-class TableClass
+class SemanticClass
 {
 public:
-    QHash<QString, TableMethod> methods;
-    QHash<int, TableConst> constants;
-    QHash<QString, TableVar> fields;
+    QHash<QString, SemanticMethod> methods;
+    QHash<int, SemanticConst> constants;
+    QHash<QString, SemanticVar> fields;
 };
 
-class TableConst
+class SemanticConst
 {
 public:
     ConstType type;
@@ -42,15 +41,21 @@ public:
     int numberRef2;
 };
 
-class TableMethod
+class SemanticMethod
 {
 public:
-    QHash<QString, TableVar> locals;
+    int consctName;
+    int constDesc;
+    bool abstract;
+    QHash<QString, SemanticVar> locals;
+
 };
 
-class TableVar
+class SemanticVar
 {
 public:
+    int constName;
+    int constDesc;
     int number;
 };
 
