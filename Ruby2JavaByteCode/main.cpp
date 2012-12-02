@@ -13,6 +13,19 @@ extern int yyparse(void);
 extern FILE * yyin;
 extern struct ProgramNode * root;
 
+void generateCode(SemanticAnalyzer* sem)
+{
+    QFile file("result.txt");
+    if(file.open(QIODevice::WriteOnly))
+    {
+        QDataStream out(&file);
+
+        //sem->generate(out);
+
+        file.close();
+    }
+}
+
 void showConstantsTable(SemanticAnalyzer* sem)
 {
     foreach(SemanticClass* semClass, sem->classTable)
@@ -54,6 +67,7 @@ void semantic()
         out << error << "\n";
 
     showConstantsTable(sem);
+    generateCode(sem);
 }
 
 int main(int argc, char *argv[])
@@ -70,9 +84,12 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    yyparse();
+    int result = yyparse();
     //printTree(root);
-    semantic();
+
+    if(!result)
+        semantic();
+
 
     return a.exec();
 }

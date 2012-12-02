@@ -576,7 +576,6 @@ expr		: expr '+' expr { $$ = createBinExpr(ePlus, $1, $3); }
 			| NIL { $$ = createNilExpr(); }
 			| TRUE { $$ = createBoolExpr(1); }
 			| FALSE { $$ = createBoolExpr(0); }
-			| expr '.' ID { $$ = createFieldAccExpr($1, $3); }
 
 			| expr '.' ID '(' ')' { $$ = createMethodCallExpr($1, $3, NULL); }
 			| expr '.' ID '(' expr_seqE ')' { $$ = createMethodCallExpr($1, $3, $5); }
@@ -584,7 +583,6 @@ expr		: expr '+' expr { $$ = createBinExpr(ePlus, $1, $3); }
 			| expr '.' ID '(' EOL expr_seqE EOL ')' { $$ = createMethodCallExpr($1, $3, $6); }
 			| expr '.' ID '(' expr_seqE EOL ')' { $$ = createMethodCallExpr($1, $3, $5); }
 			
-			| expr '.' EOL ID { $$ = createFieldAccExpr($1, $4); }
 			| expr '.' EOL ID '(' ')' { $$ = createMethodCallExpr($1, $4, NULL); }
 			| expr '.' EOL ID '(' expr_seqE ')' { $$ = createMethodCallExpr($1, $4, $6); }
 			| expr '.' EOL ID '(' EOL expr_seqE ')' { $$ = createMethodCallExpr($1, $4, $7); }

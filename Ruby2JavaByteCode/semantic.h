@@ -2,7 +2,7 @@
 #define SEMANTICSTRUCTURES_H
 #include <QString.h>
 #include <qlinkedlist.h>
-#include <QTextStream.h>>
+#include <QTextStream.h>
 #include "SemanticTables.h"
 #include "structures.h"
 
@@ -22,9 +22,6 @@ class AttrMethodCall;
 class AttrFieldAcc;
 class AttrConstExpr;
 
-
-
-
 class SemanticAnalyzer
 {
 public:
@@ -37,6 +34,7 @@ public:
     void doSemantics();
     void transform();
     void dotPrint(QTextStream & out);
+    //void generate(QDataStream & out);
 };
 
 class AttributedNode

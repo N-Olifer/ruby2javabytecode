@@ -83,6 +83,7 @@ void AttrProgram::transform()
 {
     AttrClassDef* mainClass = new AttrClassDef();
     mainClass->id = NAME_MAIN_CLASS;
+    mainClass->parentId = NAME_JAVA_OBJECT;
 
     AttrMethodDef* mainMethod = new AttrMethodDef();
     mainMethod->id = NAME_MAIN_CLASS_METHOD;
@@ -124,10 +125,15 @@ AttrClassDef* AttrClassDef::fromParserNode(StmtNode* node)
 
 void AttrClassDef::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> & errors)
 {
-    // ПРоверка переопределения
+    // Проверка переопределения
     if(classTable.contains(id))
     {
-        errors << "Class redefenition: " + id + ".";
+        errors << "Class redefinition: " + id + ".";
+        return;
+    }
+    if(!id[0].isUpper() && id[0].isLetter())
+    {
+        errors << "Incorrect class name: " + id + ".";
         return;
     }
 
@@ -135,34 +141,43 @@ void AttrClassDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sema
 
     SemanticClass* semClass = new SemanticClass();
 
-    classTable.insert(id, semClass);
-    if(curClass)
-    {
-        semClass->constClass = curClass->addConstantClass(id);
-        semClass->id = id;
-        semClass->parentId = parentId;
+    semClass->id = id;
+    semClass->parentId = parentId;
+    semClass->constClass = semClass->addConstantClass(id);
 
-        // Проверка существования родителя
-        if(parentId != NAME_COMMON_CLASS)
+    classTable.insert(id, semClass);
+
+    // Проверка существования родителя
+    if(parentId != NAME_COMMON_CLASS && parentId != NAME_JAVA_OBJECT)
+    {
+        if(!classTable.contains(parentId))
         {
-            if(!classTable.contains(parentId))
-            {
-                errors << "Parent class " + parentId + " of " + id + " not found.";
-                return;
-            }
-            semClass->constParent = classTable.value(parentId)->constClass;
+            errors << "Parent class " + parentId + " of " + id + " not found.";
+            return;
         }
-        else
-            semClass->constParent = EMPTY_CONST_NUMBER;
+        semClass->constParent = classTable.value(parentId)->constClass;
     }
+    else
+        semClass->constParent = EMPTY_CONST_NUMBER;
+
 
     foreach(AttrStmt* stmt, body)
         stmt->doSemantics(classTable, semClass, NULL, errors);
 
+    // Проверка существования конструктора
     if(!semClass->methods.contains(id))
     {
         AttrMethodDef* defaultConstructor = new AttrMethodDef();
         defaultConstructor->id = NAME_DEFAULT_CONSTRUCTOR;
+
+        AttrExprStmt* stmt = new AttrExprStmt();
+        AttrMethodCall* superCall = new AttrMethodCall();
+        superCall->id = "super";
+        superCall->left = NULL;
+        stmt->expr = superCall;
+
+        defaultConstructor->body << stmt;
+
         defaultConstructor->doSemantics(classTable, semClass, NULL, errors);
     }
 }
@@ -197,7 +212,8 @@ void AttrMethodDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sem
 {
     if(curClass->methods.contains(id))
     {
-        //?
+        errors << QString("Method already defined: " + id);
+        return;
     }
     SemanticMethod* newMethod = new SemanticMethod();
     newMethod->id = id;
@@ -209,7 +225,7 @@ void AttrMethodDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sem
     desc += QString(")");
     desc += DESC_COMMON_CLASS;
 
-    newMethod->constNameAndType = curClass->addConstantNameAndType(id, desc);
+    newMethod->constMethodRef = curClass->addConstantMethodRef(curClass->id, id, desc);
 
     curClass->methods.insert(id, newMethod);
     foreach(AttrMethodDefParam* param, params)
@@ -340,6 +356,7 @@ AttrExpr* AttrExpr::fromParserNode(ExprNode* node)
     case eFieldAcc:
         return AttrFieldAcc::fromParserNode(node);
     case eMethodCall:
+    case eSuper:
         return AttrMethodCall::fromParserNode(node);
     case eAssign:
     case ePlus:
@@ -467,27 +484,29 @@ AttrMethodCall* AttrMethodCall::fromParserNode(ExprNode* node)
 
 void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
-    isObjectCreating = false;
-
     if(left)
     {
-        if(left->type == eFieldAcc)
+        QString leftId = ((AttrFieldAcc*)left)->id;
+        if(left->type == eFieldAcc && id == "new" && leftId[0].isUpper())
         {
-            QString id = ((AttrFieldAcc*)left)->id;
-            if(id[0].isUpper() && !classTable.contains(((AttrFieldAcc*)left)->id))
+            if(!classTable.contains(leftId))
             {
                 errors << "Class doesn't exist when creating object: " + id;
                 return;
             }
             isObjectCreating = true;
             constClass = curClass->addConstantClass(id);
-
+        }
+        else
+        {
+            isObjectCreating = false;
+            constClass = EMPTY_CONST_NUMBER;
         }
         left->doSemantics(classTable, curClass, curMethod, errors);
     }
     if(id == "super")
     {
-        if(!classTable.value(curClass->parentId)->methods.contains(curMethod->id))
+        if(!classTable.contains(curClass->parentId) || !classTable.value(curClass->parentId)->methods.contains(curMethod->id))
             errors << "Parent class doesn't have method:" + curMethod->id;
     }
 }
@@ -518,7 +537,9 @@ AttrFieldAcc* AttrFieldAcc::fromParserNode(ExprNode* node)
 void AttrFieldAcc::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
     if(left != NULL)
+    {
         left->doSemantics(classTable, curClass, curMethod, errors);
+    }
     else
     {
         if(id.left(1) != QString("@"))
@@ -526,7 +547,7 @@ void AttrFieldAcc::doSemantics(QHash<QString, SemanticClass *> &classTable, Sema
         else
         {
             curClass->addField(id);
-            constFieldRef = curClass->addConstantFieldRef(id, curClass->id, QString(DESC_COMMON_CLASS));
+            constFieldRef = curClass->addConstantFieldRef(curClass->id, id, QString(DESC_COMMON_CLASS));
         }
     }
 }

@@ -15,7 +15,7 @@ class SemanticVar;
 #define NAME_MAIN_CLASS "<MainClass>"
 #define NAME_MAIN_CLASS_METHOD "main"
 #define NAME_DEFAULT_CONSTRUCTOR "<init>"
-
+#define NAME_JAVA_OBJECT "Object"
 #define VALUE_MAX2BIT 65535
 
 #define DESC_COMMON_CLASS "L"NAME_COMMON_CLASS";"
@@ -31,13 +31,13 @@ enum ConstType
     CONSTANT_Methodref = 10
 };
 
-
 class SemanticClass
 {
 public:
     int constClass;
     int constParent;
     bool abstract;
+
     QString id;
     QString parentId;
 
@@ -63,7 +63,7 @@ public:
     SemanticConst(ConstType type, int number, QString & strValue = QString(), int intValue = 666, int ref1 = -1, int ref2 = -1);
 
     ConstType type;
-    int number;
+    int number; // Номер константы
 
     QString strValue;
     int intValue;
@@ -80,7 +80,7 @@ class SemanticMethod
 {
 public:
     QString id;
-    int constNameAndType;
+    int constMethodRef;
     bool abstract;
     QHash<QString, SemanticVar*> locals;
 
@@ -91,8 +91,6 @@ public:
 class SemanticVar
 {
 public:
-    //int constName;
-    //int constDesc;
     int number;
 };
 
