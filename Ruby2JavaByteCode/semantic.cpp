@@ -3,12 +3,25 @@
 #include "structures.h"
 #include "test.h"
 
-Semantics::Semantics(ProgramNode* root)
+SemanticAnalyzer::SemanticAnalyzer(ProgramNode* root)
 {
     this->root = AttrProgram::fromParserNode(root);
 }
 
-void Semantics::fillStmtList(StmtSeqNode* seq, QLinkedList<AttrStmt*> & list)
+void SemanticAnalyzer::doSemantics()
+{
+    root->doSemantics(classTable, NULL, NULL, errors);
+}
+
+
+void SemanticAnalyzer::dotPrint(QTextStream & out)
+{
+    out << QString("digraph G{ node[shape=\"rectangle\",style=\"rounded, filled\",fillcolor=\"white\"] \n");
+    root->dotPrint(out);
+    out << QString("}");
+}
+
+void AttributedNode::fillStmtList(StmtSeqNode* seq, QLinkedList<AttrStmt*> & list)
 {
     if(seq)
     {
@@ -21,16 +34,8 @@ void Semantics::fillStmtList(StmtSeqNode* seq, QLinkedList<AttrStmt*> & list)
     }
 }
 
-void Semantics::doSemantics()
+void AttributedNode::transform()
 {
-    root->doSemantics();
-}
-
-void Semantics::dotPrint(QTextStream & out)
-{
-    out << QString("digraph G{ node[shape=\"rectangle\",style=\"rounded, filled\",fillcolor=\"white\"] \n");
-    root->dotPrint(out);
-    out << QString("}");
 }
 
 void AttributedNode::dotPrintStmtSeq(QLinkedList<AttrStmt*> seq, QTextStream & out)
@@ -55,27 +60,39 @@ void AttributedNode::dotPrintExprSeq(QLinkedList<AttrExpr*> seq, QTextStream & o
     }
 }
 
-void AttrProgram::check()
+void AttrProgram::doSemantics(QHash<QString, SemanticClass*> & classTable, SemanticClass* curClass, SemanticMethod* curMethod, QList<QString> & errors)
 {
-
-}
-
-void AttrProgram::doSemantics()
-{
-
+    transform();
+    body.first()->doSemantics(classTable, NULL, NULL, errors);
 }
 
 AttrProgram* AttrProgram::fromParserNode(ProgramNode* node)
 {
     AttrProgram* result = new AttrProgram();
-    Semantics::fillStmtList(node->body, result->body);
+    AttributedNode::fillStmtList(node->body, result->body);
     return result;
 }
 
 void AttrProgram::dotPrint(QTextStream & out)
 {
-    out << QString::number((int)this) + QString("[label=Program]") + QString("\n");
+    out << QString::number((int)this) + QString("[label = \"Program\"]") + QString("\n");
     dotPrintStmtSeq(body, out);
+}
+
+void AttrProgram::transform()
+{
+    AttrClassDef* mainClass = new AttrClassDef();
+    mainClass->id = NAME_MAIN_CLASS;
+
+    AttrMethodDef* mainMethod = new AttrMethodDef();
+    mainMethod->id = NAME_MAIN_CLASS_METHOD;
+    mainMethod->params << new AttrMethodDefParam();
+    mainMethod->params.first()->id = "argv";
+    mainClass->body << mainMethod;
+    mainMethod->body << body;
+
+    body.clear();
+    body << mainClass;
 }
 
 AttrStmt* AttrStmt::fromParserNode(StmtNode* node)
@@ -101,18 +118,53 @@ AttrClassDef* AttrClassDef::fromParserNode(StmtNode* node)
     AttrClassDef* result = new AttrClassDef();
     result->id = node->id;
     result->parentId = node->secondId;
-    Semantics::fillStmtList(node->block, result->body);
+    AttributedNode::fillStmtList(node->block, result->body);
     return result;
 }
 
-void AttrClassDef::check()
+void AttrClassDef::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> & errors)
 {
+    // ПРоверка переопределения
+    if(classTable.contains(id))
+    {
+        errors << "Class redefenition: " + id + ".";
+        return;
+    }
 
-}
+    transform();
 
-void AttrClassDef::doSemantics()
-{
+    SemanticClass* semClass = new SemanticClass();
 
+    classTable.insert(id, semClass);
+    if(curClass)
+    {
+        semClass->constClass = curClass->addConstantClass(id);
+        semClass->id = id;
+        semClass->parentId = parentId;
+
+        // Проверка существования родителя
+        if(parentId != NAME_COMMON_CLASS)
+        {
+            if(!classTable.contains(parentId))
+            {
+                errors << "Parent class " + parentId + " of " + id + " not found.";
+                return;
+            }
+            semClass->constParent = classTable.value(parentId)->constClass;
+        }
+        else
+            semClass->constParent = EMPTY_CONST_NUMBER;
+    }
+
+    foreach(AttrStmt* stmt, body)
+        stmt->doSemantics(classTable, semClass, NULL, errors);
+
+    if(!semClass->methods.contains(id))
+    {
+        AttrMethodDef* defaultConstructor = new AttrMethodDef();
+        defaultConstructor->id = NAME_DEFAULT_CONSTRUCTOR;
+        defaultConstructor->doSemantics(classTable, semClass, NULL, errors);
+    }
 }
 
 void AttrClassDef::dotPrint(QTextStream & out)
@@ -121,11 +173,17 @@ void AttrClassDef::dotPrint(QTextStream & out)
     dotPrintStmtSeq(body, out);
 }
 
+void AttrClassDef::transform()
+{
+    if(parentId.isEmpty())
+        parentId = NAME_COMMON_CLASS;
+}
+
 AttrMethodDef* AttrMethodDef::fromParserNode(StmtNode* node)
 {
     AttrMethodDef* result = new AttrMethodDef();
     result->id = node->id;
-    Semantics::fillStmtList(node->block, result->body);
+    AttributedNode::fillStmtList(node->block, result->body);
     MethodDefParamNode* current = node->params->first;
     while(current)
     {
@@ -135,14 +193,29 @@ AttrMethodDef* AttrMethodDef::fromParserNode(StmtNode* node)
     return result;
 }
 
-void AttrMethodDef::check()
+void AttrMethodDef::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> & errors)
 {
+    if(curClass->methods.contains(id))
+    {
+        //?
+    }
+    SemanticMethod* newMethod = new SemanticMethod();
+    newMethod->id = id;
 
-}
+    QString desc("(");
+    int count = params.count();
+    for(int  i = 0; i < count; i++)
+        desc += DESC_COMMON_CLASS;
+    desc += QString(")");
+    desc += DESC_COMMON_CLASS;
 
-void AttrMethodDef::doSemantics()
-{
+    newMethod->constNameAndType = curClass->addConstantNameAndType(id, desc);
 
+    curClass->methods.insert(id, newMethod);
+    foreach(AttrMethodDefParam* param, params)
+        param->doSemantics(classTable, curClass, newMethod, errors);
+    foreach(AttrStmt* stmt, body)
+        stmt->doSemantics(classTable, curClass, newMethod, errors);
 }
 
 void AttrMethodDef::dotPrint(QTextStream & out)
@@ -166,14 +239,10 @@ AttrMethodDefParam* AttrMethodDefParam::fromParserNode(MethodDefParamNode* node)
     return result;
 }
 
-void AttrMethodDefParam::check()
+
+void AttrMethodDefParam::doSemantics(QHash<QString, SemanticClass*> & classTable, SemanticClass* curClass, SemanticMethod* curMethod, QList<QString> & errors)
 {
-
-}
-
-void AttrMethodDefParam::doSemantics()
-{
-
+    curMethod->addLocalVar(id, curClass);
 }
 
 void AttrMethodDefParam::dotPrint(QTextStream & out)
@@ -185,7 +254,7 @@ AttrCycleStmt* AttrCycleStmt::fromParserNode(StmtNode* node)
 {
     AttrCycleStmt* result = new AttrCycleStmt();
     result->expr = AttrExpr::fromParserNode(node->expr);
-    Semantics::fillStmtList(node->block, result->block);
+    AttributedNode::fillStmtList(node->block, result->block);
     if( node->type == eWhile)
         result->cycleType = cycleWhile;
     else
@@ -193,14 +262,12 @@ AttrCycleStmt* AttrCycleStmt::fromParserNode(StmtNode* node)
     return result;
 }
 
-void AttrCycleStmt::check()
+
+void AttrCycleStmt::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
-
-}
-
-void AttrCycleStmt::doSemantics()
-{
-
+    expr->doSemantics(classTable, curClass, curMethod, errors);
+    foreach(AttrStmt* stmt, block)
+        stmt->doSemantics(classTable, curClass, curMethod, errors);
 }
 
 void AttrCycleStmt::dotPrint(QTextStream & out)
@@ -224,14 +291,10 @@ AttrReturnStmt* AttrReturnStmt::fromParserNode(StmtNode* node)
     return result;
 }
 
-void AttrReturnStmt::check()
+
+void AttrReturnStmt::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
-
-}
-
-void AttrReturnStmt::doSemantics()
-{
-
+    expr->doSemantics(classTable, curClass, curMethod, errors);
 }
 
 void AttrReturnStmt::dotPrint(QTextStream & out)
@@ -251,14 +314,10 @@ AttrExprStmt* AttrExprStmt::fromParserNode(StmtNode* node)
     return result;
 }
 
-void AttrExprStmt::check()
+
+void AttrExprStmt::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
-
-}
-
-void AttrExprStmt::doSemantics()
-{
-
+    expr->doSemantics(classTable, curClass, curMethod, errors);
 }
 
 void AttrExprStmt::dotPrint(QTextStream & out)
@@ -310,25 +369,53 @@ AttrBinExpr* AttrBinExpr::fromParserNode(ExprNode* node)
     return result;
 }
 
-void AttrBinExpr::check()
+void AttrBinExpr::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
+    transform();
 
-}
-
-void AttrBinExpr::doSemantics()
-{
-
+    if(type == eAssign && left->type != eFieldAccAssign)
+    {
+        errors << "Not lvalue left of \"=\"";
+        return;
+    }
+    if(left)
+        left->doSemantics(classTable, curClass, curMethod, errors);
+    right->doSemantics(classTable, curClass, curMethod, errors);
 }
 
 void AttrBinExpr::dotPrint(QTextStream & out)
 {
-    char str[25];
-    exprTypeToStr(type, str);
-    out << QString::number((int)this) + "[label=\"" + str + "\"]" + QString("\n");
-    left->dotPrint(out);
+    transform();
+    if(type == eFieldAccAssign)
+        out << QString::number((int)this) + "[label=\" = " + id + "\"]" + QString("\n");
+    else
+    {
+        char str[25];
+        exprTypeToStr(type, str);
+        out << QString::number((int)this) + "[label=\"" + str + "\"]" + QString("\n");
+    }
+    if(left)
+        left->dotPrint(out);
     right->dotPrint(out);
     out << QString::number((int)this) + "->" + QString::number((int)left) + QString("\n");
     out << QString::number((int)this) + "->" + QString::number((int)right) + QString("\n");
+}
+
+void AttrBinExpr::transform()
+{
+    if(type == eAssign)
+    {
+        if(left->type == eFieldAcc)
+        {
+            type = eFieldAccAssign;
+            //AttrExpr* newLeft;
+            //newLeft = ((AttrFieldAcc*)left)->left;
+            //id = ((AttrFieldAcc*)left)->id;
+            //delete left;
+            //left = newLeft;
+        }
+        // TODO array
+    }
 }
 
 AttrUnExpr* AttrUnExpr::fromParserNode(ExprNode* node)
@@ -339,14 +426,15 @@ AttrUnExpr* AttrUnExpr::fromParserNode(ExprNode* node)
     return result;
 }
 
-void AttrUnExpr::check()
+void AttrUnExpr::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
-
-}
-
-void AttrUnExpr::doSemantics()
-{
-
+    transform();
+    if(expr->type == eBool || expr->type == eString)
+    {
+        errors << "Incorrect type with uMinus";
+        return;
+    }
+    expr->doSemantics(classTable, curClass, curMethod, errors);
 }
 
 void AttrUnExpr::dotPrint(QTextStream & out)
@@ -377,14 +465,31 @@ AttrMethodCall* AttrMethodCall::fromParserNode(ExprNode* node)
     return result;
 }
 
-void AttrMethodCall::check()
+void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
+    isObjectCreating = false;
 
-}
+    if(left)
+    {
+        if(left->type == eFieldAcc)
+        {
+            QString id = ((AttrFieldAcc*)left)->id;
+            if(id[0].isUpper() && !classTable.contains(((AttrFieldAcc*)left)->id))
+            {
+                errors << "Class doesn't exist when creating object: " + id;
+                return;
+            }
+            isObjectCreating = true;
+            constClass = curClass->addConstantClass(id);
 
-void AttrMethodCall::doSemantics()
-{
-
+        }
+        left->doSemantics(classTable, curClass, curMethod, errors);
+    }
+    if(id == "super")
+    {
+        if(!classTable.value(curClass->parentId)->methods.contains(curMethod->id))
+            errors << "Parent class doesn't have method:" + curMethod->id;
+    }
 }
 
 void AttrMethodCall::dotPrint(QTextStream & out)
@@ -408,14 +513,22 @@ AttrFieldAcc* AttrFieldAcc::fromParserNode(ExprNode* node)
     return result;
 }
 
-void AttrFieldAcc::check()
+
+
+void AttrFieldAcc::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
-
-}
-
-void AttrFieldAcc::doSemantics()
-{
-
+    if(left != NULL)
+        left->doSemantics(classTable, curClass, curMethod, errors);
+    else
+    {
+        if(id.left(1) != QString("@"))
+            curMethod->addLocalVar(id, curClass);
+        else
+        {
+            curClass->addField(id);
+            constFieldRef = curClass->addConstantFieldRef(id, curClass->id, QString(DESC_COMMON_CLASS));
+        }
+    }
 }
 
 void AttrFieldAcc::dotPrint(QTextStream & out)
@@ -437,14 +550,16 @@ AttrConstExpr* AttrConstExpr::fromParserNode(ExprNode* node)
     return result;
 }
 
-void AttrConstExpr::check()
+void AttrConstExpr::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
-
-}
-
-void AttrConstExpr::doSemantics()
-{
-
+    if(type == eInt && value > VALUE_MAX2BIT)
+    {
+        constValue = curClass->addConstantInteger(value);
+    }
+    else if(type == eString)
+    {
+        constValue = curClass->addConstantString(str);
+    }
 }
 
 void AttrConstExpr::dotPrint(QTextStream & out)

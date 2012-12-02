@@ -24,12 +24,15 @@ enum ExprNodeType
 	eUMinus,
 	eBrackets,
 	eQBrackets,
+    eQBracketsLvalue,
 	eQBracketsInit,
 	eFieldAcc,
+    eFieldAccAssign,
     eMethodCall,
 	eSuper,
 	eSelf,
     eNil
+
 };
 
 // Тип оператора

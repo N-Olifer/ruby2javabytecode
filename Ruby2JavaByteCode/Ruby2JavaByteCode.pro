@@ -6,7 +6,7 @@
 
 QT       += core
 
-QT       -= gui
+QT       += gui
 
 TARGET = Ruby2JavaByteCode
 CONFIG   += console
@@ -19,7 +19,8 @@ SOURCES += main.cpp \
     test.cpp \
     parser_tab.cpp \
     lex.yy.cpp \
-    semantic.cpp
+    semantic.cpp \
+    semanticTables.cpp
 
 HEADERS += \
     test.h \

@@ -6,14 +6,36 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qprocess.h>
+#include <qtablewidget>
+#include <QApplication>
 
 extern int yyparse(void);
 extern FILE * yyin;
 extern struct ProgramNode * root;
 
+void showConstantsTable(SemanticAnalyzer* sem)
+{
+    foreach(SemanticClass* semClass, sem->classTable)
+    {
+        QTableWidget* table = new QTableWidget();
+        table->setRowCount(semClass->constants.count());
+        table->setColumnCount(3);
+        table->show();
+        table->setWindowTitle(semClass->id);
+        int row = 0;
+        foreach(SemanticConst* constant, semClass->constants)
+        {
+            table->setItem(row, 0, new QTableWidgetItem(constant->numberToString()));
+            table->setItem(row, 1, new QTableWidgetItem(constant->typeToString()));
+            table->setItem(row, 2, new QTableWidgetItem(constant->valueToString()));
+            row++;
+        }
+    }
+}
+
 void semantic()
 {
-    Semantics* sem = new Semantics(root);
+    SemanticAnalyzer* sem = new SemanticAnalyzer(root);
 
     QFile file("dot2.txt");
     if(file.open(QIODevice::WriteOnly))
@@ -21,14 +43,22 @@ void semantic()
         QTextStream out(&file);
 
         sem->dotPrint(out);
+
         file.close();
         QProcess::execute("dot.exe -Tpng -oresult2.png dot2.txt");
     }
+    sem->doSemantics();
+
+    QTextStream out(stdout);
+    foreach(QString error, sem->errors)
+        out << error << "\n";
+
+    showConstantsTable(sem);
 }
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+    QApplication a(argc, argv);
 
     if(argc < 2)
     {
@@ -41,8 +71,8 @@ int main(int argc, char *argv[])
     }
 
     yyparse();
-    printTree(root);
+    //printTree(root);
     semantic();
 
-    return 0;
+    return a.exec();
 }
