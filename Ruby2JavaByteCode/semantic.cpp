@@ -10,6 +10,21 @@ SemanticAnalyzer::SemanticAnalyzer(ProgramNode* root)
 
 void SemanticAnalyzer::doSemantics()
 {
+    //Создание общего предка
+    SemanticClass* commonClass = new SemanticClass();
+    commonClass->id = NAME_COMMON_CLASS;
+    commonClass->parentId = NAME_JAVA_OBJECT;
+    commonClass->constClass = commonClass->addConstantClass(QString(NAME_COMMON_CLASS));
+    commonClass->constParent = commonClass->addConstantClass(QString(NAME_JAVA_OBJECT));
+    SemanticMethod* constr = new SemanticMethod();
+    constr->id = NAME_DEFAULT_CONSTRUCTOR;
+    commonClass->methods.insert(constr->id, constr);
+
+    constr->constName = commonClass->addConstantUtf8(QString(NAME_DEFAULT_CONSTRUCTOR));
+    constr->constDesc = commonClass->addConstantUtf8(QString("()V"));
+
+
+    classTable.insert(commonClass->id, commonClass);
     root->doSemantics(classTable, NULL, NULL, errors);
 }
 
@@ -155,10 +170,9 @@ void AttrClassDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sema
             errors << "Parent class " + parentId + " of " + id + " not found.";
             return;
         }
-        semClass->constParent = classTable.value(parentId)->constClass;
     }
-    else
-        semClass->constParent = EMPTY_CONST_NUMBER;
+    semClass->constParent = semClass->addConstantClass(parentId);
+
 
 
     foreach(AttrStmt* stmt, body)
@@ -169,6 +183,7 @@ void AttrClassDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sema
     {
         AttrMethodDef* defaultConstructor = new AttrMethodDef();
         defaultConstructor->id = NAME_DEFAULT_CONSTRUCTOR;
+        defaultConstructor->isConstructor = true;
 
         AttrExprStmt* stmt = new AttrExprStmt();
         AttrMethodCall* superCall = new AttrMethodCall();
@@ -217,17 +232,35 @@ void AttrMethodDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sem
     }
     SemanticMethod* newMethod = new SemanticMethod();
     newMethod->id = id;
+    if(curClass->id == id)
+        isConstructor = true;
 
     QString desc("(");
     int count = params.count();
     for(int  i = 0; i < count; i++)
         desc += DESC_COMMON_CLASS;
     desc += QString(")");
-    desc += DESC_COMMON_CLASS;
+    if(isConstructor)
+        desc += "V";
+    else
+        desc += DESC_COMMON_CLASS;
 
-    newMethod->constMethodRef = curClass->addConstantMethodRef(curClass->id, id, desc);
+    newMethod->constName = curClass->addConstantUtf8(id);
+    newMethod->constDesc = curClass->addConstantUtf8(desc);
+
+    // Добавление метода в общего родителя
+    SemanticClass* commonClass = classTable.value(QString(NAME_COMMON_CLASS));
+
+    SemanticMethod* newMethodC = new SemanticMethod();
+    newMethodC->id = id;
+    newMethodC->constName = commonClass->addConstantUtf8(id);
+    newMethodC->constDesc = commonClass->addConstantUtf8(desc);
+
+    commonClass->methods.insert(id, newMethodC);
 
     curClass->methods.insert(id, newMethod);
+
+    newMethod->paramCount = params.count();
     foreach(AttrMethodDefParam* param, params)
         param->doSemantics(classTable, curClass, newMethod, errors);
     foreach(AttrStmt* stmt, body)
@@ -425,11 +458,11 @@ void AttrBinExpr::transform()
         if(left->type == eFieldAcc)
         {
             type = eFieldAccAssign;
-            //AttrExpr* newLeft;
-            //newLeft = ((AttrFieldAcc*)left)->left;
-            //id = ((AttrFieldAcc*)left)->id;
-            //delete left;
-            //left = newLeft;
+            AttrExpr* newLeft;
+            newLeft = ((AttrFieldAcc*)left)->left;
+            id = ((AttrFieldAcc*)left)->id;
+            delete left;
+            left = newLeft;
         }
         // TODO array
     }
@@ -495,18 +528,46 @@ void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, Se
                 return;
             }
             isObjectCreating = true;
-            constClass = curClass->addConstantClass(id);
+            //constClass = curClass->addConstantClass(id);
         }
         else
         {
             isObjectCreating = false;
-            constClass = EMPTY_CONST_NUMBER;
+            //constClass = EMPTY_CONST_NUMBER;
+        }
+
+        QString desc("(");
+        int count = arguments.count();
+        for(int  i = 0; i < count; i++)
+            desc += DESC_COMMON_CLASS;
+        desc += QString(")");
+
+        if(!isObjectCreating)
+            desc += DESC_COMMON_CLASS;
+        else
+            desc += "V";
+
+        bool methodFound = false;
+        foreach(SemanticClass* semClass, classTable)
+            foreach(SemanticMethod* method, semClass->methods)
+                if(method->id == id && method->paramCount == arguments.count())
+                {
+                    if(isObjectCreating)
+                        constMethodRef = curClass->addConstantMethodRef(leftId, id, desc);
+                    else
+                        constMethodRef = curClass->addConstantMethodRef(QString(NAME_COMMON_CLASS), id, desc);
+                    methodFound = true;
+                }
+        if(!methodFound)
+        {
+            errors << "Method not exists: " + id;
+            return;
         }
         left->doSemantics(classTable, curClass, curMethod, errors);
     }
     if(id == "super")
     {
-        if(!classTable.contains(curClass->parentId) || !classTable.value(curClass->parentId)->methods.contains(curMethod->id))
+        if(classTable.contains(curClass->parentId) && !classTable.value(curClass->parentId)->methods.contains(curMethod->id))
             errors << "Parent class doesn't have method:" + curMethod->id;
     }
 }

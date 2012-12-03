@@ -10,12 +10,13 @@ class SemanticMethod;
 class SemanticVar;
 
 #define EMPTY_CONST_NUMBER -1
+#define NAMESPACE "Ruby/"
 
-#define NAME_COMMON_CLASS "<CommonClass>"
-#define NAME_MAIN_CLASS "<MainClass>"
+#define NAME_COMMON_CLASS NAMESPACE"<CommonClass>"
+#define NAME_MAIN_CLASS NAMESPACE"<MainClass>"
 #define NAME_MAIN_CLASS_METHOD "main"
 #define NAME_DEFAULT_CONSTRUCTOR "<init>"
-#define NAME_JAVA_OBJECT "Object"
+#define NAME_JAVA_OBJECT "Java/lang/Object"
 #define VALUE_MAX2BIT 65535
 
 #define DESC_COMMON_CLASS "L"NAME_COMMON_CLASS";"
@@ -36,7 +37,7 @@ class SemanticClass
 public:
     int constClass;
     int constParent;
-    bool abstract;
+    bool isAbstract;
 
     QString id;
     QString parentId;
@@ -44,9 +45,11 @@ public:
     QHash<QString, SemanticMethod*> methods;
     QHash<int, SemanticConst*> constants;
     QHash<QString, SemanticVar*> fields;
-    QHash<QString, SemanticClass*> classes;
+
+    SemanticClass() { isAbstract = false; }
 
     void addField(QString & id);
+   // void addMethod(QString & name, QString & desc);
 
     int addConstantUtf8(QString & value);
     int addConstantInteger(int value);
@@ -80,9 +83,11 @@ class SemanticMethod
 {
 public:
     QString id;
-    int constMethodRef;
+    int constName;
+    int constDesc;
     bool abstract;
     QHash<QString, SemanticVar*> locals;
+    int paramCount;
 
     void addLocalVar(QString & name, SemanticClass* currentClass);
 

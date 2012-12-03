@@ -31,7 +31,7 @@ void showConstantsTable(SemanticAnalyzer* sem)
     foreach(SemanticClass* semClass, sem->classTable)
     {
         QTableWidget* table = new QTableWidget();
-        table->setRowCount(semClass->constants.count());
+        table->setRowCount(semClass->constants.count() + semClass->methods.count() + semClass->fields.count() + 2);
         table->setColumnCount(3);
         table->show();
         table->setWindowTitle(semClass->id);
@@ -41,6 +41,21 @@ void showConstantsTable(SemanticAnalyzer* sem)
             table->setItem(row, 0, new QTableWidgetItem(constant->numberToString()));
             table->setItem(row, 1, new QTableWidgetItem(constant->typeToString()));
             table->setItem(row, 2, new QTableWidgetItem(constant->valueToString()));
+            row++;
+        }
+        row++;
+        foreach(SemanticMethod* meth, semClass->methods)
+        {
+            table->setItem(row, 0, new QTableWidgetItem(meth->id));
+            table->setItem(row, 1, new QTableWidgetItem(QString::number(meth->constName)));
+            table->setItem(row, 2, new QTableWidgetItem(QString::number(meth->constDesc)));
+            row++;
+        }
+        row++;
+        foreach(SemanticVar* var, semClass->fields)
+        {
+            table->setItem(row, 0, new QTableWidgetItem(QString::number(var->number)));
+            table->setItem(row, 1, new QTableWidgetItem(semClass->fields.key(var)));
             row++;
         }
     }

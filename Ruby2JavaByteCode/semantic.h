@@ -89,7 +89,9 @@ public:
     QString id;
     QLinkedList<AttrMethodDefParam*> params;
     QLinkedList<AttrStmt*> body;
+    bool isConstructor;
 
+    AttrMethodDef() { isConstructor = false; }
     static AttrMethodDef* fromParserNode(StmtNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
@@ -196,6 +198,7 @@ public:
     QLinkedList<AttrExpr*> arguments;
     bool isObjectCreating;
     int constClass;
+    int constMethodRef;
 
     static AttrMethodCall* fromParserNode(ExprNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
