@@ -1,7 +1,7 @@
 
 #include "SemanticTables.h"
-
-
+#include "semantic.h"
+#include <QFile>
 
 SemanticConst::SemanticConst(ConstType type, int number, QString & value, int intValue, int ref1, int ref2)
 {
@@ -48,10 +48,31 @@ QString SemanticConst::numberToString()
     return QString::number(number);
 }
 
+QDataStream & operator<<(QDataStream& out, const SemanticConst *constant)
+{
+    out << (quint8)constant->type;
+    switch(constant->type)
+    {
+        case CONSTANT_String:
+        case CONSTANT_Class: out << (quint16)constant->numberRef1;
+            break;
+        case CONSTANT_Integer: out << (qint32)constant->intValue;
+            break;
+        case CONSTANT_Fieldref:
+        case CONSTANT_Methodref:
+        case CONSTANT_NameAndType: out << (quint16)constant->numberRef1 << (quint16)constant->numberRef2;
+            break;
+        case CONSTANT_Utf8: out << (quint16)constant->strValue.size() << constant->strValue.toLocal8Bit();
+    }
+    return out;
+}
+
 void SemanticClass::addField(QString &id)
 {
     SemanticVar* newField = new SemanticVar();
     newField->number = fields.size();
+    newField->constName = addConstantUtf8(id);
+    newField->constType = addConstantUtf8(QString(DESC_COMMON_CLASS));
     fields.insert(id, newField);
 }
 
@@ -164,6 +185,35 @@ int SemanticClass::addConstantMethodRef(QString &className, QString &methodName,
     return newConst->number;
 }
 
+void SemanticClass::generate()
+{
+    QFile file(id + ".class");
+    if(file.open(QIODevice::WriteOnly))
+    {
+        QDataStream out(&file);
+
+        out << 0xCAFEBABE << 0x00000032;
+        out << (quint16)(constants.count() + 1);
+
+        foreach(SemanticConst* constant, constants)
+            out << constant;
+
+        out << (quint16)(ACC_SUPER | ACC_PUBLIC);
+        out << (quint16)constClass;
+        out << (quint16)constParent;
+        out << (quint16)0;
+        out << (quint16)fields.count();
+
+        foreach(SemanticVar* field, fields)
+            out << field;
+
+        out << (quint16)methods.count();
+
+        foreach(SemanticMethod* method, methods)
+            method->generate(out);
+    }
+}
+
 
 void SemanticMethod::addLocalVar(QString &name, SemanticClass *currentClass)
 {
@@ -175,6 +225,22 @@ void SemanticMethod::addLocalVar(QString &name, SemanticClass *currentClass)
     }
 }
 
+void SemanticMethod::generate(QDataStream &out)
+{
+    out << (quint16)ACC_PUBLIC_FIELD;
+    out << (quint16)constName;
+    out << (quint16)constDesc;
+    out << (quint16)1; // Колиество атрибутов
+    methodDef->generateCode(out);
+}
 
+QDataStream & operator<< (QDataStream& out, const SemanticVar *var)
+{
+    out << (quint16)ACC_PUBLIC_FIELD;
+    out << (quint16)var->constName;
+    out << (quint16)var->constType;
+    out << (quint16)0;
+    return out;
+}
 
 

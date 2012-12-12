@@ -34,7 +34,7 @@ public:
     void doSemantics();
     void transform();
     void dotPrint(QTextStream & out);
-    //void generate(QDataStream & out);
+    void generate();
 };
 
 class AttributedNode
@@ -95,6 +95,7 @@ public:
     static AttrMethodDef* fromParserNode(StmtNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
+    void generateCode(QDataStream & out);
 };
 
 

@@ -15,15 +15,7 @@ extern struct ProgramNode * root;
 
 void generateCode(SemanticAnalyzer* sem)
 {
-    QFile file("result.txt");
-    if(file.open(QIODevice::WriteOnly))
-    {
-        QDataStream out(&file);
-
-        //sem->generate(out);
-
-        file.close();
-    }
+    sem->generate();
 }
 
 void showConstantsTable(SemanticAnalyzer* sem)

@@ -2,6 +2,8 @@
 #include "semantic.h"
 #include "structures.h"
 #include "test.h"
+#include <QFile>
+#include <QDataStream>
 
 SemanticAnalyzer::SemanticAnalyzer(ProgramNode* root)
 {
@@ -34,6 +36,12 @@ void SemanticAnalyzer::dotPrint(QTextStream & out)
     out << QString("digraph G{ node[shape=\"rectangle\",style=\"rounded, filled\",fillcolor=\"white\"] \n");
     root->dotPrint(out);
     out << QString("}");
+}
+
+void SemanticAnalyzer::generate()
+{
+    foreach(SemanticClass* semClass, classTable)
+        semClass->generate();
 }
 
 void AttributedNode::fillStmtList(StmtSeqNode* seq, QLinkedList<AttrStmt*> & list)
@@ -279,6 +287,10 @@ void AttrMethodDef::dotPrint(QTextStream & out)
         param->dotPrint(out);
         out << QString::number((int)this + 2) + "->" + QString::number((int)param) + QString("\n");
     }
+}
+
+void AttrMethodDef::generateCode(QDataStream &out)
+{
 }
 
 AttrMethodDefParam* AttrMethodDefParam::fromParserNode(MethodDefParamNode* node)
