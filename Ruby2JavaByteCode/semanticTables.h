@@ -16,9 +16,10 @@ class AttrMethodDef;
 #define EMPTY_CONST_NUMBER -1
 #define NAMESPACE "Ruby/"
 
-#define NAME_COMMON_CLASS NAMESPACE"<CommonClass>"
-#define NAME_MAIN_CLASS NAMESPACE"<MainClass>"
+#define NAME_COMMON_CLASS NAMESPACE"CommonClass"
+#define NAME_MAIN_CLASS NAMESPACE"MainClass"
 #define NAME_MAIN_CLASS_METHOD "main"
+#define NAME_COMMON_VALUE NAMESPACE"CommonValue"
 #define NAME_DEFAULT_CONSTRUCTOR "<init>"
 #define NAME_JAVA_OBJECT "Java/lang/Object"
 
@@ -30,6 +31,7 @@ class AttrMethodDef;
 #define VALUE_MAX2BIT 65535
 
 #define DESC_COMMON_CLASS "L"NAME_COMMON_CLASS";"
+#define DESC_COMMON_VALUE "L"NAME_COMMON_VALUE";"
 
 enum ConstType
 {

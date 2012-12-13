@@ -246,12 +246,12 @@ void AttrMethodDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sem
     QString desc("(");
     int count = params.count();
     for(int  i = 0; i < count; i++)
-        desc += DESC_COMMON_CLASS;
+        desc += DESC_COMMON_VALUE;
     desc += QString(")");
     if(isConstructor)
         desc += "V";
     else
-        desc += DESC_COMMON_CLASS;
+        desc += DESC_COMMON_VALUE;
 
     newMethod->constName = curClass->addConstantUtf8(id);
     newMethod->constDesc = curClass->addConstantUtf8(desc);
@@ -551,11 +551,11 @@ void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, Se
         QString desc("(");
         int count = arguments.count();
         for(int  i = 0; i < count; i++)
-            desc += DESC_COMMON_CLASS;
+            desc += DESC_COMMON_VALUE;
         desc += QString(")");
 
         if(!isObjectCreating)
-            desc += DESC_COMMON_CLASS;
+            desc += DESC_COMMON_VALUE;
         else
             desc += "V";
 
@@ -620,7 +620,7 @@ void AttrFieldAcc::doSemantics(QHash<QString, SemanticClass *> &classTable, Sema
         else
         {
             curClass->addField(id);
-            constFieldRef = curClass->addConstantFieldRef(curClass->id, id, QString(DESC_COMMON_CLASS));
+            constFieldRef = curClass->addConstantFieldRef(curClass->id, id, QString(DESC_COMMON_VALUE));
         }
     }
 }
