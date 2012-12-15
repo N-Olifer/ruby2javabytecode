@@ -32,6 +32,11 @@ class AttrMethodDef;
 #define NAME_RTL_ASSIGN "assign"
 #define DESC_RTL_ASSIGN "(L"NAME_COMMON_VALUE";)V"
 
+#define NAME_RTL_CONSOLE "Console"
+#define NAME_RTL_CONSOLE_PRINT_INT "printInt"
+#define DESC_RTL_CONSOLE_PRINT_INT "(I)V"
+#define NAME_RTL_CONSOLE_PRINT_STRING "printString"
+#define DESC_RTL_CONSOLE_PRINT_STRING "(L"NAME_JAVA_STRING";)V"
 
 #define ACC_CLASS_PUBLIC 0x0001
 #define ACC_CLASS_ABSTRACT 0x0400
@@ -50,13 +55,13 @@ class AttrMethodDef;
 
 enum ConstType
 {
-    CONSTANT_Utf8 = 1,
-    CONSTANT_Integer = 3,
-    CONSTANT_String = 8,
-    CONSTANT_NameAndType = 12,
-    CONSTANT_Class = 7,
-    CONSTANT_Fieldref = 9,
-    CONSTANT_Methodref = 10
+    CONSTANT_Utf8			= 1,
+    CONSTANT_Integer		= 3,
+    CONSTANT_String			= 8,
+    CONSTANT_NameAndType	= 12,
+    CONSTANT_Class			= 7,
+    CONSTANT_Fieldref		= 9,
+    CONSTANT_Methodref		= 10
 };
 
 class SemanticClass
@@ -69,7 +74,8 @@ public:
     int constRTLInitIntRef;
     int constRTLAssignRef;
     int constCommonValueClass;
-
+	int constRTLConsolePrintIntRef;
+	int constRTLConsolePrintStringRef;
     bool isAbstract;
 
     QString id;
