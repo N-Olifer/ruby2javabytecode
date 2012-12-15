@@ -140,7 +140,7 @@ AttrStmt* AttrStmt::fromParserNode(StmtNode* node)
     }
 }
 
-void AttrStmt::generate(QDataStream &out, SemanticClass *curClass)
+void AttrStmt::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
 {
 }
 
@@ -226,7 +226,7 @@ void AttrClassDef::transform()
         parentId = NAME_COMMON_CLASS;
 }
 
-void AttrClassDef::generate(QDataStream &out, SemanticClass *curClass)
+void AttrClassDef::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
 {
 }
 
@@ -333,7 +333,7 @@ void AttrMethodDef::generateCode(QDataStream &out, SemanticClass *curClass)
 
     foreach(AttrStmt* stmt, body)
     {
-        stmt->generate(byteOut, curClass);
+        stmt->generate(byteOut, curClass, semMethod);
     }
     byteOut << RETURN;
     attOut << (quint32)byteCode.length();
@@ -439,9 +439,9 @@ void AttrExprStmt::dotPrint(QTextStream & out)
     out << QString::number((int)this) + "->" + QString::number((int)expr) + QString("\n");
 }
 
-void AttrExprStmt::generate(QDataStream &out, SemanticClass *curClass)
+void AttrExprStmt::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
 {
-    expr->generate(out, curClass);
+    expr->generate(out, curClass, curMethod);
 }
 
 AttrExpr* AttrExpr::fromParserNode(ExprNode* node)
@@ -480,7 +480,7 @@ AttrExpr* AttrExpr::fromParserNode(ExprNode* node)
     }
 }
 
-void AttrExpr::generate(QDataStream &out, SemanticClass *curClass)
+void AttrExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod* curMethod)
 {
 }
 
@@ -497,7 +497,7 @@ void AttrBinExpr::doSemantics(QHash<QString, SemanticClass *> &classTable, Seman
 {
     transform();
 
-    if(type == eAssign && left->type != eLocalRef && left->type != eFieldAccRef)
+    if(type == eAssign && left->type != eLocalNewRef && left->type != eFieldAccRef)
     {
         errors << "Not lvalue left of \"=\"";
         return;
@@ -544,7 +544,7 @@ void AttrBinExpr::transform()
         else if(left->type == eLocal)
         {
             //type = eLocalAssign;
-            left->type = eLocalRef;
+            left->type = eLocalNewRef;
             //AttrExpr* newLeft;
             //newLeft = ((AttrLocal*)left)->left;
             //id = ((AttrFieldAcc*)left)->id;
@@ -555,14 +555,18 @@ void AttrBinExpr::transform()
     }
 }
 
-void AttrBinExpr::generate(QDataStream &out, SemanticClass *curClass)
+void AttrBinExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
 {
-    left->generate(out, curClass);
-    right->generate(out, curClass);
+    left->generate(out, curClass, curMethod);
+    right->generate(out, curClass, curMethod);
 
     switch(type)
     {
         case eAssign:
+        {
+            out << INVOKEVIRTUAL << (quint16)curClass->constRTLAssignRef;
+            break;
+        }
         case ePlus:
         case eMinus:
         case eMul:
@@ -603,6 +607,10 @@ void AttrUnExpr::dotPrint(QTextStream & out)
     out << QString::number((int)this) + "[label=\"" + str + "\"]" + QString("\n");
     expr->dotPrint(out);
     out << QString::number((int)this) + "->" + QString::number((int)expr) + QString("\n");
+}
+
+void AttrUnExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
+{
 }
 
 AttrMethodCall* AttrMethodCall::fromParserNode(ExprNode* node)
@@ -698,8 +706,17 @@ void AttrMethodCall::dotPrint(QTextStream & out)
     }
 }
 
-void AttrMethodCall::generateCode(QDataStream &out, SemanticClass *curClass)
+void AttrMethodCall::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
 {
+    //TODO
+
+    foreach(AttrExpr* argument, arguments)
+        argument->generate(out, curClass, curMethod);
+
+    if(id == NAME_PRINTINT_METHOD)
+    {
+        out << INVOKESTATIC << (quint16)curClass->constants.value(curClass->constRTLConsolePrintIntRef)->number;
+    }
     if(id == NAME_SUPER_METHOD)
     {
        // out << ALOAD_0;
@@ -741,9 +758,9 @@ void AttrFieldAcc::dotPrint(QTextStream & out)
     }
 }
 
-void AttrFieldAcc::generateCode(QDataStream &out, SemanticClass *curClass)
+void AttrFieldAcc::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
 {
-    out << ILOAD;
+    //out << ILOAD;
 }
 
 AttrConstExpr* AttrConstExpr::fromParserNode(ExprNode* node)
@@ -788,15 +805,15 @@ void AttrConstExpr::dotPrint(QTextStream & out)
     out << QString::number((int)this) + "[label=\"" + label + "\"]" + QString("\n");
 }
 
-void AttrConstExpr::generateCode(QDataStream &out, SemanticClass *curClass)
+void AttrConstExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
 {
     if(type == eInt)
     {
-        out << NEW << curClass->constants.value(curClass->constCommonValueClass);
+        out << NEW << (quint16)curClass->constants.value(curClass->constCommonValueClass)->number;
         out << DUP;
         //TODO long int
-        out << (qint16)intValue;
-        out << INVOKESPECIAL << curClass->constants.value(curClass->constRTLInitIntRef);
+        out << BIPUSH << (qint8)intValue;
+        out << INVOKESPECIAL << (quint16)curClass->constants.value(curClass->constRTLInitIntRef)->number;
     }
 }
 
@@ -819,6 +836,22 @@ void AttrLocal::dotPrint(QTextStream &out)
     out << QString::number((int)this) + "[label=\" local access: " + id + "\"]" + QString("\n");
 }
 
-void AttrLocal::generateCode(QDataStream &out, SemanticClass *curClass)
+void AttrLocal::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod* curMethod)
 {
+    if(type == eLocal)
+    {
+        out << ALOAD << (quint8)curMethod->locals.value(id)->number;
+    }
+    else if(type == eLocalNewRef)
+    {
+        out << NEW << (quint16)curClass->constants.value(curClass->constCommonValueClass)->number;
+        out << DUP;
+        out << DUP;
+        out << ASTORE << (quint8)curMethod->locals.value(id)->number;
+        out << INVOKESPECIAL << (quint16)curClass->constants.value(curClass->constRTLInitUninitRef)->number;
+    }
+    else if(type == eLocalRef)
+    {
+        out << ALOAD << (quint8)curMethod->locals.value(id)->number;
+    }
 }

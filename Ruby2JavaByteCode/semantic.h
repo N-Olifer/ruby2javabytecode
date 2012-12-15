@@ -53,7 +53,7 @@ class AttrStmt : public AttributedNode
 {
 public:
     static AttrStmt* fromParserNode(StmtNode* node);
-    virtual void generate(QDataStream & out, SemanticClass * curClass);
+    virtual void generate(QDataStream & out, SemanticClass * curClass, SemanticMethod *curMethod);
 };
 
 
@@ -80,7 +80,7 @@ public:
     void doSemantics(QHash<QString, SemanticClass*> & classTable, SemanticClass* curClass, SemanticMethod* curMethod, QList<QString> & errors);
     void dotPrint(QTextStream & out);
     void transform();
-    void generate(QDataStream & out, SemanticClass * curClass);
+    void generate(QDataStream & out, SemanticClass * curClass, SemanticMethod *curMethod);
 };
 
 
@@ -148,7 +148,7 @@ public:
     static AttrExprStmt* fromParserNode(StmtNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
-    virtual void generate(QDataStream & out, SemanticClass * curClass);
+    virtual void generate(QDataStream & out, SemanticClass * curClass, SemanticMethod *curMethod);
 };
 
 
@@ -158,7 +158,7 @@ public:
     ExprNodeType type;
 
     static AttrExpr* fromParserNode(ExprNode* node);
-    virtual void generate(QDataStream & out, SemanticClass * curClass);
+    virtual void generate(QDataStream & out, SemanticClass * curClass, SemanticMethod* curMethod) = 0;
 };
 
 
@@ -175,7 +175,7 @@ public:
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
     void transform();
-    void generate(QDataStream &out, SemanticClass *curClass);
+    void generate(QDataStream &out, SemanticClass *curClass, SemanticMethod* curMethod);
 };
 
 
@@ -187,6 +187,7 @@ public:
     static AttrUnExpr* fromParserNode(ExprNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
+    void generate(QDataStream &out, SemanticClass *curClass, SemanticMethod* curMethod);
 };
 
 
@@ -209,7 +210,7 @@ public:
     static AttrMethodCall* fromParserNode(ExprNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
-    void generateCode(QDataStream & out, SemanticClass* curClass);
+    void generate(QDataStream &out, SemanticClass *curClass, SemanticMethod* curMethod);
 };
 
 
@@ -222,7 +223,7 @@ public:
     static AttrFieldAcc* fromParserNode(ExprNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
-    void generateCode(QDataStream &out, SemanticClass *curClass);
+    void generate(QDataStream &out, SemanticClass *curClass, SemanticMethod* curMethod);
 };
 
 class AttrLocal : public AttrExpr
@@ -234,7 +235,7 @@ public:
     static AttrLocal* fromParserNode(ExprNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
-    void generateCode(QDataStream &out, SemanticClass *curClass);
+    void generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod);
 };
 
 class AttrConstExpr : public AttrExpr
@@ -249,7 +250,7 @@ public:
     static AttrConstExpr* fromParserNode(ExprNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
-    void generateCode(QDataStream & out, SemanticClass* curClass);
+    void generate(QDataStream &out, SemanticClass *curClass, SemanticMethod* curMethod);
 };
 
 

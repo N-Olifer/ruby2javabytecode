@@ -31,6 +31,7 @@ enum ExprNodeType
 	eLocal,
     //eLocalAssign,
     eLocalRef,
+    eLocalNewRef,
     eMethodCall,
 	eSuper,
 	eSelf,

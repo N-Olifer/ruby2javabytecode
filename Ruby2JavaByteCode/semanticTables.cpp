@@ -193,14 +193,9 @@ void SemanticClass::addRTLConstants()
     constRTLInitIntRef = addConstantMethodRef(QString(NAME_COMMON_VALUE), QString(NAME_RTL_INIT), QString(DESC_RTL_INIT_INT));
     constRTLAddRef = addConstantMethodRef(QString(NAME_COMMON_VALUE), QString(NAME_RTL_ADD), QString(DESC_RTL_ADD));
     constRTLAssignRef = addConstantMethodRef(QString(NAME_COMMON_VALUE), QString(NAME_RTL_ASSIGN), QString(DESC_RTL_ASSIGN));
-	constRTLConsolePrintIntRef = addConstantMethodRef(
-		QString(NAME_RTL_CONSOLE), 
-		QString(NAME_RTL_CONSOLE_PRINT_INT), 
-		QString(DESC_RTL_CONSOLE_PRINT_INT));
-	constRTLConsolePrintIntRef = addConstantMethodRef(
-		QString(NAME_RTL_CONSOLE),
-		QString(NAME_RTL_CONSOLE_PRINT_STRING),
-		QString(DESC_RTL_CONSOLE_PRINT_STRING));
+    constRTLInitUninitRef = addConstantMethodRef(QString(NAME_COMMON_VALUE), QString(NAME_RTL_INIT), QString(DESC_RTL_INIT_UNINIT));
+	constRTLConsolePrintIntRef = addConstantMethodRef(QString(NAME_RTL_CONSOLE), QString(NAME_RTL_CONSOLE_PRINT_INT), QString(DESC_RTL_CONSOLE_PRINT_INT));
+    constRTLConsolePrintStringRef = addConstantMethodRef(QString(NAME_RTL_CONSOLE),QString(NAME_RTL_CONSOLE_PRINT_STRING),QString(DESC_RTL_CONSOLE_PRINT_STRING));
 }
 
 void SemanticClass::generate()
@@ -240,7 +235,7 @@ void SemanticMethod::addLocalVar(QString &name, SemanticClass *currentClass)
     if(!locals.contains(name))
     {
         SemanticVar* newVar = new SemanticVar();
-        newVar->number = locals.count() + 1;
+        newVar->number = locals.count();
         locals.insert(name, newVar);
     }
 }

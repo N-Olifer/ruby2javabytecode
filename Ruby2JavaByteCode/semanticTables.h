@@ -22,19 +22,21 @@ class AttrMethodDef;
 #define NAME_COMMON_VALUE NAMESPACE"CommonValue"
 #define NAME_DEFAULT_CONSTRUCTOR "<init>"
 #define NAME_SUPER_METHOD "super"
+#define NAME_PRINTINT_METHOD "printInt"
 #define NAME_JAVA_OBJECT "java/lang/Object"
 #define NAME_JAVA_STRING "java/lang/String"
 
 #define NAME_RTL_INIT "<init>"
 #define DESC_RTL_INIT_INT "(I)V"
+#define DESC_RTL_INIT_UNINIT "()V"
 #define NAME_RTL_ADD "add"
 #define DESC_RTL_ADD "(L"NAME_COMMON_VALUE";)L"NAME_COMMON_VALUE";"
 #define NAME_RTL_ASSIGN "assign"
 #define DESC_RTL_ASSIGN "(L"NAME_COMMON_VALUE";)V"
 
-#define NAME_RTL_CONSOLE "Console"
+#define NAME_RTL_CONSOLE NAMESPACE"Console"
 #define NAME_RTL_CONSOLE_PRINT_INT "printInt"
-#define DESC_RTL_CONSOLE_PRINT_INT "(I)V"
+#define DESC_RTL_CONSOLE_PRINT_INT "("DESC_COMMON_VALUE")V"
 #define NAME_RTL_CONSOLE_PRINT_STRING "printString"
 #define DESC_RTL_CONSOLE_PRINT_STRING "(L"NAME_JAVA_STRING";)V"
 
@@ -74,6 +76,7 @@ public:
     int constRTLInitIntRef;
     int constRTLAssignRef;
     int constCommonValueClass;
+    int constRTLInitUninitRef;
 	int constRTLConsolePrintIntRef;
 	int constRTLConsolePrintStringRef;
     bool isAbstract;
