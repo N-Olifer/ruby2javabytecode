@@ -1294,7 +1294,7 @@ YY_RULE_SETUP
 {
 	yylval.uId = (char*)malloc(sizeof(char) * strlen(yytext));
 	strcpy(yylval.uId, yytext);
-	return ID;
+	return IDFIELD;
 }
 	YY_BREAK
 case 75:
@@ -1303,7 +1303,7 @@ YY_RULE_SETUP
 {
 	yylval.uId = (char*)malloc(sizeof(char) * strlen(yytext));
 	strcpy(yylval.uId, yytext);
-	return ID;
+	return IDFIELD;
 }
 	YY_BREAK
 case 76:

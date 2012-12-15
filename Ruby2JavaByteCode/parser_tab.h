@@ -25,20 +25,21 @@ typedef union
 #define	SUPER	268
 #define	RETURN	269
 #define	ID	270
-#define	EQUAL	271
-#define	NOTEQUAL	272
-#define	OR	273
-#define	AND	274
-#define	NIL	275
-#define	TRUE	276
-#define	FALSE	277
-#define	IF	278
-#define	ELSIF	279
-#define	ELSE	280
-#define	UNLESS	281
-#define	THEN	282
-#define	UMINUS	283
-#define	UBR	284
+#define	IDFIELD	271
+#define	EQUAL	272
+#define	NOTEQUAL	273
+#define	OR	274
+#define	AND	275
+#define	NIL	276
+#define	TRUE	277
+#define	FALSE	278
+#define	IF	279
+#define	ELSIF	280
+#define	ELSE	281
+#define	UNLESS	282
+#define	THEN	283
+#define	UMINUS	284
+#define	UBR	285
 
 
 extern YYSTYPE yylval;

@@ -19,6 +19,7 @@ void SemanticAnalyzer::doSemantics()
     commonClass->parentId = NAME_JAVA_OBJECT;
     commonClass->constClass = commonClass->addConstantClass(QString(NAME_COMMON_CLASS));
     commonClass->constParent = commonClass->addConstantClass(QString(NAME_JAVA_OBJECT));
+    commonClass->addRTLConstants();
     //SemanticMethod* constr = new SemanticMethod();
     //constr->id = NAME_DEFAULT_CONSTRUCTOR;
     //commonClass->methods.insert(constr->id, constr);
@@ -169,6 +170,8 @@ void AttrClassDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sema
     transform();
 
     SemanticClass* semClass = new SemanticClass();
+
+    semClass->addRTLConstants();
 
     semClass->id = id;
     semClass->parentId = parentId;
@@ -453,6 +456,8 @@ AttrExpr* AttrExpr::fromParserNode(ExprNode* node)
         return AttrConstExpr::fromParserNode(node);
     case eFieldAcc:
         return AttrFieldAcc::fromParserNode(node);
+    case eLocal:
+        return AttrLocal::fromParserNode(node);
     case eMethodCall:
     case eSuper:
         return AttrMethodCall::fromParserNode(node);
@@ -492,7 +497,7 @@ void AttrBinExpr::doSemantics(QHash<QString, SemanticClass *> &classTable, Seman
 {
     transform();
 
-    if(type == eAssign && left->type != eFieldAccAssign)
+    if(type == eAssign && left->type != eLocalRef && left->type != eFieldAccRef)
     {
         errors << "Not lvalue left of \"=\"";
         return;
@@ -505,8 +510,10 @@ void AttrBinExpr::doSemantics(QHash<QString, SemanticClass *> &classTable, Seman
 void AttrBinExpr::dotPrint(QTextStream & out)
 {
     transform();
-    if(type == eFieldAccAssign)
-        out << QString::number((int)this) + "[label=\" = " + id + "\"]" + QString("\n");
+    if(type == eAssign && left->type != eLocalRef && left->type != eFieldAccRef)
+    {
+        out << QString::number((int)this) + "[label=\" = \"]" + QString("\n");
+    }
     else
     {
         char str[25];
@@ -526,14 +533,47 @@ void AttrBinExpr::transform()
     {
         if(left->type == eFieldAcc)
         {
-            type = eFieldAccAssign;
-            AttrExpr* newLeft;
-            newLeft = ((AttrFieldAcc*)left)->left;
-            id = ((AttrFieldAcc*)left)->id;
-            delete left;
-            left = newLeft;
+            //type = eFieldAccAssign;
+            left->type = eFieldAccRef;
+           // AttrExpr* newLeft;
+          //  newLeft = ((AttrFieldAcc*)left)->left;
+           // id = ((AttrFieldAcc*)left)->id;
+           // delete left;
+           // left = newLeft;
+        }
+        else if(left->type == eLocal)
+        {
+            //type = eLocalAssign;
+            left->type = eLocalRef;
+            //AttrExpr* newLeft;
+            //newLeft = ((AttrLocal*)left)->left;
+            //id = ((AttrFieldAcc*)left)->id;
+            //delete left;
+            //left = newLeft;
         }
         // TODO array
+    }
+}
+
+void AttrBinExpr::generate(QDataStream &out, SemanticClass *curClass)
+{
+    left->generate(out, curClass);
+    right->generate(out, curClass);
+
+    switch(type)
+    {
+        case eAssign:
+        case ePlus:
+        case eMinus:
+        case eMul:
+        case eDiv:
+        case eLess:
+        case eMore:
+        case eOr:
+        case eAnd:
+        case eEqu:
+        case eNEqu:
+        break;
     }
 }
 
@@ -588,16 +628,21 @@ void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, Se
 {
     if(left)
     {
-        QString leftId = ((AttrFieldAcc*)left)->id;
-        if(left->type == eFieldAcc && id == "new" && leftId[0].isUpper())
+        // Проверка на операцию new
+        QString leftId;
+        if(left->type == eLocal)
         {
-            if(!classTable.contains(leftId))
+            leftId = ((AttrLocal*)left)->id;
+            if(left->type == eFieldAcc && id == "new" && leftId[0].isUpper())
             {
-                errors << "Class doesn't exist when creating object: " + id;
-                return;
+                if(!classTable.contains(leftId))
+                {
+                    errors << "Class doesn't exist when creating object: " + id;
+                    return;
+                }
+                isObjectCreating = true;
+                //constClass = curClass->addConstantClass(id);
             }
-            isObjectCreating = true;
-            //constClass = curClass->addConstantClass(id);
         }
         else
         {
@@ -681,13 +726,8 @@ void AttrFieldAcc::doSemantics(QHash<QString, SemanticClass *> &classTable, Sema
     }
     else
     {
-        if(id.left(1) != QString("@"))
-            curMethod->addLocalVar(id, curClass);
-        else
-        {
-            curClass->addField(id);
-            constFieldRef = curClass->addConstantFieldRef(curClass->id, id, QString(DESC_COMMON_VALUE));
-        }
+        curClass->addField(id);
+        constFieldRef = curClass->addConstantFieldRef(curClass->id, id, QString(DESC_COMMON_VALUE));
     }
 }
 
@@ -701,20 +741,25 @@ void AttrFieldAcc::dotPrint(QTextStream & out)
     }
 }
 
+void AttrFieldAcc::generateCode(QDataStream &out, SemanticClass *curClass)
+{
+    out << ILOAD;
+}
+
 AttrConstExpr* AttrConstExpr::fromParserNode(ExprNode* node)
 {
     AttrConstExpr* result = new AttrConstExpr();
     result->str = node->str;
-    result->value = node->value;
+    result->intValue = node->value;
     result->type = node->type;
     return result;
 }
 
 void AttrConstExpr::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
-    if(type == eInt && value > VALUE_MAX2BIT)
+    if(type == eInt && intValue > VALUE_MAX2BIT)
     {
-        constValue = curClass->addConstantInteger(value);
+        constValue = curClass->addConstantInteger(intValue);
     }
     else if(type == eString)
     {
@@ -728,10 +773,10 @@ void AttrConstExpr::dotPrint(QTextStream & out)
     switch(type)
     {
     case eInt:
-        label = QString::number(value);
+        label = QString::number(intValue);
         break;
     case eBool:
-        if(value)
+        if(intValue)
             label = QString("true");
         else
             label = QString("false");
@@ -741,4 +786,39 @@ void AttrConstExpr::dotPrint(QTextStream & out)
         break;
     }
     out << QString::number((int)this) + "[label=\"" + label + "\"]" + QString("\n");
+}
+
+void AttrConstExpr::generateCode(QDataStream &out, SemanticClass *curClass)
+{
+    if(type == eInt)
+    {
+        out << NEW << curClass->constants.value(curClass->constCommonValueClass);
+        out << DUP;
+        //TODO long int
+        out << (qint16)intValue;
+        out << INVOKESPECIAL << curClass->constants.value(curClass->constRTLInitIntRef);
+    }
+}
+
+
+AttrLocal *AttrLocal::fromParserNode(ExprNode *node)
+{
+    AttrLocal* result = new AttrLocal();
+    result->id = node->id;
+    result->type = eLocal;
+    return result;
+}
+
+void AttrLocal::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
+{
+    curMethod->addLocalVar(id, curClass);
+}
+
+void AttrLocal::dotPrint(QTextStream &out)
+{
+    out << QString::number((int)this) + "[label=\" local access: " + id + "\"]" + QString("\n");
+}
+
+void AttrLocal::generateCode(QDataStream &out, SemanticClass *curClass)
+{
 }

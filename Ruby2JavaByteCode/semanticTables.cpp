@@ -187,6 +187,14 @@ int SemanticClass::addConstantMethodRef(QString &className, QString &methodName,
     return newConst->number;
 }
 
+void SemanticClass::addRTLConstants()
+{
+    constCommonValueClass = addConstantClass(QString(NAME_COMMON_VALUE));
+    constRTLInitIntRef = addConstantMethodRef(QString(NAME_COMMON_VALUE), QString(NAME_RTL_INIT), QString(DESC_RTL_INIT_INT));
+    constRTLAddRef = addConstantMethodRef(QString(NAME_COMMON_VALUE), QString(NAME_RTL_ADD), QString(DESC_RTL_ADD));
+    constRTLAssignRef = addConstantMethodRef(QString(NAME_COMMON_VALUE), QString(NAME_RTL_ASSIGN), QString(DESC_RTL_ASSIGN));
+}
+
 void SemanticClass::generate()
 {
     QFile file(id + ".class");

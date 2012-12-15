@@ -57,6 +57,8 @@ void semantic()
 {
     SemanticAnalyzer* sem = new SemanticAnalyzer(root);
 
+
+    sem->doSemantics();
     QFile file("dot2.txt");
     if(file.open(QIODevice::WriteOnly))
     {
@@ -67,14 +69,13 @@ void semantic()
         file.close();
         QProcess::execute("dot.exe -Tpng -oresult2.png dot2.txt");
     }
-    sem->doSemantics();
 
     QTextStream out(stdout);
     foreach(QString error, sem->errors)
         out << error << "\n";
 
     showConstantsTable(sem);
-    generateCode(sem);
+    //generateCode(sem);
 }
 
 int main(int argc, char *argv[])

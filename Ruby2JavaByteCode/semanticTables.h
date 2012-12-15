@@ -17,13 +17,21 @@ class AttrMethodDef;
 #define NAMESPACE "Ruby/"
 
 #define NAME_COMMON_CLASS NAMESPACE"CommonClass"
-#define NAME_MAIN_CLASS "MainClasszz"
+#define NAME_MAIN_CLASS "MainClass"
 #define NAME_MAIN_CLASS_METHOD "main"
 #define NAME_COMMON_VALUE NAMESPACE"CommonValue"
 #define NAME_DEFAULT_CONSTRUCTOR "<init>"
 #define NAME_SUPER_METHOD "super"
 #define NAME_JAVA_OBJECT "java/lang/Object"
 #define NAME_JAVA_STRING "java/lang/String"
+
+#define NAME_RTL_INIT "<init>"
+#define DESC_RTL_INIT_INT "(I)V"
+#define NAME_RTL_ADD "add"
+#define DESC_RTL_ADD "(L"NAME_COMMON_VALUE";)L"NAME_COMMON_VALUE";"
+#define NAME_RTL_ASSIGN "assign"
+#define DESC_RTL_ASSIGN "(L"NAME_COMMON_VALUE";)V"
+
 
 #define ACC_CLASS_PUBLIC 0x0001
 #define ACC_CLASS_ABSTRACT 0x0400
@@ -56,6 +64,12 @@ class SemanticClass
 public:
     int constClass;
     int constParent;
+
+    int constRTLAddRef;
+    int constRTLInitIntRef;
+    int constRTLAssignRef;
+    int constCommonValueClass;
+
     bool isAbstract;
 
     QString id;
@@ -65,11 +79,10 @@ public:
     QHash<int, SemanticConst*> constants;
     QHash<QString, SemanticVar*> fields;
 
-    SemanticClass() { isAbstract = false; }
     AttrClassDef* classDef;
 
+    SemanticClass() { isAbstract = false; }
     void addField(QString & id);
-   // void addMethod(QString & name, QString & desc);
 
     int addConstantUtf8(QString & value);
     int addConstantInteger(int value);
@@ -78,6 +91,8 @@ public:
     int addConstantClass(QString & name);
     int addConstantFieldRef(QString & className, QString & fieldName, QString & type);
     int addConstantMethodRef(QString & className, QString & methodName, QString & type);
+
+    void addRTLConstants();
 
     void generate();
 };

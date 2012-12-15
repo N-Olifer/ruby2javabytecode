@@ -143,6 +143,21 @@ struct ExprNode* createFieldAccExpr(struct ExprNode* left, char* idStr)
 	return result;
 }
 
+struct ExprNode* createLocalExpr(char* idStr)
+{
+	struct ExprNode* result = (struct ExprNode*)malloc(sizeof(struct ExprNode));
+	
+	result->type = eLocal;
+	result->left = NULL;
+	result->list = NULL;
+	result->right = NULL;
+	result->next = NULL;
+	result->id = idStr;
+	result->str = NULL;
+	
+	return result;
+}
+
 struct ExprNode* createMethodCallExpr(struct ExprNode* left, char* idStr, struct ExprSeqNode* params)
 {
 	struct ExprNode* result = (struct ExprNode*)malloc(sizeof(struct ExprNode));
@@ -478,6 +493,7 @@ struct StmtNode* createUnlessStmt(struct ExprNode *expression, struct StmtSeqNod
 %token SUPER
 %token RETURN
 %token <uId> ID
+%token <uId> IDFIELD
 %token EQUAL
 %token NOTEQUAL
 %token OR
@@ -590,7 +606,8 @@ expr		: expr '+' expr { $$ = createBinExpr(ePlus, $1, $3); }
 			| expr '.' EOL ID '(' expr_seqE EOL ')' { $$ = createMethodCallExpr($1, $4, $6); }
 
 
-			| ID { $$ = createFieldAccExpr(NULL, $1); }
+			| ID { $$ = createLocalExpr($1); }
+			| IDFIELD { $$ = createFieldAccExpr(NULL, $1); }
 			| ID '(' ')' { $$ = createMethodCallExpr(NULL, $1, NULL); }
 			| ID '(' expr_seqE ')' { $$ = createMethodCallExpr(NULL, $1, $3); }
 			| ID '(' EOL expr_seqE ')' { $$ = createMethodCallExpr(NULL, $1, $4); }

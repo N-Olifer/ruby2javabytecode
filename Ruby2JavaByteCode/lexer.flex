@@ -220,12 +220,12 @@ nil return NIL;
 "@"{IDENTIFIER} {
 	yylval.uId = (char*)malloc(sizeof(char) * strlen(yytext));
 	strcpy(yylval.uId, yytext);
-	return ID;
+	return IDFIELD;
 }
 "@@"{IDENTIFIER} {
 	yylval.uId = (char*)malloc(sizeof(char) * strlen(yytext));
 	strcpy(yylval.uId, yytext);
-	return ID;
+	return IDFIELD;
 }
 {IDENTIFIER}"?" {
 	yylval.uId = (char*)malloc(sizeof(char) * strlen(yytext));
