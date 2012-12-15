@@ -53,7 +53,7 @@ class AttrStmt : public AttributedNode
 {
 public:
     static AttrStmt* fromParserNode(StmtNode* node);
-
+    virtual void generate(QDataStream & out, SemanticClass * curClass);
 };
 
 
@@ -80,6 +80,7 @@ public:
     void doSemantics(QHash<QString, SemanticClass*> & classTable, SemanticClass* curClass, SemanticMethod* curMethod, QList<QString> & errors);
     void dotPrint(QTextStream & out);
     void transform();
+    void generate(QDataStream & out, SemanticClass * curClass);
 };
 
 
@@ -90,12 +91,13 @@ public:
     QLinkedList<AttrMethodDefParam*> params;
     QLinkedList<AttrStmt*> body;
     bool isConstructor;
+    bool isStatic;
 
-    AttrMethodDef() { isConstructor = false; }
+    AttrMethodDef() { isConstructor = false; isStatic = false; }
     static AttrMethodDef* fromParserNode(StmtNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
-    void generateCode(QDataStream & out);
+    void generateCode(QDataStream & out, SemanticClass* curClass);
 };
 
 
@@ -146,6 +148,7 @@ public:
     static AttrExprStmt* fromParserNode(StmtNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
+    void generate(QDataStream & out, SemanticClass * curClass);
 };
 
 
@@ -155,6 +158,7 @@ public:
     ExprNodeType type;
 
     static AttrExpr* fromParserNode(ExprNode* node);
+    virtual void generate(QDataStream & out, SemanticClass * curClass);
 };
 
 
@@ -204,6 +208,7 @@ public:
     static AttrMethodCall* fromParserNode(ExprNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
+    void generateCode(QDataStream & out, SemanticClass* curClass);
 };
 
 

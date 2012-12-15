@@ -51,6 +51,7 @@ QString SemanticConst::numberToString()
 QDataStream & operator<<(QDataStream& out, const SemanticConst *constant)
 {
     out << (quint8)constant->type;
+    int tt;
     switch(constant->type)
     {
         case CONSTANT_String:
@@ -62,7 +63,8 @@ QDataStream & operator<<(QDataStream& out, const SemanticConst *constant)
         case CONSTANT_Methodref:
         case CONSTANT_NameAndType: out << (quint16)constant->numberRef1 << (quint16)constant->numberRef2;
             break;
-        case CONSTANT_Utf8: out << (quint16)constant->strValue.size() << constant->strValue.toLocal8Bit();
+        case CONSTANT_Utf8: out << (quint16)constant->strValue.size();
+            tt = out.writeRawData(constant->strValue.toLocal8Bit().data(), constant->strValue.size());
     }
     return out;
 }
@@ -198,7 +200,7 @@ void SemanticClass::generate()
         foreach(SemanticConst* constant, constants)
             out << constant;
 
-        out << (quint16)(ACC_SUPER | ACC_PUBLIC);
+        out << (quint16)(ACC_CLASS_SUPER | ACC_CLASS_PUBLIC);
         out << (quint16)constClass;
         out << (quint16)constParent;
         out << (quint16)0;
@@ -210,7 +212,9 @@ void SemanticClass::generate()
         out << (quint16)methods.count();
 
         foreach(SemanticMethod* method, methods)
-            method->generate(out);
+            method->generate(out, this);
+
+        out << (quint16)0;
     }
 }
 
@@ -225,18 +229,31 @@ void SemanticMethod::addLocalVar(QString &name, SemanticClass *currentClass)
     }
 }
 
-void SemanticMethod::generate(QDataStream &out)
+void SemanticMethod::generate(QDataStream &out, SemanticClass* curClass)
 {
-    out << (quint16)ACC_PUBLIC_FIELD;
+    //if(id == NAME_DEFAULT_CONSTRUCTOR)
+     //   return; //TODO
+
+    quint16 flags;
+    if(methodDef->isStatic)
+    {
+        flags = ACC_FIELD_PUBLIC | ACC_FIELD_STATIC;
+    }
+    else
+        flags = ACC_FIELD_PUBLIC;
+
+    out << (quint16)flags;
     out << (quint16)constName;
     out << (quint16)constDesc;
     out << (quint16)1; // Колиество атрибутов
-    methodDef->generateCode(out);
+
+
+    methodDef->generateCode(out, curClass);
 }
 
 QDataStream & operator<< (QDataStream& out, const SemanticVar *var)
 {
-    out << (quint16)ACC_PUBLIC_FIELD;
+    out << (quint16)ACC_FIELD_PUBLIC;
     out << (quint16)var->constName;
     out << (quint16)var->constType;
     out << (quint16)0;

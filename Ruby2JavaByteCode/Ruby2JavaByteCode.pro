@@ -27,7 +27,8 @@ HEADERS += \
     structures.h \
     parser_tab.h \
     semantic.h \
-    semanticTables.h
+    semanticTables.h \
+    CodeCommands.h
 
 OTHER_FILES += \
     parser.y

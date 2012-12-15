@@ -17,21 +17,28 @@ class AttrMethodDef;
 #define NAMESPACE "Ruby/"
 
 #define NAME_COMMON_CLASS NAMESPACE"CommonClass"
-#define NAME_MAIN_CLASS NAMESPACE"MainClass"
+#define NAME_MAIN_CLASS "MainClasszz"
 #define NAME_MAIN_CLASS_METHOD "main"
 #define NAME_COMMON_VALUE NAMESPACE"CommonValue"
 #define NAME_DEFAULT_CONSTRUCTOR "<init>"
-#define NAME_JAVA_OBJECT "Java/lang/Object"
+#define NAME_SUPER_METHOD "super"
+#define NAME_JAVA_OBJECT "java/lang/Object"
+#define NAME_JAVA_STRING "java/lang/String"
 
-#define ACC_SUPER 0x02
-#define ACC_PUBLIC 0x01
-#define ACC_PUBLIC_FIELD 0x001
-#define ACC_ABSTRACT 0x0400
+#define ACC_CLASS_PUBLIC 0x0001
+#define ACC_CLASS_ABSTRACT 0x0400
+#define ACC_CLASS_SUPER 0x0020
+
+#define ACC_FIELD_PUBLIC 0x0001
+#define ACC_FIELD_STATIC 0x0008
+
+#define ATTR_CODE "Code"
 
 #define VALUE_MAX2BIT 65535
 
 #define DESC_COMMON_CLASS "L"NAME_COMMON_CLASS";"
 #define DESC_COMMON_VALUE "L"NAME_COMMON_VALUE";"
+#define DESC_MAIN_CLASS_METHOD "([L"NAME_JAVA_STRING";)V"
 
 enum ConstType
 {
@@ -102,6 +109,7 @@ public:
     QString id;
     int constName;
     int constDesc;
+    int constCode;
     bool abstract;
     QHash<QString, SemanticVar*> locals;
     int paramCount;
@@ -109,7 +117,7 @@ public:
 
     void addLocalVar(QString & name, SemanticClass* currentClass);
 
-    void generate(QDataStream & out);
+    void generate(QDataStream & out, SemanticClass* curClass);
 };
 
 class SemanticVar

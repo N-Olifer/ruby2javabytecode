@@ -4,6 +4,7 @@
 #include "test.h"
 #include <QFile>
 #include <QDataStream>
+#include "CodeCommands.h"
 
 SemanticAnalyzer::SemanticAnalyzer(ProgramNode* root)
 {
@@ -18,12 +19,12 @@ void SemanticAnalyzer::doSemantics()
     commonClass->parentId = NAME_JAVA_OBJECT;
     commonClass->constClass = commonClass->addConstantClass(QString(NAME_COMMON_CLASS));
     commonClass->constParent = commonClass->addConstantClass(QString(NAME_JAVA_OBJECT));
-    SemanticMethod* constr = new SemanticMethod();
-    constr->id = NAME_DEFAULT_CONSTRUCTOR;
-    commonClass->methods.insert(constr->id, constr);
+    //SemanticMethod* constr = new SemanticMethod();
+    //constr->id = NAME_DEFAULT_CONSTRUCTOR;
+    //commonClass->methods.insert(constr->id, constr);
 
-    constr->constName = commonClass->addConstantUtf8(QString(NAME_DEFAULT_CONSTRUCTOR));
-    constr->constDesc = commonClass->addConstantUtf8(QString("()V"));
+    //constr->constName = commonClass->addConstantUtf8(QString(NAME_DEFAULT_CONSTRUCTOR));
+    //constr->constDesc = commonClass->addConstantUtf8(QString("()V"));
 
 
     classTable.insert(commonClass->id, commonClass);
@@ -112,6 +113,7 @@ void AttrProgram::transform()
     mainMethod->id = NAME_MAIN_CLASS_METHOD;
     mainMethod->params << new AttrMethodDefParam();
     mainMethod->params.first()->id = "argv";
+    mainMethod->isStatic = true;
     mainClass->body << mainMethod;
     mainMethod->body << body;
 
@@ -135,6 +137,10 @@ AttrStmt* AttrStmt::fromParserNode(StmtNode* node)
     case eReturn:
         return AttrReturnStmt::fromParserNode(node);
     }
+}
+
+void AttrStmt::generate(QDataStream &out, SemanticClass *curClass)
+{
 }
 
 AttrClassDef* AttrClassDef::fromParserNode(StmtNode* node)
@@ -187,7 +193,7 @@ void AttrClassDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sema
         stmt->doSemantics(classTable, semClass, NULL, errors);
 
     // ѕроверка существовани€ конструктора
-    if(!semClass->methods.contains(id))
+    if(!semClass->methods.contains(id) && id != NAME_MAIN_CLASS)
     {
         AttrMethodDef* defaultConstructor = new AttrMethodDef();
         defaultConstructor->id = NAME_DEFAULT_CONSTRUCTOR;
@@ -217,6 +223,10 @@ void AttrClassDef::transform()
         parentId = NAME_COMMON_CLASS;
 }
 
+void AttrClassDef::generate(QDataStream &out, SemanticClass *curClass)
+{
+}
+
 AttrMethodDef* AttrMethodDef::fromParserNode(StmtNode* node)
 {
     AttrMethodDef* result = new AttrMethodDef();
@@ -239,35 +249,46 @@ void AttrMethodDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sem
         return;
     }
     SemanticMethod* newMethod = new SemanticMethod();
+    newMethod->methodDef = this;
+
     newMethod->id = id;
     if(curClass->id == id)
         isConstructor = true;
 
-    QString desc("(");
-    int count = params.count();
-    for(int  i = 0; i < count; i++)
-        desc += DESC_COMMON_VALUE;
-    desc += QString(")");
-    if(isConstructor)
-        desc += "V";
+    QString desc;
+    if(curClass->id == NAME_MAIN_CLASS && id == NAME_MAIN_CLASS_METHOD)
+        desc = DESC_MAIN_CLASS_METHOD;
     else
-        desc += DESC_COMMON_VALUE;
+    {
+        desc = QString("(");
+        int count = params.count();
+        for(int  i = 0; i < count; i++)
+            desc += DESC_COMMON_VALUE;
+        desc += QString(")");
+        if(isConstructor)
+            desc += "V";
+        else
+            desc += DESC_COMMON_VALUE;
+    }
+
 
     newMethod->constName = curClass->addConstantUtf8(id);
     newMethod->constDesc = curClass->addConstantUtf8(desc);
+    newMethod->constCode = curClass->addConstantUtf8(QString(ATTR_CODE));
 
     // ƒобавление метода в общего родител€
-    SemanticClass* commonClass = classTable.value(QString(NAME_COMMON_CLASS));
+    if(curClass->id != NAME_MAIN_CLASS)
+    {
+        SemanticClass* commonClass = classTable.value(QString(NAME_COMMON_CLASS));
 
-    SemanticMethod* newMethodC = new SemanticMethod();
-    newMethodC->id = id;
-    newMethodC->constName = commonClass->addConstantUtf8(id);
-    newMethodC->constDesc = commonClass->addConstantUtf8(desc);
+        SemanticMethod* newMethodC = new SemanticMethod();
+        newMethodC->id = id;
+        newMethodC->constName = commonClass->addConstantUtf8(id);
+        newMethodC->constDesc = commonClass->addConstantUtf8(desc);
 
-    commonClass->methods.insert(id, newMethodC);
-
+        commonClass->methods.insert(id, newMethodC);
+    }
     curClass->methods.insert(id, newMethod);
-
     newMethod->paramCount = params.count();
     foreach(AttrMethodDefParam* param, params)
         param->doSemantics(classTable, curClass, newMethod, errors);
@@ -289,8 +310,35 @@ void AttrMethodDef::dotPrint(QTextStream & out)
     }
 }
 
-void AttrMethodDef::generateCode(QDataStream &out)
+void AttrMethodDef::generateCode(QDataStream &out, SemanticClass *curClass)
 {
+    SemanticMethod* semMethod = curClass->methods.value(id);
+
+    out << (quint16)semMethod->constCode;
+
+    QByteArray attribute;
+    QDataStream attOut(&attribute, QIODevice::WriteOnly);
+
+    attOut << (quint16)1000;
+    int localsCount = semMethod->locals.count();
+    if(!isStatic)
+        localsCount++;
+    attOut << (quint16)localsCount;
+
+    QByteArray byteCode;
+    QDataStream byteOut(&byteCode, QIODevice::WriteOnly);
+
+    foreach(AttrStmt* stmt, body)
+    {
+        stmt->generate(byteOut, curClass);
+    }
+    byteOut << RETURN;
+    attOut << (quint32)byteCode.length();
+    attOut.writeRawData(byteCode.data(), byteCode.size());
+    attOut << (quint16)0;
+    attOut << (quint16)0;
+    out << (quint32)attribute.size();
+    out.writeRawData(attribute.data(), attribute.size());
 }
 
 AttrMethodDefParam* AttrMethodDefParam::fromParserNode(MethodDefParamNode* node)
@@ -388,6 +436,11 @@ void AttrExprStmt::dotPrint(QTextStream & out)
     out << QString::number((int)this) + "->" + QString::number((int)expr) + QString("\n");
 }
 
+void AttrExprStmt::generate(QDataStream &out, SemanticClass *curClass)
+{
+    expr->generate(out, curClass);
+}
+
 AttrExpr* AttrExpr::fromParserNode(ExprNode* node)
 {
     if(!node)
@@ -420,6 +473,10 @@ AttrExpr* AttrExpr::fromParserNode(ExprNode* node)
     case eBrackets:
         return AttrUnExpr::fromParserNode(node);
     }
+}
+
+void AttrExpr::generate(QDataStream &out, SemanticClass *curClass)
+{
 }
 
 AttrBinExpr* AttrBinExpr::fromParserNode(ExprNode* node)
@@ -593,6 +650,15 @@ void AttrMethodCall::dotPrint(QTextStream & out)
     {
         left->dotPrint(out);
         out << QString::number((int)this) + "->" + QString::number((int)left) + QString("\n");
+    }
+}
+
+void AttrMethodCall::generateCode(QDataStream &out, SemanticClass *curClass)
+{
+    if(id == NAME_SUPER_METHOD)
+    {
+       // out << ALOAD_0;
+
     }
 }
 
