@@ -75,7 +75,9 @@ void semantic()
         out << error << "\n";
 
     showConstantsTable(sem);
-    generateCode(sem);
+
+    if(sem->errors.isEmpty())
+        generateCode(sem);
 }
 
 int main(int argc, char *argv[])

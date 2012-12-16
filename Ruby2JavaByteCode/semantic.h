@@ -41,6 +41,7 @@ class AttributedNode
 {
 public:
     virtual void doSemantics(QHash<QString, SemanticClass*> & classTable, SemanticClass* curClass, SemanticMethod* curMethod, QList<QString> & errors) = 0;
+    virtual void doFirstSemantics(QHash<QString, SemanticClass*> & classTable, SemanticClass* curClass, SemanticMethod* curMethod, QList<QString> & errors, AttrStmt* parentStmt);
     virtual void dotPrint(QTextStream & out) = 0;
     virtual void transform();
     void dotPrintStmtSeq(QLinkedList<AttrStmt*> seq, QTextStream & out);
@@ -52,8 +53,11 @@ public:
 class AttrStmt : public AttributedNode
 {
 public:
+    StmtNodeType type;
+
     static AttrStmt* fromParserNode(StmtNode* node);
     virtual void generate(QDataStream & out, SemanticClass * curClass, SemanticMethod *curMethod);
+    virtual QLinkedList<AttrStmt*>* getBody() = 0;
 };
 
 
@@ -64,6 +68,7 @@ public:
 
     static AttrProgram* fromParserNode(ProgramNode* node);
     void doSemantics(QHash<QString, SemanticClass*> & classTable, SemanticClass* curClass, SemanticMethod* curMethod, QList<QString> & errors);
+    void doFirstSemantics(QHash<QString, SemanticClass*> & classTable, SemanticClass* curClass, SemanticMethod* curMethod, QList<QString> & errors, AttrStmt* parentStmt);
     void dotPrint(QTextStream & out);
     void transform();
 };
@@ -78,9 +83,11 @@ public:
 
     static AttrClassDef* fromParserNode(StmtNode* node);
     void doSemantics(QHash<QString, SemanticClass*> & classTable, SemanticClass* curClass, SemanticMethod* curMethod, QList<QString> & errors);
+    void doFirstSemantics(QHash<QString, SemanticClass*> & classTable, SemanticClass* curClass, SemanticMethod* curMethod, QList<QString> & errors, AttrStmt* parentStmt);
     void dotPrint(QTextStream & out);
     void transform();
     void generate(QDataStream & out, SemanticClass * curClass, SemanticMethod *curMethod);
+    QLinkedList<AttrStmt*>* getBody();
 };
 
 
@@ -96,8 +103,10 @@ public:
     AttrMethodDef() { isConstructor = false; isStatic = false; }
     static AttrMethodDef* fromParserNode(StmtNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
+    void doFirstSemantics(QHash<QString, SemanticClass*> & classTable, SemanticClass* curClass, SemanticMethod* curMethod, QList<QString> & errors, AttrStmt* parentStmt);
     void dotPrint(QTextStream & out);
     void generateCode(QDataStream & out, SemanticClass* curClass);
+    QLinkedList<AttrStmt*>* getBody();
 };
 
 
@@ -126,7 +135,9 @@ public:
 
     static AttrCycleStmt* fromParserNode(StmtNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
+    void doFirstSemantics(QHash<QString, SemanticClass*> & classTable, SemanticClass* curClass, SemanticMethod* curMethod, QList<QString> & errors, AttrStmt* parentStmt);
     void dotPrint(QTextStream & out);
+    QLinkedList<AttrStmt*>* getBody();
 };
 
 class AttrReturnStmt : public AttrStmt
@@ -137,6 +148,7 @@ public:
     static AttrReturnStmt* fromParserNode(StmtNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
+    QLinkedList<AttrStmt*>* getBody();
 };
 
 
@@ -149,6 +161,7 @@ public:
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
     virtual void generate(QDataStream & out, SemanticClass * curClass, SemanticMethod *curMethod);
+    QLinkedList<AttrStmt*>* getBody();
 };
 
 

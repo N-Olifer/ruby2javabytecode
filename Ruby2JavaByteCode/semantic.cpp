@@ -29,6 +29,7 @@ void SemanticAnalyzer::doSemantics()
 
 
     classTable.insert(commonClass->id, commonClass);
+    root->doFirstSemantics(classTable, NULL, NULL, errors, NULL);
     root->doSemantics(classTable, NULL, NULL, errors);
 }
 
@@ -59,6 +60,10 @@ void AttributedNode::fillStmtList(StmtSeqNode* seq, QLinkedList<AttrStmt*> & lis
     }
 }
 
+void AttributedNode::doFirstSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors, AttrStmt *parentStmt)
+{
+}
+
 void AttributedNode::transform()
 {
 }
@@ -87,8 +92,14 @@ void AttributedNode::dotPrintExprSeq(QLinkedList<AttrExpr*> seq, QTextStream & o
 
 void AttrProgram::doSemantics(QHash<QString, SemanticClass*> & classTable, SemanticClass* curClass, SemanticMethod* curMethod, QList<QString> & errors)
 {
-    transform();
+
     body.first()->doSemantics(classTable, NULL, NULL, errors);
+}
+
+void AttrProgram::doFirstSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors, AttrStmt* parentStmt)
+{
+    transform();
+    body.first()->doFirstSemantics(classTable, NULL, NULL, errors, parentStmt);
 }
 
 AttrProgram* AttrProgram::fromParserNode(ProgramNode* node)
@@ -155,29 +166,29 @@ AttrClassDef* AttrClassDef::fromParserNode(StmtNode* node)
 
 void AttrClassDef::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> & errors)
 {
-    // Проверка переопределения
-    if(classTable.contains(id))
-    {
-        errors << "Class redefinition: " + id + ".";
-        return;
-    }
+
     if(!id[0].isUpper() && id[0].isLetter())
     {
         errors << "Incorrect class name: " + id + ".";
         return;
     }
+    //if(curClass->id != NAME_MAIN_CLASS && curMethod->id != NAME_MAIN_CLASS_METHOD)
+    //{
+    //    errors << "Class definition in wrong place: " + id + ".";
+    //    return;
+   // }
 
     transform();
 
-    SemanticClass* semClass = new SemanticClass();
+    SemanticClass* semClass = classTable.value(id);
 
     semClass->addRTLConstants();
 
-    semClass->id = id;
+    //semClass->id = id;
     semClass->parentId = parentId;
     semClass->constClass = semClass->addConstantClass(id);
 
-    classTable.insert(id, semClass);
+
 
     // Проверка существования родителя
     if(parentId != NAME_COMMON_CLASS && parentId != NAME_JAVA_OBJECT)
@@ -190,10 +201,36 @@ void AttrClassDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sema
     }
     semClass->constParent = semClass->addConstantClass(parentId);
 
-
-
     foreach(AttrStmt* stmt, body)
         stmt->doSemantics(classTable, semClass, NULL, errors);
+
+
+}
+
+void AttrClassDef::doFirstSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors, AttrStmt *parentStmt)
+{
+    // Проверка переопределения
+    if(classTable.contains(id))
+    {
+        errors << "Class redefinition: " + id + ".";
+        return;
+    }
+
+    SemanticClass* semClass = new SemanticClass();
+    semClass->id = id;
+    semClass->classDef = this;
+    classTable.insert(id, semClass);
+
+    // Перемещение определения класса в тело класса
+    if(parentStmt)
+    {
+        QLinkedList<AttrStmt*>* parentBody = parentStmt->getBody();
+        parentBody->removeOne(this);
+        curClass->classDef->getBody()->append(this);
+    }
+
+    foreach(AttrStmt* stmt, body)
+        stmt->doFirstSemantics(classTable, semClass, NULL, errors, this);
 
     // Проверка существования конструктора
     if(!semClass->methods.contains(id) && id != NAME_MAIN_CLASS)
@@ -210,7 +247,7 @@ void AttrClassDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sema
 
         defaultConstructor->body << stmt;
 
-        defaultConstructor->doSemantics(classTable, semClass, NULL, errors);
+        defaultConstructor->doFirstSemantics(classTable, semClass, NULL, errors, this);
     }
 }
 
@@ -230,6 +267,11 @@ void AttrClassDef::generate(QDataStream &out, SemanticClass *curClass, SemanticM
 {
 }
 
+QLinkedList<AttrStmt *> *AttrClassDef::getBody()
+{
+    return &body;
+}
+
 AttrMethodDef* AttrMethodDef::fromParserNode(StmtNode* node)
 {
     AttrMethodDef* result = new AttrMethodDef();
@@ -246,15 +288,11 @@ AttrMethodDef* AttrMethodDef::fromParserNode(StmtNode* node)
 
 void AttrMethodDef::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> & errors)
 {
-    if(curClass->methods.contains(id))
-    {
-        errors << QString("Method already defined: " + id);
-        return;
-    }
-    SemanticMethod* newMethod = new SemanticMethod();
+
+    SemanticMethod* newMethod = curClass->methods.value(id);
     newMethod->methodDef = this;
 
-    newMethod->id = id;
+
     if(curClass->id == id)
         isConstructor = true;
 
@@ -291,12 +329,38 @@ void AttrMethodDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sem
 
         commonClass->methods.insert(id, newMethodC);
     }
-    curClass->methods.insert(id, newMethod);
-    newMethod->paramCount = params.count();
+
+   // newMethod->paramCount = params.count();
     foreach(AttrMethodDefParam* param, params)
         param->doSemantics(classTable, curClass, newMethod, errors);
     foreach(AttrStmt* stmt, body)
         stmt->doSemantics(classTable, curClass, newMethod, errors);
+}
+
+void AttrMethodDef::doFirstSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors, AttrStmt *parentStmt)
+{
+    if(curClass->methods.contains(id))
+    {
+        errors << QString("Method already defined: " + id);
+        return;
+    }
+    //if(parentStmt->type != eClassDef)
+    //{
+    //    errors << QString("Method define in wrong place: " + id);
+    //    return;
+    //}
+    SemanticMethod* newMethod = new SemanticMethod();
+    newMethod->paramCount = params.count();
+    newMethod->id = id;
+    curClass->methods.insert(id, newMethod);
+
+    // Перемещение определения функции в тело класса
+    QLinkedList<AttrStmt*>* parentBody = parentStmt->getBody();
+    parentBody->removeOne(this);
+    curClass->classDef->getBody()->append(this);
+
+    foreach(AttrStmt* stmt, body)
+        stmt->doFirstSemantics(classTable, curClass, newMethod, errors, this);
 }
 
 void AttrMethodDef::dotPrint(QTextStream & out)
@@ -344,6 +408,11 @@ void AttrMethodDef::generateCode(QDataStream &out, SemanticClass *curClass)
     out.writeRawData(attribute.data(), attribute.size());
 }
 
+QLinkedList<AttrStmt *> *AttrMethodDef::getBody()
+{
+    return &body;
+}
+
 AttrMethodDefParam* AttrMethodDefParam::fromParserNode(MethodDefParamNode* node)
 {
     AttrMethodDefParam* result = new AttrMethodDefParam();
@@ -382,6 +451,12 @@ void AttrCycleStmt::doSemantics(QHash<QString, SemanticClass *> &classTable, Sem
         stmt->doSemantics(classTable, curClass, curMethod, errors);
 }
 
+void AttrCycleStmt::doFirstSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors, AttrStmt *parentStmt)
+{
+    foreach(AttrStmt* stmt, block)
+        stmt->doFirstSemantics(classTable, curClass, curMethod, errors, this);
+}
+
 void AttrCycleStmt::dotPrint(QTextStream & out)
 {
     QString label;
@@ -393,6 +468,11 @@ void AttrCycleStmt::dotPrint(QTextStream & out)
     dotPrintStmtSeq(block, out);
     expr->dotPrint(out);
     out << QString::number((int)this) + "->" + QString::number((int)expr) + QString("\n");
+}
+
+QLinkedList<AttrStmt *> *AttrCycleStmt::getBody()
+{
+    return &block;
 }
 
 
@@ -419,6 +499,11 @@ void AttrReturnStmt::dotPrint(QTextStream & out)
     }
 }
 
+QLinkedList<AttrStmt *> *AttrReturnStmt::getBody()
+{
+    return NULL;
+}
+
 AttrExprStmt* AttrExprStmt::fromParserNode(StmtNode* node)
 {
     AttrExprStmt* result = new AttrExprStmt();
@@ -442,6 +527,11 @@ void AttrExprStmt::dotPrint(QTextStream & out)
 void AttrExprStmt::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
 {
     expr->generate(out, curClass, curMethod);
+}
+
+QLinkedList<AttrStmt *> *AttrExprStmt::getBody()
+{
+    return NULL;
 }
 
 AttrExpr* AttrExpr::fromParserNode(ExprNode* node)
@@ -634,6 +724,25 @@ AttrMethodCall* AttrMethodCall::fromParserNode(ExprNode* node)
 
 void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
+    bool methodFound = false;
+    if(left == NULL)
+    {
+        if(id == NAME_SUPER_METHOD ||
+                id == NAME_PRINTINT_METHOD)
+            methodFound = true;
+    }
+    if(!methodFound)
+    {
+        foreach(SemanticClass* semClass, classTable)
+            foreach(SemanticMethod* method, semClass->methods)
+                if(method->id == id && method->paramCount == arguments.count())
+                    methodFound = true;
+    }
+    if(!methodFound)
+    {
+        errors << "Method with " + QString::number(arguments.count()) + " arguments not exists: " + id;
+        return;
+    }
     if(left)
     {
         // Проверка на операцию new
@@ -669,7 +778,7 @@ void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, Se
         else
             desc += "V";
 
-        bool methodFound = false;
+       // bool methodFound = false;
         foreach(SemanticClass* semClass, classTable)
             foreach(SemanticMethod* method, semClass->methods)
                 if(method->id == id && method->paramCount == arguments.count())
@@ -678,13 +787,13 @@ void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, Se
                         constMethodRef = curClass->addConstantMethodRef(leftId, id, desc);
                     else
                         constMethodRef = curClass->addConstantMethodRef(QString(NAME_COMMON_CLASS), id, desc);
-                    methodFound = true;
+                    //methodFound = true;
                 }
-        if(!methodFound)
-        {
-            errors << "Method not exists: " + id;
-            return;
-        }
+        //if(!methodFound)
+        //{
+        //    errors << "Method not exists: " + id;
+        //    return;
+        //}
         left->doSemantics(classTable, curClass, curMethod, errors);
     }
     if(id == "super")
