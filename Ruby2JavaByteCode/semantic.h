@@ -267,7 +267,29 @@ public:
     void dotPrint(QTextStream & out);
     void generate(QDataStream &out, SemanticClass *curClass, SemanticMethod* curMethod);
 };
+class AttrElsif : public AttributedNode
+{
+public:
+    AttrExpr* expr;
+    QLinkedList<AttrStmt*> block;
 
+    static AttrElsif* fromParserNode(ElsifNode* node);
+    void doSemantics(QHash<QString, SemanticClass *> &classTable, 
+		SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
+    void dotPrint(QTextStream & out);
+};
+class AttrIfStmt : public AttrStmt
+{
+public:
+    AttrExpr* expr;
+    QLinkedList<AttrStmt*> block;
+    QLinkedList<AttrStmt*> elseBlock;
+	QLinkedList<AttrElsif*> elsifBlock;
 
-
+    static AttrIfStmt* fromParserNode(StmtNode* node);
+    void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
+    void dotPrint(QTextStream & out);
+    void generate(QDataStream & out, SemanticClass * curClass, SemanticMethod *curMethod);
+    QLinkedList<AttrStmt*>* getBody();
+};
 #endif // SEMANTICSTRUCTURES_H

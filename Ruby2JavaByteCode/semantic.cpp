@@ -161,6 +161,8 @@ AttrStmt* AttrStmt::fromParserNode(StmtNode* node)
         return AttrMethodDef::fromParserNode(node);
     case eReturn:
         return AttrReturnStmt::fromParserNode(node);
+	case eIf:
+		return AttrIfStmt::fromParserNode(node);
     }
 }
 
@@ -719,6 +721,11 @@ void AttrBinExpr::transform()
             //left = newLeft;
         }
         // TODO array
+		//if(left->type == eQBrackets)
+		//{
+		//	type = eQBracketsLvalue;
+		//	//this->
+		//}
     }
 }
 
@@ -1117,4 +1124,92 @@ void AttrLocal::generate(QDataStream &out, SemanticClass *curClass, SemanticMeth
     {
         out << ALOAD << (quint8)curMethod->locals.value(id)->number;
     }
+}
+
+AttrElsif* AttrElsif::fromParserNode(ElsifNode* node)
+{
+	AttrElsif *result = new AttrElsif();
+	result->expr = AttrExpr::fromParserNode(node->expr);
+	AttributedNode::fillStmtList(node->block, result->block);
+	return result;
+}
+void AttrElsif::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
+{
+    expr->doSemantics(classTable, curClass, curMethod, errors);
+    foreach(AttrStmt* stmt, block)
+        stmt->doSemantics(classTable, curClass, curMethod, errors);
+}
+void AttrElsif::dotPrint(QTextStream & out)
+{
+    QString label = "elsif";
+    out << QString::number((int)this) + "[label = \"" + label +"\"]" + QString("\n");
+    dotPrintStmtSeq(block, out);
+    expr->dotPrint(out);
+    out << QString::number((int)this) + "->" + QString::number((int)expr) + QString("\n");
+}
+
+
+AttrIfStmt* AttrIfStmt::fromParserNode(StmtNode* node)
+{
+	AttrIfStmt *result = new AttrIfStmt();
+	result->expr = AttrExpr::fromParserNode(node->expr);
+	AttributedNode::fillStmtList(node->block, result->block);
+	AttributedNode::fillStmtList(node->elseStmtBlock, result->elseBlock);
+	if(node->elsifList)
+    {
+        ElsifNode* current = node->elsifList->first;
+        while(current)
+        {
+            result->elsifBlock << AttrElsif::fromParserNode(current);
+            current = current->next;
+        }
+    }
+	return result;
+}
+void AttrIfStmt::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
+{
+    expr->doSemantics(classTable, curClass, curMethod, errors);
+    foreach(AttrStmt* stmt, block)
+        stmt->doSemantics(classTable, curClass, curMethod, errors);
+    foreach(AttrElsif* elsif, elsifBlock)
+        elsif->doSemantics(classTable, curClass, curMethod, errors);
+    foreach(AttrStmt* stmt, elseBlock)
+        stmt->doSemantics(classTable, curClass, curMethod, errors);
+}
+void AttrIfStmt::dotPrint(QTextStream & out)
+{
+    QString label = "if";
+    out << QString::number((int)this) + "[label = \"" + label +"\"]" + QString("\n");
+    dotPrintStmtSeq(block, out);
+    expr->dotPrint(out);
+    out << QString::number((int)this) + "->" + QString::number((int)expr) + QString("\n");
+	if(!elsifBlock.isEmpty())
+	{
+		out << QString::number((int)this + 2) + "[label = \"elseif seq\"]" + QString("\n");
+		out << QString::number((int)this) + "->" + QString::number((int)this + 2) + QString("\n");
+		foreach(AttrElsif* elsif, elsifBlock)
+		{
+			elsif->dotPrint(out);
+			out << QString::number((int)this + 2) + "->" + QString::number((int)elsif) + QString("\n");
+		}
+	}
+
+	if(!elseBlock.isEmpty())
+	{
+		out << QString::number((int)this + 3) + "[label = \"else\"]" + QString("\n");
+		out << QString::number((int)this) + "->" + QString::number((int)this + 3) + QString("\n");
+		foreach(AttrStmt* elseStmt, elseBlock)
+		{
+			elseStmt->dotPrint(out);
+			out << QString::number((int)this + 3) + "->" + QString::number((int)elseStmt) + QString("\n");
+		}
+	}
+}
+void AttrIfStmt::generate(QDataStream & out, SemanticClass * curClass, SemanticMethod *curMethod)
+{
+
+}
+QLinkedList<AttrStmt*>* AttrIfStmt::getBody()
+{
+	return &block;
 }
