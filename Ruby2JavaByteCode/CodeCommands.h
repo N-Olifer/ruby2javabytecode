@@ -19,5 +19,7 @@
 #define IRETURN (quint8)0xac
 #define ARETURN (quint8)0xb0
 #define RETURN (quint8)0xb1
+#define PUTFIELD (quint8)0xb5
+#define GETFIELD (quint8)0xb4
 
 #endif // CODECOMMANDS_H

@@ -221,6 +221,7 @@ public:
     int constClass;
     int constMethodRef;
 
+    AttrMethodCall() { isObjectCreating = false; };
     static AttrMethodCall* fromParserNode(ExprNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);

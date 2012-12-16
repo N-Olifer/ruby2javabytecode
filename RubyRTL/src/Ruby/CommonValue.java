@@ -38,6 +38,11 @@ public class CommonValue {
         fType = CommonValue.Type.tString;
     }
     
+    public CommonValue(CommonClass object) {
+        fObjectValue = object;
+        fType = CommonValue.Type.tObject;
+    }
+    
     public CommonValue add(CommonValue other) {
         if(fType == other.fType) {
             if(fType == CommonValue.Type.tInt) {
@@ -49,23 +54,23 @@ public class CommonValue {
     }
     
     public CommonValue assign(CommonValue newValue) {
-            if(newValue.fType == CommonValue.Type.tInt) {
+        if(newValue.fType == CommonValue.Type.tInt) {
+            fIntValue = newValue.fIntValue;
+        }
+        switch(newValue.fType) {
+            case tInt:
                 fIntValue = newValue.fIntValue;
-            }
-            switch(newValue.fType) {
-                case tInt:
-                    fIntValue = newValue.fIntValue;
-                    break;
-                case tString:
-                    fStringValue = newValue.fStringValue;
-                    break;
-                case tObject:
-                    fObjectValue = newValue.fObjectValue;
-                    break;
-                case tUninitialized:
-                    break;
-            }
-            return this;
+                break;
+            case tString:
+                fStringValue = newValue.fStringValue;
+                break;
+            case tObject:
+                fObjectValue = newValue.fObjectValue;
+                break;
+            case tUninitialized:
+                break;
+        }
+        return this;
     }
     
     public int getInt() {

@@ -22,6 +22,7 @@ class AttrMethodDef;
 #define NAME_COMMON_VALUE NAMESPACE"CommonValue"
 #define NAME_DEFAULT_CONSTRUCTOR "<init>"
 #define NAME_SUPER_METHOD "super"
+#define NAME_NEW_METHOD "new"
 #define NAME_PRINTINT_METHOD "printInt"
 #define NAME_JAVA_OBJECT "java/lang/Object"
 #define NAME_JAVA_STRING "java/lang/String"
@@ -29,16 +30,22 @@ class AttrMethodDef;
 #define NAME_RTL_INIT "<init>"
 #define DESC_RTL_INIT_INT "(I)V"
 #define DESC_RTL_INIT_UNINIT "()V"
+#define DESC_RTL_INIT_OBJECT "("DESC_COMMON_CLASS")V"
+
 #define NAME_RTL_ADD "add"
-#define DESC_RTL_ADD "(L"NAME_COMMON_VALUE";)L"NAME_COMMON_VALUE";"
+#define DESC_RTL_ADD "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
+
 #define NAME_RTL_ASSIGN "assign"
-#define DESC_RTL_ASSIGN "(L"NAME_COMMON_VALUE";)V"
+#define DESC_RTL_ASSIGN "(L"NAME_COMMON_VALUE";)"DESC_COMMON_VALUE
+
+#define NAME_RTL_GET_OBJECT "getObject"
+#define DESC_RTL_GET_OBJECT "()"DESC_COMMON_CLASS
 
 #define NAME_RTL_CONSOLE NAMESPACE "Console"
 #define NAME_RTL_CONSOLE_PRINT_INT "printInt"
 #define DESC_RTL_CONSOLE_PRINT_INT "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
 #define NAME_RTL_CONSOLE_PRINT_STRING "printString"
-#define DESC_RTL_CONSOLE_PRINT_STRING "(L"NAME_JAVA_STRING";)"NAME_JAVA_STRING
+#define DESC_RTL_CONSOLE_PRINT_STRING "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
 
 #define ACC_CLASS_PUBLIC 0x0001
 #define ACC_CLASS_ABSTRACT 0x0400
@@ -72,13 +79,16 @@ public:
     int constClass;
     int constParent;
 
+    int constCommonValueClass;
+
     int constRTLAddRef;
     int constRTLInitIntRef;
     int constRTLAssignRef;
-    int constCommonValueClass;
     int constRTLInitUninitRef;
 	int constRTLConsolePrintIntRef;
 	int constRTLConsolePrintStringRef;
+    int constRTLInitObjectRef;
+    int constRTLGetObjectRef;
     bool isAbstract;
 
     QString id;
