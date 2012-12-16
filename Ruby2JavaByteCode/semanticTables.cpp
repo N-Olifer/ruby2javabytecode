@@ -198,6 +198,9 @@ void SemanticClass::addRTLConstants()
     constRTLConsolePrintStringRef = addConstantMethodRef(QString(NAME_RTL_CONSOLE),QString(NAME_RTL_CONSOLE_PRINT_STRING),QString(DESC_RTL_CONSOLE_PRINT_STRING));
     constRTLInitObjectRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_INIT),QString(DESC_RTL_INIT_OBJECT));
     constRTLGetObjectRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_GET_OBJECT),QString(DESC_RTL_GET_OBJECT));
+    constRTLMulRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_MUL),QString(DESC_RTL_MUL));
+    constRTLDivRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_DIV),QString(DESC_RTL_DIV));
+    constRTLMinusRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_MINUS),QString(DESC_RTL_MINUS));
 }
 
 void SemanticClass::generate()

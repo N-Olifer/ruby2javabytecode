@@ -59,6 +59,36 @@ public class CommonValue {
         return null;
     }
     
+    public CommonValue minus(CommonValue other) {
+        if(fType == other.fType) {
+            if(fType == Type.tInt) {
+                CommonValue result = new CommonValue(fIntValue - other.fIntValue);
+                return result;
+            }
+        }
+        return null;
+    }
+    
+    public CommonValue div(CommonValue other) {
+        if(fType == other.fType) {
+            if(fType == Type.tInt) {
+                CommonValue result = new CommonValue(fIntValue / other.fIntValue);
+                return result;
+            }
+        }
+        return null;
+    }
+    
+    public CommonValue mul(CommonValue other) {
+        if(fType == other.fType) {
+            if(fType == Type.tInt) {
+                CommonValue result = new CommonValue(fIntValue * other.fIntValue);
+                return result;
+            }
+        }
+        return null;
+    }
+    
     public CommonValue assign(CommonValue newValue) {
         switch(newValue.fType) {
             case tInt:

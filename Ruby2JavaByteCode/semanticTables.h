@@ -41,6 +41,15 @@ class AttrMethodDef;
 #define NAME_RTL_GET_OBJECT "getObject"
 #define DESC_RTL_GET_OBJECT "()"DESC_COMMON_CLASS
 
+#define NAME_RTL_MUL "mul"
+#define DESC_RTL_MUL "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
+
+#define NAME_RTL_DIV "div"
+#define DESC_RTL_DIV "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
+
+#define NAME_RTL_MINUS "minus"
+#define DESC_RTL_MINUS "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
+
 #define NAME_RTL_CONSOLE NAMESPACE "Console"
 #define NAME_RTL_CONSOLE_PRINT_INT "printInt"
 #define DESC_RTL_CONSOLE_PRINT_INT "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
@@ -89,6 +98,9 @@ public:
 	int constRTLConsolePrintStringRef;
     int constRTLInitObjectRef;
     int constRTLGetObjectRef;
+    int constRTLMulRef;
+    int constRTLDivRef;
+    int constRTLMinusRef;
     bool isAbstract;
 
     QString id;

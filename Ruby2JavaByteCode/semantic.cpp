@@ -780,8 +780,20 @@ void AttrBinExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMe
             break;
         }
         case eMinus:
+        {
+            out << INVOKEVIRTUAL << (quint16)curClass->constRTLMinusRef;
+            break;
+        }
         case eMul:
+        {
+            out << INVOKEVIRTUAL << (quint16)curClass->constRTLMulRef;
+            break;
+        }
         case eDiv:
+        {
+            out << INVOKEVIRTUAL << (quint16)curClass->constRTLDivRef;
+            break;
+        }
         case eLess:
         case eMore:
         case eOr:
