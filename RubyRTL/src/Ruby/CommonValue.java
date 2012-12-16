@@ -14,11 +14,13 @@ public class CommonValue {
     private enum Type {
         tInt,
         tObject,
-        tUninitialized
+        tUninitialized,
+        tString
     }
     
     private CommonValue.Type fType;
     private int fIntValue;
+    private String fStringValue;
     
     private CommonClass fObjectValue;
     
@@ -31,6 +33,11 @@ public class CommonValue {
         fType = CommonValue.Type.tInt;
     }
     
+    public CommonValue(String StringValue) {
+        fStringValue = StringValue;
+        fType = CommonValue.Type.tString;
+    }
+    
     public CommonValue add(CommonValue other) {
         if(fType == other.fType) {
             if(fType == CommonValue.Type.tInt) {
@@ -41,18 +48,36 @@ public class CommonValue {
         return null;
     }
     
-    public void assign(CommonValue newValue) {
-        //if(fType == newValue.fType) {
+    public CommonValue assign(CommonValue newValue) {
             if(newValue.fType == CommonValue.Type.tInt) {
                 fIntValue = newValue.fIntValue;
             }
+            switch(newValue.fType) {
+                case tInt:
+                    fIntValue = newValue.fIntValue;
+                    break;
+                case tString:
+                    fStringValue = newValue.fStringValue;
+                    break;
+                case tObject:
+                    fObjectValue = newValue.fObjectValue;
+                    break;
+                case tUninitialized:
+                    break;
+            }
+            return this;
     }
     
     public int getInt() {
         return fIntValue;
     }
+
+    public String getString() {
+        return fStringValue;
+    }
     
     public CommonClass getObject() {
         return fObjectValue;
     }
+    
 }
