@@ -45,27 +45,33 @@ public class CommonValue {
     
     public CommonValue add(CommonValue other) {
         if(fType == other.fType) {
-            if(fType == CommonValue.Type.tInt) {
+            if(fType == Type.tInt) {
                 CommonValue result = new CommonValue(fIntValue + other.fIntValue);
                 return result;
             }
+        }
+        else
+        {
+            System.out.print("aaa");
+            printType();
+            other.printType();
         }
         return null;
     }
     
     public CommonValue assign(CommonValue newValue) {
-        if(newValue.fType == CommonValue.Type.tInt) {
-            fIntValue = newValue.fIntValue;
-        }
         switch(newValue.fType) {
             case tInt:
                 fIntValue = newValue.fIntValue;
+                fType = Type.tInt;
                 break;
             case tString:
                 fStringValue = newValue.fStringValue;
+                fType = Type.tString;
                 break;
             case tObject:
                 fObjectValue = newValue.fObjectValue;
+                fType = Type.tObject;
                 break;
             case tUninitialized:
                 break;
@@ -85,4 +91,20 @@ public class CommonValue {
         return fObjectValue;
     }
     
+    public void printType() {
+        switch(fType) {
+            case tInt:
+                System.out.print("-int-");
+                break;
+            case tString:
+                System.out.print("-str-");
+                break;
+            case tObject:
+                System.out.print("-obj-");
+                break;
+            case tUninitialized:
+                System.out.print("-uninit-");
+                break;
+        }
+    }
 }

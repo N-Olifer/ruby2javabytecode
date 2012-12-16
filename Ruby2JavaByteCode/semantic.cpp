@@ -446,6 +446,24 @@ void AttrMethodDef::generateCode(QDataStream &out, SemanticClass *curClass)
     QByteArray byteCode;
     QDataStream byteOut(&byteCode, QIODevice::WriteOnly);
 
+
+    int lastParamIndex = semMethod->methodDef->params.count();
+    int i = semMethod->locals.count();
+
+    if(isStatic)
+    {
+        i--;
+        lastParamIndex--;
+    }
+    // Создание объектов для всех локальных переменных (не параметров)
+    for(;i > lastParamIndex; i--)
+    {
+        byteOut << NEW << (quint16)curClass->constCommonValueClass;
+        byteOut << DUP;
+        byteOut << ASTORE << (quint8)i;
+        byteOut << INVOKESPECIAL << (quint16)curClass->constRTLInitUninitRef;
+    }
+
     if(curClass->id != NAME_COMMON_CLASS || (curClass->id == NAME_COMMON_CLASS && id == NAME_DEFAULT_CONSTRUCTOR))
         foreach(AttrStmt* stmt, body)
         {
@@ -757,6 +775,10 @@ void AttrBinExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMe
             break;
         }
         case ePlus:
+        {
+            out << INVOKEVIRTUAL << (quint16)curClass->constRTLAddRef;
+            break;
+        }
         case eMinus:
         case eMul:
         case eDiv:
@@ -936,9 +958,6 @@ void AttrMethodCall::dotPrint(QTextStream & out)
 void AttrMethodCall::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
 {
     //TODO
-
-
-
     if(id == NAME_PRINTINT_METHOD)
     {
         foreach(AttrExpr* argument, arguments)
@@ -1108,21 +1127,17 @@ void AttrLocal::dotPrint(QTextStream &out)
 
 void AttrLocal::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod* curMethod)
 {
-    if(type == eLocal)
+    //if(type == eLocal || type == eLocalRef)
     {
         out << ALOAD << (quint8)curMethod->locals.value(id)->number;
     }
-    else if(type == eLocalNewRef)
+    //else if(type == eLocalNewRef)
     {
-        out << NEW << (quint16)curClass->constants.value(curClass->constCommonValueClass)->number;
-        out << DUP;
-        out << DUP;
-        out << ASTORE << (quint8)curMethod->locals.value(id)->number;
-        out << INVOKESPECIAL << (quint16)curClass->constants.value(curClass->constRTLInitUninitRef)->number;
-    }
-    else if(type == eLocalRef)
-    {
-        out << ALOAD << (quint8)curMethod->locals.value(id)->number;
+    //    out << NEW << (quint16)curClass->constants.value(curClass->constCommonValueClass)->number;
+     //   out << DUP;
+      //  out << DUP;
+      //  out << ASTORE << (quint8)curMethod->locals.value(id)->number;
+      //  out << INVOKESPECIAL << (quint16)curClass->constants.value(curClass->constRTLInitUninitRef)->number;
     }
 }
 

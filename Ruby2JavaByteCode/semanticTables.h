@@ -94,9 +94,9 @@ public:
     QString id;
     QString parentId;
 
-    QHash<QString, SemanticMethod*> methods;
-    QHash<int, SemanticConst*> constants;
-    QHash<QString, SemanticVar*> fields;
+    QMap<QString, SemanticMethod*> methods;
+    QMap<int, SemanticConst*> constants;
+    QMap<QString, SemanticVar*> fields;
 
     AttrClassDef* classDef;
 
@@ -145,7 +145,7 @@ public:
     int constDesc;
     int constCode;
     bool abstract;
-    QHash<QString, SemanticVar*> locals;
+    QMap<QString, SemanticVar*> locals;
     int paramCount;
     AttrMethodDef* methodDef;
 

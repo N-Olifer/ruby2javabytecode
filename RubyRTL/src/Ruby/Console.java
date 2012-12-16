@@ -10,6 +10,7 @@ package Ruby;
  */
 public class Console {
     static public CommonValue printInt(CommonValue arg) {
+        System.out.print("\n");
         System.out.print(arg.getInt());
         return arg;
     }
