@@ -51,4 +51,8 @@ public class CommonValue {
     public int getInt() {
         return fIntValue;
     }
+    
+    public CommonClass getObject() {
+        return fObjectValue;
+    }
 }

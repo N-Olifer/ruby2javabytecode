@@ -9,8 +9,9 @@ package Ruby;
  * @author astr0lit
  */
 public class Console {
-    static public void printInt(CommonValue arg) {
+    static public CommonValue printInt(CommonValue arg) {
         System.out.print(arg.getInt());
+        return arg;
     }
     static public void printString(String arg) {
         System.out.print(arg);

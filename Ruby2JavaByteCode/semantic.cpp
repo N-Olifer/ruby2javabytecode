@@ -119,7 +119,7 @@ void AttrProgram::transform()
 {
     AttrClassDef* mainClass = new AttrClassDef();
     mainClass->id = NAME_MAIN_CLASS;
-    mainClass->parentId = NAME_JAVA_OBJECT;
+    mainClass->parentId = NAME_COMMON_CLASS;
 
     AttrMethodDef* mainMethod = new AttrMethodDef();
     mainMethod->id = NAME_MAIN_CLASS_METHOD;
@@ -160,6 +160,7 @@ AttrClassDef* AttrClassDef::fromParserNode(StmtNode* node)
     AttrClassDef* result = new AttrClassDef();
     result->id = node->id;
     result->parentId = node->secondId;
+    result->type = node->type;
     AttributedNode::fillStmtList(node->block, result->body);
     return result;
 }
@@ -283,6 +284,7 @@ AttrMethodDef* AttrMethodDef::fromParserNode(StmtNode* node)
         result->params << AttrMethodDefParam::fromParserNode(current);
         current = current->next;
     }
+    result->type = node->type;
     return result;
 }
 
@@ -295,6 +297,8 @@ void AttrMethodDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sem
 
     if(curClass->id == id)
         isConstructor = true;
+    if(curClass->id == NAME_MAIN_CLASS)
+        isStatic = true;
 
     QString desc;
     if(curClass->id == NAME_MAIN_CLASS && id == NAME_MAIN_CLASS_METHOD)
@@ -318,23 +322,57 @@ void AttrMethodDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sem
     newMethod->constCode = curClass->addConstantUtf8(QString(ATTR_CODE));
 
     // Добавление метода в общего родителя
-    if(curClass->id != NAME_MAIN_CLASS)
+    //if(curClass->id != NAME_MAIN_CLASS)
+    //{
+    SemanticMethod* newMethodC;
+    if(!isStatic)
     {
         SemanticClass* commonClass = classTable.value(QString(NAME_COMMON_CLASS));
 
-        SemanticMethod* newMethodC = new SemanticMethod();
+        newMethodC = new SemanticMethod();
         newMethodC->id = id;
         newMethodC->constName = commonClass->addConstantUtf8(id);
         newMethodC->constDesc = commonClass->addConstantUtf8(desc);
+        newMethodC->constCode = commonClass->addConstantUtf8(QString(ATTR_CODE));
+        newMethodC->methodDef = this;
 
         commonClass->methods.insert(id, newMethodC);
     }
 
-   // newMethod->paramCount = params.count();
     foreach(AttrMethodDefParam* param, params)
         param->doSemantics(classTable, curClass, newMethod, errors);
+
+    // Поправка return
+    AttrStmt* lastStmt = body.last();
+
+    if(lastStmt->type != eReturn)
+    {
+        AttrReturnStmt* newLast = new AttrReturnStmt();
+        if(newMethod->methodDef->isConstructor || newMethod->id == NAME_MAIN_CLASS_METHOD && curClass->id == NAME_MAIN_CLASS)
+        {// Для конструкторов и main просто return
+            newLast->expr = NULL;
+        }
+        else if(lastStmt->type == eExpr)
+        {// Если в конце идёт выражение - заменяем его на return
+            newLast->expr = ((AttrExprStmt*)lastStmt)->expr;
+            body.removeLast();
+            delete lastStmt;
+        }
+        else
+        {// Иначе return 0
+            // TODO nil
+            AttrConstExpr* value = new AttrConstExpr();
+            value->intValue = 0;
+            newLast->expr = value;
+        }
+        body << newLast;
+    }
+
     foreach(AttrStmt* stmt, body)
         stmt->doSemantics(classTable, curClass, newMethod, errors);
+
+    if(!isStatic)
+        newMethodC->locals = newMethod->locals;
 }
 
 void AttrMethodDef::doFirstSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors, AttrStmt *parentStmt)
@@ -344,11 +382,7 @@ void AttrMethodDef::doFirstSemantics(QHash<QString, SemanticClass *> &classTable
         errors << QString("Method already defined: " + id);
         return;
     }
-    //if(parentStmt->type != eClassDef)
-    //{
-    //    errors << QString("Method define in wrong place: " + id);
-    //    return;
-    //}
+
     SemanticMethod* newMethod = new SemanticMethod();
     newMethod->paramCount = params.count();
     newMethod->id = id;
@@ -378,7 +412,7 @@ void AttrMethodDef::dotPrint(QTextStream & out)
 }
 
 void AttrMethodDef::generateCode(QDataStream &out, SemanticClass *curClass)
-{
+{ 
     SemanticMethod* semMethod = curClass->methods.value(id);
 
     out << (quint16)semMethod->constCode;
@@ -395,11 +429,24 @@ void AttrMethodDef::generateCode(QDataStream &out, SemanticClass *curClass)
     QByteArray byteCode;
     QDataStream byteOut(&byteCode, QIODevice::WriteOnly);
 
-    foreach(AttrStmt* stmt, body)
+    if(curClass->id != NAME_COMMON_CLASS)
+        foreach(AttrStmt* stmt, body)
+        {
+            stmt->generate(byteOut, curClass, semMethod);
+        }
+    else if(id == NAME_MAIN_CLASS_METHOD)
+        byteOut << RETURN;
+    else
     {
-        stmt->generate(byteOut, curClass, semMethod);
+        byteOut << NEW << (quint16)curClass->constants.value(curClass->constCommonValueClass)->number;
+        byteOut << DUP;
+        byteOut << BIPUSH << (qint8)0;
+        byteOut << INVOKESPECIAL << (quint16)curClass->constants.value(curClass->constRTLInitIntRef)->number;
+        byteOut << ARETURN;
+        // TODO кидать исключение
     }
-    byteOut << RETURN;
+
+
     attOut << (quint32)byteCode.length();
     attOut.writeRawData(byteCode.data(), byteCode.size());
     attOut << (quint16)0;
@@ -440,6 +487,7 @@ AttrCycleStmt* AttrCycleStmt::fromParserNode(StmtNode* node)
         result->cycleType = cycleWhile;
     else
         result->cycleType = cycleUntil;
+    result->type = node->type;
     return result;
 }
 
@@ -480,13 +528,15 @@ AttrReturnStmt* AttrReturnStmt::fromParserNode(StmtNode* node)
 {
     AttrReturnStmt* result = new AttrReturnStmt();
     result->expr = AttrExpr::fromParserNode(node->expr);
+    result->type = node->type;
     return result;
 }
 
 
 void AttrReturnStmt::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
-    expr->doSemantics(classTable, curClass, curMethod, errors);
+    if(expr)
+        expr->doSemantics(classTable, curClass, curMethod, errors);
 }
 
 void AttrReturnStmt::dotPrint(QTextStream & out)
@@ -499,6 +549,17 @@ void AttrReturnStmt::dotPrint(QTextStream & out)
     }
 }
 
+void AttrReturnStmt::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
+{
+    if(expr)
+    {
+        expr->generate(out, curClass, curMethod);
+        out << ARETURN;
+    }
+    else
+        out << RETURN;
+}
+
 QLinkedList<AttrStmt *> *AttrReturnStmt::getBody()
 {
     return NULL;
@@ -508,6 +569,7 @@ AttrExprStmt* AttrExprStmt::fromParserNode(StmtNode* node)
 {
     AttrExprStmt* result = new AttrExprStmt();
     result->expr = AttrExpr::fromParserNode(node->expr);
+    result->type = node->type;
     return result;
 }
 
@@ -743,6 +805,13 @@ void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, Se
         errors << "Method with " + QString::number(arguments.count()) + " arguments not exists: " + id;
         return;
     }
+
+    QString desc("(");
+    int count = arguments.count();
+    for(int  i = 0; i < count; i++)
+        desc += DESC_COMMON_VALUE;
+    desc += QString(")");
+
     if(left)
     {
         // Проверка на операцию new
@@ -758,43 +827,34 @@ void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, Se
                     return;
                 }
                 isObjectCreating = true;
-                //constClass = curClass->addConstantClass(id);
             }
         }
         else
         {
             isObjectCreating = false;
-            //constClass = EMPTY_CONST_NUMBER;
         }
-
-        QString desc("(");
-        int count = arguments.count();
-        for(int  i = 0; i < count; i++)
-            desc += DESC_COMMON_VALUE;
-        desc += QString(")");
 
         if(!isObjectCreating)
             desc += DESC_COMMON_VALUE;
         else
             desc += "V";
 
-       // bool methodFound = false;
-        foreach(SemanticClass* semClass, classTable)
-            foreach(SemanticMethod* method, semClass->methods)
-                if(method->id == id && method->paramCount == arguments.count())
-                {
-                    if(isObjectCreating)
-                        constMethodRef = curClass->addConstantMethodRef(leftId, id, desc);
-                    else
-                        constMethodRef = curClass->addConstantMethodRef(QString(NAME_COMMON_CLASS), id, desc);
-                    //methodFound = true;
-                }
-        //if(!methodFound)
-        //{
-        //    errors << "Method not exists: " + id;
-        //    return;
-        //}
+        if(isObjectCreating)
+            constMethodRef = curClass->addConstantMethodRef(leftId, id, desc);
+        else
+            constMethodRef = curClass->addConstantMethodRef(QString(NAME_COMMON_CLASS), id, desc);
+
         left->doSemantics(classTable, curClass, curMethod, errors);
+    }
+    else
+    {
+        desc += DESC_COMMON_VALUE;
+        if(curClass->id == NAME_MAIN_CLASS)
+        // Статический метод класса MainClass
+            constMethodRef = curClass->addConstantMethodRef(QString(NAME_MAIN_CLASS), id, desc);
+        else
+        // Обычный метод
+            constMethodRef = curClass->addConstantMethodRef(QString(NAME_COMMON_CLASS), id, desc);
     }
     if(id == "super")
     {
@@ -819,17 +879,37 @@ void AttrMethodCall::generate(QDataStream &out, SemanticClass *curClass, Semanti
 {
     //TODO
 
-    foreach(AttrExpr* argument, arguments)
-        argument->generate(out, curClass, curMethod);
+
 
     if(id == NAME_PRINTINT_METHOD)
     {
+        foreach(AttrExpr* argument, arguments)
+            argument->generate(out, curClass, curMethod);
         out << INVOKESTATIC << (quint16)curClass->constants.value(curClass->constRTLConsolePrintIntRef)->number;
     }
-    if(id == NAME_SUPER_METHOD)
+    else if(id == NAME_SUPER_METHOD)
     {
-       // out << ALOAD_0;
+       // TODO
 
+    }
+    else
+    {
+        if(left)
+            left->generate(out, curClass, curMethod);
+        //else
+         //   if(!)
+         //   out << (quint16)0; // ссылка на self
+
+        foreach(AttrExpr* argument, arguments)
+            argument->generate(out, curClass, curMethod);
+
+        if(!left && curClass->id == NAME_MAIN_CLASS)
+        {
+            out << INVOKESTATIC << (quint16)constMethodRef;
+        }
+        //if()
+        //out << INVOKEVIRTUAL << (quint16)curClass->constants.value(constMethodRef);
+        //out << INVOKESTATIC << (quint16)curClass->constants.value(constMethodRef)->number;
     }
 }
 
