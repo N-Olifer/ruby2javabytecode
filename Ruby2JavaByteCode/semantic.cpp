@@ -391,6 +391,7 @@ void AttrMethodDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sem
                 // TODO nil
                 AttrConstExpr* value = new AttrConstExpr();
                 value->intValue = 0;
+                value->type = eInt;
                 newLast->expr = value;
             }
             body << newLast;
