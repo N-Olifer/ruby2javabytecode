@@ -973,7 +973,7 @@ void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, Se
         else
         {
             if(curClass->id != NAME_COMMON_CLASS)
-                constMethodRef = curClass->addConstantMethodRef(QString(NAME_COMMON_CLASS), curMethod->id, curClass->constants.value(curMethod->constDesc)->strValue);
+                constMethodRef = curClass->addConstantMethodRef(curClass->parentId, curMethod->id, curClass->constants.value(curMethod->constDesc)->strValue);
             else
                 constMethodRef = curClass->addConstantMethodRef(QString(NAME_JAVA_OBJECT), curMethod->id, curClass->constants.value(curMethod->constDesc)->strValue);
         }
@@ -1010,7 +1010,7 @@ void AttrMethodCall::generate(QDataStream &out, SemanticClass *curClass, Semanti
     }
     else if(id == NAME_SUPER_METHOD)
     {
-       // TODO
+        // TODO
         out << ALOAD << (quint8)0;
 
         foreach(AttrExpr* argument, arguments)
