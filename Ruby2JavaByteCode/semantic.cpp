@@ -894,8 +894,20 @@ void AttrUnExpr::dotPrint(QTextStream & out)
 
 void AttrUnExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
 {
-    if(type == eBrackets)
-        expr->generate(out, curClass, curMethod);
+    switch(type)
+    {
+        case eBrackets:
+        {
+            expr->generate(out, curClass, curMethod);
+            break;
+        }
+        case eUMinus:
+        {
+            expr->generate(out, curClass, curMethod);
+            out << INVOKEVIRTUAL << (quint16)curClass->constRTLUMinusRef;
+            break;
+        }
+    }
 }
 
 AttrMethodCall* AttrMethodCall::fromParserNode(ExprNode* node)

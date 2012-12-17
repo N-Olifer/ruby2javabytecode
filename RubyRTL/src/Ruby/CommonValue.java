@@ -165,6 +165,14 @@ public class CommonValue {
         return null;
     }
     
+    public CommonValue uMinus() {
+        if(fType == Type.tInt) {
+            CommonValue result = new CommonValue(-fIntValue);
+            return result;
+        }
+        return null;
+    }
+    
     public int getInt() {
         return fIntValue;
     }

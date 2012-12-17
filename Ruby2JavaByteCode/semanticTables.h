@@ -62,6 +62,9 @@ class AttrMethodDef;
 #define NAME_RTL_NEQU "nequ"
 #define DESC_RTL_NEQU "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
 
+#define NAME_RTL_UMINUS "uMinus"
+#define DESC_RTL_UMINUS "()"DESC_COMMON_VALUE
+
 #define NAME_RTL_GET_INT "getInt"
 #define DESC_RTL_GET_INT "()I"
 
@@ -121,6 +124,7 @@ public:
     int constRTLMoreRef;
     int constRTLEquRef;
     int constRTLNequRef;
+    int constRTLUMinusRef;
     bool isAbstract;
 
     QString id;

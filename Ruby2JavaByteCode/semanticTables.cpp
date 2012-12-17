@@ -206,6 +206,7 @@ void SemanticClass::addRTLConstants()
     constRTLMoreRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_MORE),QString(DESC_RTL_MORE));
     constRTLEquRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_EQU),QString(DESC_RTL_EQU));
     constRTLNequRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_NEQU),QString(DESC_RTL_NEQU));
+    constRTLUMinusRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_UMINUS),QString(DESC_RTL_UMINUS));
 }
 
 void SemanticClass::generate()
