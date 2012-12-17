@@ -360,29 +360,41 @@ void AttrMethodDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sem
         param->doSemantics(classTable, curClass, newMethod, errors);
 
     // Поправка return
-    AttrStmt* lastStmt = body.last();
-
-    if(lastStmt->type != eReturn)
+    if(body.isEmpty())
     {
         AttrReturnStmt* newLast = new AttrReturnStmt();
-        if(newMethod->methodDef->isConstructor || newMethod->id == NAME_MAIN_CLASS_METHOD && curClass->id == NAME_MAIN_CLASS)
-        {// Для конструкторов и main просто return
-            newLast->expr = NULL;
-        }
-        else if(lastStmt->type == eExpr)
-        {// Если в конце идёт выражение - заменяем его на return
-            newLast->expr = ((AttrExprStmt*)lastStmt)->expr;
-            body.removeLast();
-            delete lastStmt;
-        }
-        else
-        {// Иначе return 0
-            // TODO nil
-            AttrConstExpr* value = new AttrConstExpr();
-            value->intValue = 0;
-            newLast->expr = value;
-        }
+        AttrConstExpr* value = new AttrConstExpr();
+        value->intValue = 0;
+        value->type = eInt;
+        newLast->expr = value;
         body << newLast;
+    }
+    else
+    {
+        AttrStmt* lastStmt = body.last();
+
+        if(lastStmt->type != eReturn)
+        {
+            AttrReturnStmt* newLast = new AttrReturnStmt();
+            if(newMethod->methodDef->isConstructor || newMethod->id == NAME_MAIN_CLASS_METHOD && curClass->id == NAME_MAIN_CLASS)
+            {// Для конструкторов и main просто return
+                newLast->expr = NULL;
+            }
+            else if(lastStmt->type == eExpr)
+            {// Если в конце идёт выражение - заменяем его на return
+                newLast->expr = ((AttrExprStmt*)lastStmt)->expr;
+                body.removeLast();
+                delete lastStmt;
+            }
+            else
+            {// Иначе return 0
+                // TODO nil
+                AttrConstExpr* value = new AttrConstExpr();
+                value->intValue = 0;
+                newLast->expr = value;
+            }
+            body << newLast;
+        }
     }
 
     foreach(AttrStmt* stmt, body)
