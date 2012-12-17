@@ -50,6 +50,9 @@ class AttrMethodDef;
 #define NAME_RTL_MINUS "minus"
 #define DESC_RTL_MINUS "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
 
+#define NAME_RTL_GET_INT "getInt"
+#define DESC_RTL_GET_INT "()I"
+
 #define NAME_RTL_CONSOLE NAMESPACE "Console"
 #define NAME_RTL_CONSOLE_PRINT_INT "printInt"
 #define DESC_RTL_CONSOLE_PRINT_INT "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
@@ -101,6 +104,7 @@ public:
     int constRTLMulRef;
     int constRTLDivRef;
     int constRTLMinusRef;
+    int constRTLGetIntRef;
     bool isAbstract;
 
     QString id;

@@ -35,6 +35,7 @@ void SemanticAnalyzer::doSemantics()
     superCall->id = NAME_SUPER_METHOD;
     superCall->left = NULL;
     stmt->expr = superCall;
+    stmt->expr->type = eMethodCall;
     defaultConstructor->body << stmt;
 
     defaultConstructor->doFirstSemantics(classTable, commonClass, NULL, errors, NULL);
@@ -257,9 +258,10 @@ void AttrClassDef::doFirstSemantics(QHash<QString, SemanticClass *> &classTable,
 
         AttrExprStmt* stmt = new AttrExprStmt();
         AttrMethodCall* superCall = new AttrMethodCall();
-        superCall->id = "super";
+        superCall->id = NAME_SUPER_METHOD;
         superCall->left = NULL;
         stmt->expr = superCall;
+        stmt->expr->type = eMethodCall;
 
         defaultConstructor->body << stmt;
 
@@ -553,6 +555,33 @@ void AttrCycleStmt::dotPrint(QTextStream & out)
     out << QString::number((int)this) + "->" + QString::number((int)expr) + QString("\n");
 }
 
+void AttrCycleStmt::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
+{
+    QByteArray codeBlock;
+    QDataStream blockOut(&codeBlock, QIODevice::WriteOnly);
+
+    foreach(AttrStmt* stmt, block)
+        stmt->generate(blockOut, curClass, curMethod);
+
+    out << GOTO << (qint16)(codeBlock.size() + 3);
+
+    QByteArray exprBlock;
+    QDataStream exprOut(&exprBlock, QIODevice::WriteOnly);
+    expr->generate(exprOut, curClass, curMethod);
+
+    exprOut << INVOKEVIRTUAL << (quint16)curClass->constRTLGetIntRef;
+
+    out.writeRawData(codeBlock.data(), codeBlock.size());
+    out.writeRawData(exprBlock.data(), exprBlock.size());
+
+    int pos = -exprBlock.size() - codeBlock.size();
+
+    if(cycleType == cycleWhile)
+        out << IFNE << (qint16)(pos);
+    else
+        out << IFEQ << (qint16)(pos);
+}
+
 QLinkedList<AttrStmt *> *AttrCycleStmt::getBody()
 {
     return &block;
@@ -624,6 +653,9 @@ void AttrExprStmt::dotPrint(QTextStream & out)
 void AttrExprStmt::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
 {
     expr->generate(out, curClass, curMethod);
+    if(expr->type == eMethodCall && (((AttrMethodCall*)expr)->id == NAME_DEFAULT_CONSTRUCTOR || ((AttrMethodCall*)expr)->id == NAME_SUPER_METHOD))
+        return;
+    out << POP; // Если значение возвращается, но не используетс, оно снимается со стека
 }
 
 QLinkedList<AttrStmt *> *AttrExprStmt::getBody()

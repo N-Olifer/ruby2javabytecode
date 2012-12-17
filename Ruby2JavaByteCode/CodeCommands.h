@@ -21,5 +21,10 @@
 #define RETURN (quint8)0xb1
 #define PUTFIELD (quint8)0xb5
 #define GETFIELD (quint8)0xb4
+#define GOTO (quint8)0xa7
+#define GOTO_W (quint8)0xc8
+#define IFNE (quint8)0x9a
+#define IFEQ (quint8)0x99
+#define POP (quint8)0x57
 
 #endif // CODECOMMANDS_H
