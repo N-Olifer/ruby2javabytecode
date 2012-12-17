@@ -612,6 +612,22 @@ AttrReturnStmt* AttrReturnStmt::fromParserNode(StmtNode* node)
 
 void AttrReturnStmt::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
+    if(!expr)
+    {
+        if(curMethod->id != NAME_DEFAULT_CONSTRUCTOR && !(curClass->id == NAME_MAIN_CLASS && curMethod->id == NAME_MAIN_CLASS_METHOD))
+        {
+            AttrConstExpr* value = new AttrConstExpr();
+            value->intValue = 0;
+            value->type = eInt;
+            expr = value;
+        }
+    }
+    else if(curMethod->id == NAME_DEFAULT_CONSTRUCTOR || curClass->id == NAME_MAIN_CLASS && curMethod->id == NAME_MAIN_CLASS_METHOD)
+    {
+        errors << "wrong return with value in constructor or main.";
+        return;
+    }
+
     if(expr)
         expr->doSemantics(classTable, curClass, curMethod, errors);
 }
@@ -1112,9 +1128,10 @@ void AttrFieldAcc::doSemantics(QHash<QString, SemanticClass *> &classTable, Sema
     }
     else
     {
-        curClass->addField(id);
+        if(!existsInParent(classTable, curClass))
+            curClass->addField(id);
         classTable.value(NAME_COMMON_CLASS)->addField(id);
-        constFieldRef = curClass->addConstantFieldRef(curClass->id, id, QString(DESC_COMMON_VALUE));
+        constFieldRef = curClass->addConstantFieldRef(/*curClass->id*/QString(NAME_COMMON_CLASS), id, QString(DESC_COMMON_VALUE));
     }
 }
 
@@ -1137,6 +1154,20 @@ void AttrFieldAcc::generate(QDataStream &out, SemanticClass *curClass, SemanticM
     out << ALOAD << (quint8)0;
 
     out << GETFIELD << (quint16)constFieldRef;
+}
+
+bool AttrFieldAcc::existsInParent(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass)
+{
+    if(curClass->fields.contains(id))
+        return true;
+    if(curClass->id == NAME_COMMON_CLASS)
+    {
+        if(curClass->fields.contains(id))
+            return true;
+        return false;
+    }
+    else
+        return existsInParent(classTable, classTable.value(curClass->parentId));
 }
 
 AttrConstExpr* AttrConstExpr::fromParserNode(ExprNode* node)

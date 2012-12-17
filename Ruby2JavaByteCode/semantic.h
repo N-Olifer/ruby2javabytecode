@@ -240,6 +240,7 @@ public:
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
     void generate(QDataStream &out, SemanticClass *curClass, SemanticMethod* curMethod);
+    bool existsInParent(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass);
 };
 
 class AttrLocal : public AttrExpr
