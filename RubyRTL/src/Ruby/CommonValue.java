@@ -109,6 +109,62 @@ public class CommonValue {
         return this;
     }
     
+    public CommonValue less(CommonValue other) {
+        if(fType == other.fType) {
+            if(fType == Type.tInt) {
+                CommonValue result;
+                if(fIntValue < other.fIntValue)
+                    result = new CommonValue(1);
+                else
+                    result = new CommonValue(0);
+                return result;
+            }
+        }
+        return null;
+    }
+    
+    public CommonValue more(CommonValue other) {
+        if(fType == other.fType) {
+            if(fType == Type.tInt) {
+                CommonValue result;
+                if(fIntValue > other.fIntValue)
+                    result = new CommonValue(1);
+                else
+                    result = new CommonValue(0);
+                return result;
+            }
+        }
+        return null;
+    }
+    
+    public CommonValue equ(CommonValue other) {
+        if(fType == other.fType) {
+            if(fType == Type.tInt) {
+                CommonValue result;
+                if(fIntValue == other.fIntValue)
+                    result = new CommonValue(1);
+                else
+                    result = new CommonValue(0);
+                return result;
+            }
+        }
+        return null;
+    }
+    
+    public CommonValue nequ(CommonValue other) {
+        if(fType == other.fType) {
+            if(fType == Type.tInt) {
+                CommonValue result;
+                if(fIntValue != other.fIntValue)
+                    result = new CommonValue(1);
+                else
+                    result = new CommonValue(0);
+                return result;
+            }
+        }
+        return null;
+    }
+    
     public int getInt() {
         return fIntValue;
     }

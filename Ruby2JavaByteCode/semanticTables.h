@@ -50,6 +50,18 @@ class AttrMethodDef;
 #define NAME_RTL_MINUS "minus"
 #define DESC_RTL_MINUS "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
 
+#define NAME_RTL_LESS "less"
+#define DESC_RTL_LESS "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
+
+#define NAME_RTL_MORE "more"
+#define DESC_RTL_MORE "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
+
+#define NAME_RTL_EQU "equ"
+#define DESC_RTL_EQU "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
+
+#define NAME_RTL_NEQU "nequ"
+#define DESC_RTL_NEQU "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
+
 #define NAME_RTL_GET_INT "getInt"
 #define DESC_RTL_GET_INT "()I"
 
@@ -105,6 +117,10 @@ public:
     int constRTLDivRef;
     int constRTLMinusRef;
     int constRTLGetIntRef;
+    int constRTLLessRef;
+    int constRTLMoreRef;
+    int constRTLEquRef;
+    int constRTLNequRef;
     bool isAbstract;
 
     QString id;

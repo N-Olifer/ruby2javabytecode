@@ -74,7 +74,7 @@ void semantic()
     foreach(QString error, sem->errors)
         out << error << "\n";
 
-    showConstantsTable(sem);
+    //showConstantsTable(sem);
 
     if(sem->errors.isEmpty())
         generateCode(sem);
@@ -101,5 +101,5 @@ int main(int argc, char *argv[])
         semantic();
 
 
-    return a.exec();
+    return 0;
 }

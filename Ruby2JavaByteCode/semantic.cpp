@@ -839,11 +839,27 @@ void AttrBinExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMe
             break;
         }
         case eLess:
+        {
+            out << INVOKEVIRTUAL << (quint16)curClass->constRTLLessRef;
+            break;
+        }
         case eMore:
+        {
+            out << INVOKEVIRTUAL << (quint16)curClass->constRTLMoreRef;
+            break;
+        }
         case eOr:
         case eAnd:
         case eEqu:
+        {
+            out << INVOKEVIRTUAL << (quint16)curClass->constRTLEquRef;
+            break;
+        }
         case eNEqu:
+        {
+            out << INVOKEVIRTUAL << (quint16)curClass->constRTLNequRef;
+            break;
+        }
         break;
     }
 }
@@ -878,6 +894,8 @@ void AttrUnExpr::dotPrint(QTextStream & out)
 
 void AttrUnExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
 {
+    if(type == eBrackets)
+        expr->generate(out, curClass, curMethod);
 }
 
 AttrMethodCall* AttrMethodCall::fromParserNode(ExprNode* node)
