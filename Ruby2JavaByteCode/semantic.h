@@ -248,7 +248,9 @@ class AttrLocal : public AttrExpr
 public:
     int number;
     QString id;
+    bool isSelf;
 
+    AttrLocal() { type = eLocal; }
     static AttrLocal* fromParserNode(ExprNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);

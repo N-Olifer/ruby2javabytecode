@@ -986,15 +986,25 @@ void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, Se
         if(left->type == eLocal)
         {
             leftId = ((AttrLocal*)left)->id;
-            if(id == NAME_NEW_METHOD && leftId[0].isUpper())
+
+            if(id == NAME_NEW_METHOD)
             {
-                if(!classTable.contains(leftId))
+                isObjectCreating = true;
+
+                if(leftId[0].isUpper())
                 {
-                    errors << "Class doesn't exist when creating object: " + id;
+                    if(!classTable.contains(leftId))
+                    {
+                        errors << "Class doesn't exist when creating object: " + leftId;
+                        return;
+                    }
+                    constClass = curClass->addConstantClass(leftId);
+                }
+                else
+                {
+                    errors << "Incorrect object creating: " + leftId;
                     return;
                 }
-                isObjectCreating = true;
-                constClass = curClass->addConstantClass(leftId);
             }
         }
         else
@@ -1012,7 +1022,8 @@ void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, Se
         else
             constMethodRef = curClass->addConstantMethodRef(QString(NAME_COMMON_CLASS), id, desc);
 
-        left->doSemantics(classTable, curClass, curMethod, errors);
+        if(!isObjectCreating)
+            left->doSemantics(classTable, curClass, curMethod, errors);
     }
     else
     {
@@ -1101,6 +1112,7 @@ void AttrMethodCall::generate(QDataStream &out, SemanticClass *curClass, Semanti
         }
         else
         {// Обычный метод
+            //if(!(left->type == eLocal && ((AttrLocal*)left)->isSelf))
             out << INVOKEVIRTUAL << (quint16)curClass->constRTLGetObjectRef;
             foreach(AttrExpr* argument, arguments)
                 argument->generate(out, curClass, curMethod);
@@ -1235,7 +1247,20 @@ AttrLocal *AttrLocal::fromParserNode(ExprNode *node)
 
 void AttrLocal::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
-    curMethod->addLocalVar(id, curClass);
+    if(id == NAME_SELF)
+    {
+        isSelf = true;
+        if(curMethod->methodDef->isStatic)
+        {
+            errors << "self in static method: " + curMethod->id;
+            return;
+        }
+    }
+    else
+    {
+        isSelf = false;
+        curMethod->addLocalVar(id, curClass);
+    }
 }
 
 void AttrLocal::dotPrint(QTextStream &out)
@@ -1246,17 +1271,26 @@ void AttrLocal::dotPrint(QTextStream &out)
 void AttrLocal::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod* curMethod)
 {
     //if(type == eLocal || type == eLocalRef)
+    if(!isSelf)
     {
         out << ALOAD << (quint8)curMethod->locals.value(id)->number;
     }
-    //else if(type == eLocalNewRef)
+    else
     {
+        out << NEW << (quint16)curClass->constCommonValueClass;
+        out << DUP;
+        out << ALOAD << (quint8)0;
+        out << INVOKESPECIAL << (quint16)curClass->constRTLInitObjectRef;
+
+    }
+    //else if(type == eLocalNewRef)
+    //{
     //    out << NEW << (quint16)curClass->constants.value(curClass->constCommonValueClass)->number;
      //   out << DUP;
       //  out << DUP;
       //  out << ASTORE << (quint8)curMethod->locals.value(id)->number;
       //  out << INVOKESPECIAL << (quint16)curClass->constants.value(curClass->constRTLInitUninitRef)->number;
-    }
+    //}
 }
 
 AttrElsif* AttrElsif::fromParserNode(ElsifNode* node)

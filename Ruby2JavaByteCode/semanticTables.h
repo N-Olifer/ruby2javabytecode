@@ -22,6 +22,7 @@ class AttrMethodDef;
 #define NAME_COMMON_VALUE NAMESPACE"CommonValue"
 #define NAME_DEFAULT_CONSTRUCTOR "<init>"
 #define NAME_SUPER_METHOD "super"
+#define NAME_SELF "self"
 #define NAME_NEW_METHOD "new"
 #define NAME_PRINTINT_METHOD "printInt"
 #define NAME_JAVA_OBJECT "java/lang/Object"

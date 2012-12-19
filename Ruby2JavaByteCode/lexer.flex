@@ -51,7 +51,6 @@ IDENTIFIER [A-Za-z_][A-Za-z_0-9]*
 
 class return CLASS;
 super return SUPER;
-self return SELF;
 def return DEF;
 return return RETURN;
 end return END;
