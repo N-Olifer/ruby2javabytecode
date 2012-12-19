@@ -12,6 +12,7 @@
 %option outfile="lex.yy.cpp"
 
 IDENTIFIER [A-Za-z_][A-Za-z_0-9]*
+SPACE_OR_EOL ([\n]+)|([\n]+([[:blank:]]+|[\n]+)+)|([[:blank:]]+)
 
 %x STRING
 %x STRING2
@@ -52,6 +53,7 @@ IDENTIFIER [A-Za-z_][A-Za-z_0-9]*
 class return CLASS;
 super return SUPER;
 def return DEF;
+def{SPACE_OR_EOL}+self{SPACE_OR_EOL}*"." return DEF_STATIC;
 return return RETURN;
 end return END;
 
@@ -224,7 +226,7 @@ nil return NIL;
 "@@"{IDENTIFIER} {
 	yylval.uId = (char*)malloc(sizeof(char) * strlen(yytext));
 	strcpy(yylval.uId, yytext);
-	return IDFIELD;
+	return ID_STATIC_FIELD;
 }
 {IDENTIFIER}"?" {
 	yylval.uId = (char*)malloc(sizeof(char) * strlen(yytext));

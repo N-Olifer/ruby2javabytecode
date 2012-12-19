@@ -221,8 +221,9 @@ public:
     bool isObjectCreating;
     int constClass;
     int constMethodRef;
+    bool isStaticCall;
 
-    AttrMethodCall() { isObjectCreating = false; };
+    AttrMethodCall() { isObjectCreating = false; isStaticCall = false; };
     static AttrMethodCall* fromParserNode(ExprNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
@@ -235,6 +236,7 @@ class AttrFieldAcc : public AttrClassPropertyAcc
 public:
     int number;
     int constFieldRef;
+    bool isStatic;
 
     static AttrFieldAcc* fromParserNode(ExprNode* node);
     void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);

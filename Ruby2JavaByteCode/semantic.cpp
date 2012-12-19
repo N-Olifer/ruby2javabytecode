@@ -296,6 +296,7 @@ AttrMethodDef* AttrMethodDef::fromParserNode(StmtNode* node)
     result->id = node->id;
     AttributedNode::fillStmtList(node->block, result->body);
     MethodDefParamNode* current = node->params->first;
+    result->isStatic = node->isStatic;
     while(current)
     {
         result->params << AttrMethodDefParam::fromParserNode(current);
@@ -821,11 +822,20 @@ void AttrBinExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMe
         {
             if(left->type == eFieldAccRef)
             {
-                out << ALOAD << (quint8)0;
-                right->generate(out, curClass, curMethod);
-                out << PUTFIELD << (quint16)((AttrFieldAcc*)left)->constFieldRef;
-                out << ALOAD << (quint8)0;
-                out << GETFIELD << (quint16)((AttrFieldAcc*)left)->constFieldRef; // ќставл€ем на стеке ссылку как возвращаемое значение
+                if(!((AttrFieldAcc*)left)->isStatic)
+                {
+                    out << ALOAD << (quint8)0;
+                    right->generate(out, curClass, curMethod);
+                    out << PUTFIELD << (quint16)((AttrFieldAcc*)left)->constFieldRef;
+                    out << ALOAD << (quint8)0;
+                    out << GETFIELD << (quint16)((AttrFieldAcc*)left)->constFieldRef; // ќставл€ем на стеке ссылку как возвращаемое значение
+                }
+                else
+                {
+                    right->generate(out, curClass, curMethod);
+                    out << PUTSTATIC << (quint16)((AttrFieldAcc*)left)->constFieldRef;
+                    out << GETSTATIC << (quint16)((AttrFieldAcc*)left)->constFieldRef;
+                }
             }
             else
             {
@@ -987,25 +997,27 @@ void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, Se
         {
             leftId = ((AttrLocal*)left)->id;
 
-            if(id == NAME_NEW_METHOD)
+            if(leftId[0].isUpper())
             {
-                isObjectCreating = true;
-
-                if(leftId[0].isUpper())
+                if(!classTable.contains(leftId))
                 {
-                    if(!classTable.contains(leftId))
-                    {
-                        errors << "Class doesn't exist when creating object: " + leftId;
-                        return;
-                    }
-                    constClass = curClass->addConstantClass(leftId);
-                }
-                else
-                {
-                    errors << "Incorrect object creating: " + leftId;
+                    errors << "Class doesn't exist: " + leftId;
                     return;
                 }
+                if(id == NAME_NEW_METHOD)
+                    isObjectCreating = true;
+                else
+                    isStaticCall = true;
+
+                constClass = curClass->addConstantClass(leftId);
             }
+            else if(id == NAME_NEW_METHOD)
+            {
+                errors << "Incorrect object creating: " + leftId;
+                return;
+            }
+
+
         }
         else
         {
@@ -1019,10 +1031,12 @@ void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, Se
 
         if(isObjectCreating)
             constMethodRef = curClass->addConstantMethodRef(leftId, QString(NAME_DEFAULT_CONSTRUCTOR), desc);
+        else if(isStaticCall)
+            constMethodRef = curClass->addConstantMethodRef(leftId, id, desc);
         else
             constMethodRef = curClass->addConstantMethodRef(QString(NAME_COMMON_CLASS), id, desc);
 
-        if(!isObjectCreating)
+        if(!isObjectCreating && !isStaticCall)
             left->doSemantics(classTable, curClass, curMethod, errors);
     }
     else
@@ -1101,11 +1115,17 @@ void AttrMethodCall::generate(QDataStream &out, SemanticClass *curClass, Semanti
     }
     else
     {
-        if(left)
+        if(left && !isStaticCall)
             left->generate(out, curClass, curMethod);
 
         if(!left && curClass->id == NAME_MAIN_CLASS)
         {// —татический метод класса MainClass
+            foreach(AttrExpr* argument, arguments)
+                argument->generate(out, curClass, curMethod);
+            out << INVOKESTATIC << (quint16)constMethodRef;
+        }
+        else if(isStaticCall)
+        {
             foreach(AttrExpr* argument, arguments)
                 argument->generate(out, curClass, curMethod);
             out << INVOKESTATIC << (quint16)constMethodRef;
@@ -1127,23 +1147,31 @@ AttrFieldAcc* AttrFieldAcc::fromParserNode(ExprNode* node)
     result->id = node->id;
     result->type = node->type;
     result->left = AttrExpr::fromParserNode(node->left);
+    result->isStatic = node->isStatic;
     return result;
 }
-
-
 
 void AttrFieldAcc::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
     if(left != NULL)
     {
         left->doSemantics(classTable, curClass, curMethod, errors);
+        errors << "wat";
     }
     else
     {
         if(!existsInParent(classTable, curClass))
-            curClass->addField(id);
-        classTable.value(NAME_COMMON_CLASS)->addField(id);
-        constFieldRef = curClass->addConstantFieldRef(/*curClass->id*/QString(NAME_COMMON_CLASS), id, QString(DESC_COMMON_VALUE));
+            curClass->addField(id, isStatic);
+
+        if(isStatic)
+        {
+            constFieldRef = curClass->addConstantFieldRef(curClass->id, id, QString(DESC_COMMON_VALUE));
+        }
+        else
+        {
+            classTable.value(NAME_COMMON_CLASS)->addField(id, isStatic);
+            constFieldRef = curClass->addConstantFieldRef(QString(NAME_COMMON_CLASS), id, QString(DESC_COMMON_VALUE));
+        }
     }
 }
 
@@ -1159,13 +1187,15 @@ void AttrFieldAcc::dotPrint(QTextStream & out)
 
 void AttrFieldAcc::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
 {
-    //if(this->type == eFieldAccRef)
-   // {
-
-   //}
-    out << ALOAD << (quint8)0;
-
-    out << GETFIELD << (quint16)constFieldRef;
+    if(!isStatic)
+    {
+        out << ALOAD << (quint8)0;
+        out << GETFIELD << (quint16)constFieldRef;
+    }
+    else
+    {
+        out << GETSTATIC << (quint16)constFieldRef;
+    }
 }
 
 bool AttrFieldAcc::existsInParent(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass)

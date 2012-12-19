@@ -138,7 +138,7 @@ public:
     AttrClassDef* classDef;
 
     SemanticClass() { isAbstract = false; }
-    void addField(QString & id);
+    void addField(QString & id, bool isStatic);
 
     int addConstantUtf8(QString & value);
     int addConstantInteger(int value);
@@ -197,6 +197,9 @@ public:
     int constName;
     int constType;
     int number;
+    bool isStatic;
+
+    SemanticVar(bool isStatic) { this->isStatic = isStatic; };
 };
 
 QDataStream & operator<< (QDataStream& out, const SemanticVar *var);

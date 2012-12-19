@@ -128,7 +128,7 @@ struct ExprNode* createQBracketsInitExpr(struct ExprSeqNode* expressions)
 	return result;
 }
 
-struct ExprNode* createFieldAccExpr(struct ExprNode* left, char* idStr)
+struct ExprNode* createFieldAccExpr(struct ExprNode* left, char* idStr, bool isStatic)
 {
 	struct ExprNode* result = (struct ExprNode*)malloc(sizeof(struct ExprNode));
 	
@@ -139,6 +139,8 @@ struct ExprNode* createFieldAccExpr(struct ExprNode* left, char* idStr)
 	result->next = NULL;
 	result->id = idStr;
 	result->str = NULL;
+	
+	result->isStatic = isStatic;
 	
 	return result;
 }
@@ -310,7 +312,7 @@ struct StmtSeqNode* addStmtToSeq(struct StmtSeqNode* seq, struct StmtNode* state
 	return seq;
 }
 
-struct StmtNode* createMethodDefStmt(char* id, struct MethodDefParamSeqNode* params, struct StmtSeqNode* body)
+struct StmtNode* createMethodDefStmt(char* id, struct MethodDefParamSeqNode* params, struct StmtSeqNode* body, bool isStatic)
 {
 	struct StmtNode* result = (struct StmtNode*)malloc(sizeof(struct StmtNode));
 	result->id = id;
@@ -321,6 +323,9 @@ struct StmtNode* createMethodDefStmt(char* id, struct MethodDefParamSeqNode* par
 	result->next = NULL;
 	result->elseStmtBlock = NULL;
 	result->elsifList = NULL;
+	
+	result->isStatic = isStatic;
+
 	return result;
 }
 
@@ -484,6 +489,7 @@ struct StmtNode* createUnlessStmt(struct ExprNode *expression, struct StmtSeqNod
 %token <uString> STRING
 %token EOL
 %token DEF
+%token DEF_STATIC
 %token END
 %token WHILE
 %token DO
@@ -494,6 +500,7 @@ struct StmtNode* createUnlessStmt(struct ExprNode *expression, struct StmtSeqNod
 %token RETURN
 %token <uId> ID
 %token <uId> IDFIELD
+%token <uId> ID_STATIC_FIELD
 %token EQUAL
 %token NOTEQUAL
 %token OR
@@ -607,7 +614,8 @@ expr		: expr '+' expr { $$ = createBinExpr(ePlus, $1, $3); }
 
 
 			| ID { $$ = createLocalExpr($1); }
-			| IDFIELD { $$ = createFieldAccExpr(NULL, $1); }
+			| IDFIELD { $$ = createFieldAccExpr(NULL, $1, false); }
+			| ID_STATIC_FIELD { $$ = createFieldAccExpr(NULL, $1, true); }
 			| ID '(' ')' { $$ = createMethodCallExpr(NULL, $1, NULL); }
 			| ID '(' expr_seqE ')' { $$ = createMethodCallExpr(NULL, $1, $3); }
 			| ID '(' EOL expr_seqE ')' { $$ = createMethodCallExpr(NULL, $1, $4); }
@@ -648,16 +656,27 @@ stmt_seqE   : stmt { $$ = createStmtSeq($1); }
 			| stmt_seqE EOL { $$ = $1; }
 			;
 	
-method_def	: DEF EOL ID '(' method_def_param_seq EOL ')' stmt_seq  END { $$ = createMethodDefStmt($3, $5, $8); }
-			| DEF EOL ID '(' method_def_param_seq EOL ')' EOL stmt_seq  END { $$ = createMethodDefStmt($3, $5, $9); }
-			| DEF EOL ID '(' method_def_param_seq ')' stmt_seq  END { $$ = createMethodDefStmt($3, $5, $7); }
-			| DEF EOL ID '(' method_def_param_seq ')' EOL stmt_seq  END { $$ = createMethodDefStmt($3, $5, $8); }
-			| DEF EOL ID method_def_param_seq EOL stmt_seq END { $$ = createMethodDefStmt($3, $4, $6); }
-			| DEF ID '(' method_def_param_seq ')' stmt_seq END { $$ = createMethodDefStmt($2, $4, $6); }
-			| DEF ID '(' method_def_param_seq ')' EOL stmt_seq END { $$ = createMethodDefStmt($2, $4, $7); }
-			| DEF ID '(' method_def_param_seq EOL ')' stmt_seq END { $$ = createMethodDefStmt($2, $4, $7); }
-			| DEF ID '(' method_def_param_seq EOL ')' EOL stmt_seq END { $$ = createMethodDefStmt($2, $4, $8); }
-			| DEF ID method_def_param_seq EOL stmt_seq END { $$ = createMethodDefStmt($2, $3, $5); }
+method_def	: DEF EOL ID '(' method_def_param_seq EOL ')' stmt_seq  END { $$ = createMethodDefStmt($3, $5, $8, false); }
+			| DEF EOL ID '(' method_def_param_seq EOL ')' EOL stmt_seq  END { $$ = createMethodDefStmt($3, $5, $9, false); }
+			| DEF EOL ID '(' method_def_param_seq ')' stmt_seq  END { $$ = createMethodDefStmt($3, $5, $7, false); }
+			| DEF EOL ID '(' method_def_param_seq ')' EOL stmt_seq  END { $$ = createMethodDefStmt($3, $5, $8, false); }
+			| DEF EOL ID method_def_param_seq EOL stmt_seq END { $$ = createMethodDefStmt($3, $4, $6, false); }
+			| DEF ID '(' method_def_param_seq ')' stmt_seq END { $$ = createMethodDefStmt($2, $4, $6, false); }
+			| DEF ID '(' method_def_param_seq ')' EOL stmt_seq END { $$ = createMethodDefStmt($2, $4, $7, false); }
+			| DEF ID '(' method_def_param_seq EOL ')' stmt_seq END { $$ = createMethodDefStmt($2, $4, $7, false); }
+			| DEF ID '(' method_def_param_seq EOL ')' EOL stmt_seq END { $$ = createMethodDefStmt($2, $4, $8, false); }
+			| DEF ID method_def_param_seq EOL stmt_seq END { $$ = createMethodDefStmt($2, $3, $5, false); }
+			
+			| DEF_STATIC EOL ID '(' method_def_param_seq EOL ')' stmt_seq  END { $$ = createMethodDefStmt($3, $5, $8, true); }
+			| DEF_STATIC EOL ID '(' method_def_param_seq EOL ')' EOL stmt_seq  END { $$ = createMethodDefStmt($3, $5, $9, true); }
+			| DEF_STATIC EOL ID '(' method_def_param_seq ')' stmt_seq  END { $$ = createMethodDefStmt($3, $5, $7, true); }
+			| DEF_STATIC EOL ID '(' method_def_param_seq ')' EOL stmt_seq  END { $$ = createMethodDefStmt($3, $5, $8, true); }
+			| DEF_STATIC EOL ID method_def_param_seq EOL stmt_seq END { $$ = createMethodDefStmt($3, $4, $6, true); }
+			| DEF_STATIC ID '(' method_def_param_seq ')' stmt_seq END { $$ = createMethodDefStmt($2, $4, $6, true); }
+			| DEF_STATIC ID '(' method_def_param_seq ')' EOL stmt_seq END { $$ = createMethodDefStmt($2, $4, $7, true); }
+			| DEF_STATIC ID '(' method_def_param_seq EOL ')' stmt_seq END { $$ = createMethodDefStmt($2, $4, $7, true); }
+			| DEF_STATIC ID '(' method_def_param_seq EOL ')' EOL stmt_seq END { $$ = createMethodDefStmt($2, $4, $8, true); }
+			| DEF_STATIC ID method_def_param_seq EOL stmt_seq END { $$ = createMethodDefStmt($2, $3, $5, true); }
 			;
 
 method_def_param_seq: /* empty */ { $$ = createMethodDefParamSeq(NULL); }

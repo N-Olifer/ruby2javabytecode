@@ -26,5 +26,7 @@
 #define IFNE (quint8)0x9a
 #define IFEQ (quint8)0x99
 #define POP (quint8)0x57
+#define GETSTATIC (quint8)0xb2
+#define PUTSTATIC (quint8)0xb3
 
 #endif // CODECOMMANDS_H

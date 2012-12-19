@@ -69,9 +69,9 @@ QDataStream & operator<<(QDataStream& out, const SemanticConst *constant)
     return out;
 }
 
-void SemanticClass::addField(QString &id)
+void SemanticClass::addField(QString &id, bool isStatic)
 {
-    SemanticVar* newField = new SemanticVar();
+    SemanticVar* newField = new SemanticVar(isStatic);
     newField->number = fields.size();
     newField->constName = addConstantUtf8(id);
     newField->constType = addConstantUtf8(QString(DESC_COMMON_VALUE));
@@ -245,7 +245,7 @@ void SemanticMethod::addLocalVar(QString &name, SemanticClass *currentClass)
 {
     if(!locals.contains(name))
     {
-        SemanticVar* newVar = new SemanticVar();
+        SemanticVar* newVar = new SemanticVar(false);
         if(methodDef->isStatic)
             newVar->number = locals.count();
         else
@@ -278,7 +278,10 @@ void SemanticMethod::generate(QDataStream &out, SemanticClass* curClass)
 
 QDataStream & operator<< (QDataStream& out, const SemanticVar *var)
 {
-    out << (quint16)ACC_FIELD_PUBLIC;
+    if(var->isStatic)
+        out << (quint16)(ACC_FIELD_PUBLIC|ACC_FIELD_STATIC);
+    else
+        out << (quint16)ACC_FIELD_PUBLIC;
     out << (quint16)var->constName;
     out << (quint16)var->constType;
     out << (quint16)0;

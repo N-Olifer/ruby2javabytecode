@@ -65,6 +65,8 @@ struct ExprNode
 	struct ExprNode* right; // Правый операнд
 	struct ExprSeqNode* list; // Список выражений (для вызова функции)
 	
+	bool isStatic;
+	
 	struct ExprNode* next; // Следующее в списке
 };
 
@@ -91,6 +93,8 @@ struct StmtNode
 	
 	struct StmtSeqNode *elseStmtBlock;	//Блок операторов для else в операторе if
 	struct ElsifSeqNode *elsifList;		//Блок операторов elsif в операторе if
+	
+	bool isStatic;
 };
 
 // Последовательность операторов
