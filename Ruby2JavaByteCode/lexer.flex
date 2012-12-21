@@ -68,7 +68,6 @@ unless return UNLESS;
 
 false return FALSE;
 true return TRUE;
-nil return NIL;
 
 \" { literal[0] = 0;
     BEGIN(STRING);

@@ -1281,8 +1281,14 @@ AttrLocal *AttrLocal::fromParserNode(ExprNode *node)
 
 void AttrLocal::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
-    if(id == NAME_SELF)
+    if(id == NAME_NIL)
     {
+        isNil = true;
+        isSelf = false;
+    }
+    else if(id == NAME_SELF)
+    {
+        isNil = false;
         isSelf = true;
         if(curMethod->methodDef->isStatic)
         {
@@ -1292,6 +1298,7 @@ void AttrLocal::doSemantics(QHash<QString, SemanticClass *> &classTable, Semanti
     }
     else
     {
+        isNil = false;
         isSelf = false;
         curMethod->addLocalVar(id, curClass);
     }
@@ -1304,8 +1311,13 @@ void AttrLocal::dotPrint(QTextStream &out)
 
 void AttrLocal::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod* curMethod)
 {
-    //if(type == eLocal || type == eLocalRef)
-    if(!isSelf)
+    if(isNil)
+    {
+        out << NEW << (quint16)curClass->constCommonValueClass;
+        out << DUP;
+        out << INVOKESPECIAL << (quint16)curClass->constRTLInitUninitRef;
+    }
+    else if(!isSelf)
     {
         out << ALOAD << (quint8)curMethod->locals.value(id)->number;
     }

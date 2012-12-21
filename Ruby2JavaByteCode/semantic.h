@@ -251,6 +251,7 @@ public:
     int number;
     QString id;
     bool isSelf;
+    bool isNil;
 
     AttrLocal() { type = eLocal; }
     static AttrLocal* fromParserNode(ExprNode* node);

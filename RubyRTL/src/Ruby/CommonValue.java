@@ -12,6 +12,7 @@ package Ruby;
 public class CommonValue {
     
     private enum Type {
+        tNil,
         tInt,
         tObject,
         tUninitialized,
@@ -25,7 +26,7 @@ public class CommonValue {
     private CommonClass fObjectValue;
     
     public CommonValue() {
-        fType = CommonValue.Type.tUninitialized;
+        fType = CommonValue.Type.tNil;
     }
     
     public CommonValue(int intValue) {
@@ -50,13 +51,7 @@ public class CommonValue {
                 return result;
             }
         }
-        else
-        {
-            System.out.print("aaa");
-            printType();
-            other.printType();
-        }
-        return null;
+        throw new RuntimeException("Incorrect types (Ruby)");
     }
     
     public CommonValue minus(CommonValue other) {
@@ -66,7 +61,7 @@ public class CommonValue {
                 return result;
             }
         }
-        return null;
+        throw new RuntimeException("Incorrect types (Ruby)");
     }
     
     public CommonValue div(CommonValue other) {
@@ -76,7 +71,7 @@ public class CommonValue {
                 return result;
             }
         }
-        return null;
+        throw new RuntimeException("Incorrect types (Ruby)");
     }
     
     public CommonValue mul(CommonValue other) {
@@ -86,7 +81,7 @@ public class CommonValue {
                 return result;
             }
         }
-        return null;
+        throw new RuntimeException("Incorrect types (Ruby)");
     }
     
     public CommonValue assign(CommonValue newValue) {
@@ -102,6 +97,10 @@ public class CommonValue {
             case tObject:
                 fObjectValue = newValue.fObjectValue;
                 fType = Type.tObject;
+                break;
+            case tNil:
+                fObjectValue = null;
+                fType = Type.tNil;
                 break;
             case tUninitialized:
                 break;
@@ -120,7 +119,7 @@ public class CommonValue {
                 return result;
             }
         }
-        return null;
+        throw new RuntimeException("Incorrect types (Ruby)");
     }
     
     public CommonValue more(CommonValue other) {
@@ -134,7 +133,7 @@ public class CommonValue {
                 return result;
             }
         }
-        return null;
+        throw new RuntimeException("Incorrect types (Ruby)");
     }
     
     public CommonValue equ(CommonValue other) {
@@ -148,7 +147,7 @@ public class CommonValue {
                 return result;
             }
         }
-        return null;
+        throw new RuntimeException("Incorrect types (Ruby)");
     }
     
     public CommonValue nequ(CommonValue other) {
@@ -162,7 +161,7 @@ public class CommonValue {
                 return result;
             }
         }
-        return null;
+        throw new RuntimeException("Incorrect types (Ruby)");
     }
     
     public CommonValue uMinus() {
@@ -170,7 +169,7 @@ public class CommonValue {
             CommonValue result = new CommonValue(-fIntValue);
             return result;
         }
-        return null;
+        throw new RuntimeException("Incorrect types (Ruby)");
     }
     
     public int getInt() {
