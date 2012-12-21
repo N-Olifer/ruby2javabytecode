@@ -276,6 +276,11 @@ void SemanticMethod::generate(QDataStream &out, SemanticClass* curClass)
     methodDef->generateCode(out, curClass);
 }
 
+bool SemanticMethod::isSpecialMethodName(const QString &name)
+{
+    return name == NAME_NEW_METHOD || name == NAME_PRINTINT_METHOD || name == NAME_SUPER_METHOD;
+}
+
 QDataStream & operator<< (QDataStream& out, const SemanticVar *var)
 {
     if(var->isStatic)

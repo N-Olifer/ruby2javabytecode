@@ -303,6 +303,7 @@ AttrMethodDef* AttrMethodDef::fromParserNode(StmtNode* node)
         current = current->next;
     }
     result->type = node->type;
+    result->id += QString::number(result->params.count());
     return result;
 }
 
@@ -953,6 +954,9 @@ AttrMethodCall* AttrMethodCall::fromParserNode(ExprNode* node)
         }
     }
     result->left = AttrExpr::fromParserNode(node->left);
+
+    if(!SemanticMethod::isSpecialMethodName(result->id))
+        result->id += QString::number(result->arguments.count());
     return result;
 }
 

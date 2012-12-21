@@ -189,6 +189,8 @@ public:
     void addLocalVar(QString & name, SemanticClass* currentClass);
 
     void generate(QDataStream & out, SemanticClass* curClass);
+
+    static bool isSpecialMethodName(const QString & name);
 };
 
 class SemanticVar
