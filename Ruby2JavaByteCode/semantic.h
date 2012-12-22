@@ -298,5 +298,6 @@ public:
     void dotPrint(QTextStream & out);
     void generate(QDataStream & out, SemanticClass * curClass, SemanticMethod *curMethod);
     QLinkedList<AttrStmt*>* getBody();
+	void transform();
 };
 #endif // SEMANTICSTRUCTURES_H

@@ -1379,8 +1379,24 @@ AttrIfStmt* AttrIfStmt::fromParserNode(StmtNode* node)
     }
 	return result;
 }
+void AttrIfStmt::transform()
+{
+	if(elsifBlock.isEmpty())//paranoir mode on
+		return;
+
+	AttrIfStmt *tmp = new AttrIfStmt();
+	tmp->expr = elsifBlock.first()->expr;
+	tmp->block = elsifBlock.first()->block;
+	elseBlock << tmp;
+	elsifBlock.removeFirst();
+	tmp->elsifBlock << elsifBlock;
+	elsifBlock.clear();
+	tmp->transform();
+}
 void AttrIfStmt::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
+	if(!elsifBlock.isEmpty())
+		transform();
     expr->doSemantics(classTable, curClass, curMethod, errors);
     foreach(AttrStmt* stmt, block)
         stmt->doSemantics(classTable, curClass, curMethod, errors);
@@ -1437,8 +1453,6 @@ void AttrIfStmt::generate(QDataStream & out, SemanticClass * curClass, SemanticM
 
 	out << GOTO << (quint16)(elseStmtBC.size() + 3);
 	out.writeRawData(elseStmtBC.data(), elseStmtBC.size());
-
-
 }
 QLinkedList<AttrStmt*>* AttrIfStmt::getBody()
 {
