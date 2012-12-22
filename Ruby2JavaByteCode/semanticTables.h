@@ -85,7 +85,7 @@ class AttrMethodDef;
 
 #define ATTR_CODE "Code"
 
-#define VALUE_MAX2BIT 65535
+#define VALUE_MAX2BIT 0xFFFF
 
 #define DESC_COMMON_CLASS "L"NAME_COMMON_CLASS";"
 #define DESC_COMMON_VALUE "L"NAME_COMMON_VALUE";"

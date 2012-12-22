@@ -1160,7 +1160,7 @@ void AttrFieldAcc::doSemantics(QHash<QString, SemanticClass *> &classTable, Sema
     if(left != NULL)
     {
         left->doSemantics(classTable, curClass, curMethod, errors);
-        errors << "wat";
+        errors << "wat"; //^_^
     }
     else
     {
@@ -1420,6 +1420,24 @@ void AttrIfStmt::dotPrint(QTextStream & out)
 }
 void AttrIfStmt::generate(QDataStream & out, SemanticClass * curClass, SemanticMethod *curMethod)
 {
+	expr->generate(out, curClass, curMethod);
+	out << INVOKEVIRTUAL << (quint16)curClass->constRTLGetIntRef;
+
+	QByteArray stmtBC;
+	QDataStream stmtBCOut(&stmtBC, QIODevice::WriteOnly);
+	foreach(AttrStmt* stmt, block)
+		stmt->generate(stmtBCOut,curClass,curMethod);
+	out << IFEQ << (quint16)(stmtBC.size() + 6);
+	out.writeRawData(stmtBC.data(), stmtBC.size());
+
+	QByteArray elseStmtBC;
+	QDataStream elseStmtBCOut(&elseStmtBC, QIODevice::WriteOnly);
+	foreach(AttrStmt* stmt, elseBlock)
+		stmt->generate(elseStmtBCOut, curClass, curMethod);
+
+	out << GOTO << (quint16)(elseStmtBC.size() + 3);
+	out.writeRawData(elseStmtBC.data(), elseStmtBC.size());
+
 
 }
 QLinkedList<AttrStmt*>* AttrIfStmt::getBody()
