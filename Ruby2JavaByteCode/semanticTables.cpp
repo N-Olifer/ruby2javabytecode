@@ -207,6 +207,14 @@ void SemanticClass::addRTLConstants()
     constRTLEquRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_EQU),QString(DESC_RTL_EQU));
     constRTLNequRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_NEQU),QString(DESC_RTL_NEQU));
     constRTLUMinusRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_UMINUS),QString(DESC_RTL_UMINUS));
+
+	constRTLClassArray = addConstantClass(QString(NAME_RTL_ARRAY));
+	constRTLGetArrayRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_GET_ARRAY),QString(DESC_RTL_GET_ARRAY));
+	constRTLInitByArrayRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_DEFAULT_CONSTRUCTOR),QString(DESC_RTL_INIT_ARRAY));
+	constRTLInitArrayRef = addConstantMethodRef(QString(NAME_RTL_ARRAY),QString(NAME_DEFAULT_CONSTRUCTOR),QString(DESC_RTL_ARRAY_INIT));
+	constRTLArrayAppendRef = addConstantMethodRef(QString(NAME_RTL_ARRAY),QString(NAME_RTL_ARRAY_APPEND),QString(DESC_RTL_ARRAY_APPEND));
+	constRTLArrayGetRef = addConstantMethodRef(QString(NAME_RTL_ARRAY),QString(NAME_RTL_ARRAY_GET),QString(DESC_RTL_ARRAY_GET));
+	constRTLArraySetRef = addConstantMethodRef(QString(NAME_RTL_ARRAY),QString(NAME_RTL_ARRAY_SET),QString(DESC_RTL_ARRAY_SET));
 }
 
 void SemanticClass::generate()

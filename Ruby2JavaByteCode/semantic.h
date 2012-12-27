@@ -281,8 +281,7 @@ public:
     QLinkedList<AttrStmt*> block;
 
     static AttrElsif* fromParserNode(ElsifNode* node);
-    void doSemantics(QHash<QString, SemanticClass *> &classTable, 
-		SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
+    void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
     void dotPrint(QTextStream & out);
 };
 class AttrIfStmt : public AttrStmt
@@ -299,5 +298,16 @@ public:
     void generate(QDataStream & out, SemanticClass * curClass, SemanticMethod *curMethod);
     QLinkedList<AttrStmt*>* getBody();
 	void transform();
+};
+class AttrQBracketsInit : public AttrExpr
+{
+public:
+    QLinkedList<AttrExpr*> exprList;
+
+    static AttrQBracketsInit* fromParserNode(ExprNode* node);
+    void doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors);
+    void dotPrint(QTextStream & out);
+    void transform();
+    void generate(QDataStream &out, SemanticClass *curClass, SemanticMethod* curMethod);
 };
 #endif // SEMANTICSTRUCTURES_H

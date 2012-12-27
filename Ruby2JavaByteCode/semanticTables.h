@@ -33,6 +33,7 @@ class AttrMethodDef;
 #define DESC_RTL_INIT_INT "(I)V"
 #define DESC_RTL_INIT_UNINIT "()V"
 #define DESC_RTL_INIT_OBJECT "("DESC_COMMON_CLASS")V"
+#define DESC_RTL_INIT_ARRAY "("DESC_RTL_ARRAY")V"
 
 #define NAME_RTL_ADD "add"
 #define DESC_RTL_ADD "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
@@ -41,7 +42,10 @@ class AttrMethodDef;
 #define DESC_RTL_ASSIGN "(L"NAME_COMMON_VALUE";)"DESC_COMMON_VALUE
 
 #define NAME_RTL_GET_OBJECT "getObject"
-#define DESC_RTL_GET_OBJECT "()"DESC_COMMON_CLASS
+#define DESC_RTL_GET_OBJECT "()"DESC_RTL_ARRAY
+
+#define NAME_RTL_GET_ARRAY "getArray"
+#define DESC_RTL_GET_ARRAY "()"DESC_RTL_ARRAY
 
 #define NAME_RTL_MUL "mul"
 #define DESC_RTL_MUL "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
@@ -75,6 +79,18 @@ class AttrMethodDef;
 #define DESC_RTL_CONSOLE_PRINT_INT "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
 #define NAME_RTL_CONSOLE_PRINT_STRING "printString"
 #define DESC_RTL_CONSOLE_PRINT_STRING "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
+
+#define NAME_RTL_ARRAY NAMESPACE "Array"
+#define DESC_RTL_ARRAY "L"NAME_RTL_ARRAY";"
+
+#define NAME_RTL_ARRAY_INIT "()V"
+#define DESC_RTL_ARRAY_INIT "()V"
+#define NAME_RTL_ARRAY_APPEND "append"
+#define DESC_RTL_ARRAY_APPEND "("DESC_COMMON_VALUE")V"
+#define NAME_RTL_ARRAY_GET "get"
+#define DESC_RTL_ARRAY_GET "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
+#define NAME_RTL_ARRAY_SET "set"
+#define DESC_RTL_ARRAY_SET "("DESC_COMMON_VALUE""DESC_COMMON_VALUE")"DESC_COMMON_VALUE
 
 #define ACC_CLASS_PUBLIC 0x0001
 #define ACC_CLASS_ABSTRACT 0x0400
@@ -112,6 +128,7 @@ public:
 
     int constRTLAddRef;
     int constRTLInitIntRef;
+
     int constRTLAssignRef;
     int constRTLInitUninitRef;
 	int constRTLConsolePrintIntRef;
@@ -127,6 +144,15 @@ public:
     int constRTLEquRef;
     int constRTLNequRef;
     int constRTLUMinusRef;
+
+	int constRTLInitByArrayRef;
+	int constRTLGetArrayRef;
+	int constRTLClassArray;
+	int constRTLInitArrayRef;
+	int constRTLArrayAppendRef;
+	int constRTLArrayGetRef;
+	int constRTLArraySetRef;
+
     bool isAbstract;
 
     QString id;

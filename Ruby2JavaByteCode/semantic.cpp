@@ -727,11 +727,16 @@ AttrExpr* AttrExpr::fromParserNode(ExprNode* node)
     case eUMinus:
     case eBrackets:
         return AttrUnExpr::fromParserNode(node);
+	case eQBracketsInit:
+		return AttrQBracketsInit::fromParserNode(node);
+	case eQBrackets:
+		return AttrBinExpr::fromParserNode(node);
     }
 }
 
 void AttrExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod* curMethod)
 {
+
 }
 
 AttrBinExpr* AttrBinExpr::fromParserNode(ExprNode* node)
@@ -740,6 +745,7 @@ AttrBinExpr* AttrBinExpr::fromParserNode(ExprNode* node)
     result->left = AttrExpr::fromParserNode(node->left);
     result->right = AttrExpr::fromParserNode(node->right);
     result->type = node->type;
+	result->third = NULL;
     return result;
 }
 
@@ -755,6 +761,8 @@ void AttrBinExpr::doSemantics(QHash<QString, SemanticClass *> &classTable, Seman
     if(left)
         left->doSemantics(classTable, curClass, curMethod, errors);
     right->doSemantics(classTable, curClass, curMethod, errors);
+    if(third)
+        third->doSemantics(classTable, curClass, curMethod, errors);
 }
 
 void AttrBinExpr::dotPrint(QTextStream & out)
@@ -773,8 +781,12 @@ void AttrBinExpr::dotPrint(QTextStream & out)
     if(left)
         left->dotPrint(out);
     right->dotPrint(out);
+	if(type == eQBracketsLvalue)
+        third->dotPrint(out);
     out << QString::number((int)this) + "->" + QString::number((int)left) + QString("\n");
     out << QString::number((int)this) + "->" + QString::number((int)right) + QString("\n");
+	if(type == eQBracketsLvalue)
+		out << QString::number((int)this) + "->" + QString::number((int)third) + QString("\n");
 }
 
 void AttrBinExpr::transform()
@@ -802,17 +814,19 @@ void AttrBinExpr::transform()
             //left = newLeft;
         }
         // TODO array
-		//if(left->type == eQBrackets)
-		//{
-		//	type = eQBracketsLvalue;
-		//	//this->
-		//}
+		if(left->type == eQBrackets)
+		{
+			third = right;
+			right = dynamic_cast<AttrBinExpr*>(left)->right;
+			left = dynamic_cast<AttrBinExpr*>(left)->left;
+			type = eQBracketsLvalue;
+		}
     }
 }
 
 void AttrBinExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
 {
-    if(type != eAssign)
+	if(type != eAssign && type != eQBrackets && type != eQBracketsLvalue)
     {
         left->generate(out, curClass, curMethod);
         right->generate(out, curClass, curMethod);
@@ -888,7 +902,24 @@ void AttrBinExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMe
             out << INVOKEVIRTUAL << (quint16)curClass->constRTLNequRef;
             break;
         }
-        break;
+		case eQBrackets:
+		{
+			left->generate(out, curClass, curMethod);
+            out << INVOKEVIRTUAL << (quint16)curClass->constRTLGetArrayRef;
+			right->generate(out, curClass, curMethod);
+			out << INVOKEVIRTUAL << (quint16)curClass->constRTLArrayGetRef;
+			break;
+		}
+		case eQBracketsLvalue:
+		{
+			left->generate(out, curClass, curMethod);
+            out << INVOKEVIRTUAL << (quint16)curClass->constRTLGetArrayRef;
+			right->generate(out, curClass, curMethod);
+			third->generate(out, curClass, curMethod);
+			out << INVOKEVIRTUAL << (quint16)curClass->constRTLArraySetRef;
+			break;
+		}
+
     }
 }
 
@@ -1457,4 +1488,53 @@ void AttrIfStmt::generate(QDataStream & out, SemanticClass * curClass, SemanticM
 QLinkedList<AttrStmt*>* AttrIfStmt::getBody()
 {
 	return &block;
+}
+AttrQBracketsInit* AttrQBracketsInit::fromParserNode(ExprNode* node)
+{
+	AttrQBracketsInit *result = new AttrQBracketsInit();
+    if(node->list)
+    {
+        ExprNode* current = node->list->first;
+        while(current)
+        {
+            result->exprList << AttrExpr::fromParserNode(current);
+            current = current->next;
+        }
+    }
+	return result;
+}
+void AttrQBracketsInit::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
+{
+    foreach(AttrExpr* expr, exprList)
+        expr->doSemantics(classTable, curClass, curMethod, errors);
+}
+void AttrQBracketsInit::dotPrint(QTextStream & out)
+{
+    QString label = "QBracketsInit";
+    out << QString::number((int)this) + "[label = \"" + label +"\"]" + QString("\n");
+	dotPrintExprSeq(exprList, out);
+}
+void AttrQBracketsInit::transform()
+{
+
+}
+void AttrQBracketsInit::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod* curMethod)
+{
+	out << NEW << (quint16)curClass->constCommonValueClass;
+	out << DUP;
+	out << NEW << (quint16)curClass->constRTLClassArray;
+	out << DUP;
+	out << INVOKESPECIAL << (quint16)curClass->constRTLInitArrayRef;
+
+	int dupCount = exprList.count();
+	for(int i = 0; i < dupCount; i++)
+		out << DUP;
+
+	foreach(AttrExpr *expr, exprList)
+	{
+		expr->generate(out, curClass, curMethod);
+		out << INVOKEVIRTUAL << (quint16)curClass->constRTLArrayAppendRef;
+	}
+
+	out << INVOKESPECIAL << (quint16)curClass->constRTLInitByArrayRef;
 }

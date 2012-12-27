@@ -16,7 +16,8 @@ public class CommonValue {
         tInt,
         tObject,
         tUninitialized,
-        tString
+        tString,
+        tArray
     }
     
     private CommonValue.Type fType;
@@ -24,6 +25,8 @@ public class CommonValue {
     private String fStringValue;
     
     private CommonClass fObjectValue;
+    
+    private Array fArrayValue;
     
     public CommonValue() {
         fType = CommonValue.Type.tNil;
@@ -44,6 +47,11 @@ public class CommonValue {
         fType = CommonValue.Type.tObject;
     }
     
+    public CommonValue(Array array) {
+        fArrayValue = array;
+        fType = CommonValue.Type.tArray;
+    }
+    
     public CommonValue add(CommonValue other) {
         if(fType == other.fType) {
             if(fType == Type.tInt) {
@@ -60,7 +68,7 @@ public class CommonValue {
                 CommonValue result = new CommonValue(fIntValue - other.fIntValue);
                 return result;
             }
-        }
+        } 
         throw new RuntimeException("Incorrect types (Ruby)");
     }
     
@@ -103,6 +111,10 @@ public class CommonValue {
                 fType = Type.tNil;
                 break;
             case tUninitialized:
+                break;
+            case tArray:
+                fArrayValue = newValue.fArrayValue;
+                fType = Type.tArray;
                 break;
         }
         return this;
@@ -183,6 +195,10 @@ public class CommonValue {
     public CommonClass getObject() {
         return fObjectValue;
     }
+   
+    public Array getArray() {
+        return fArrayValue;
+    }
     
     public void printType() {
         switch(fType) {
@@ -197,6 +213,9 @@ public class CommonValue {
                 break;
             case tUninitialized:
                 System.out.print("-uninit-");
+                break;
+            case tArray:
+                System.out.print("-array-");
                 break;
         }
     }

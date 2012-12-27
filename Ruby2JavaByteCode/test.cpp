@@ -75,6 +75,8 @@ void exprTypeToStr(enum ExprNodeType type, char* str)
             strcpy(str, "q_brackets"); break;
         case eQBracketsInit:
             strcpy(str, "q_brackets_init"); break;
+		case eQBracketsLvalue:
+            strcpy(str, "q_brackets_lvalue_assing"); break;
         case eFieldAcc:
             strcpy(str, "field_acc"); break;
         case eSuper:
