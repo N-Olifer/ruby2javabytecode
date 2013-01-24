@@ -826,7 +826,12 @@ void AttrBinExpr::transform()
 
 void AttrBinExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMethod *curMethod)
 {
-	if(type != eAssign && type != eQBrackets && type != eQBracketsLvalue)
+	if(type != eAssign 
+		&& type != eQBrackets 
+		&& type != eQBracketsLvalue
+		&& type != eAnd
+		&& type != eOr
+		)
     {
         left->generate(out, curClass, curMethod);
         right->generate(out, curClass, curMethod);
@@ -892,11 +897,33 @@ void AttrBinExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMe
         }
         case eOr:
         {
+			left->generate(out, curClass, curMethod);
+			out << DUP;
+			out << INVOKEVIRTUAL << (quint16)curClass->constRTLGetIntRef;
+
+			QByteArray rightBC;
+			QDataStream rightBCOut(&rightBC, QIODevice::WriteOnly);
+			right->generate(rightBCOut, curClass, curMethod);
+
+			out << IFNE << (quint16)(rightBC.size() + 6);
+			out.writeRawData(rightBC.data(), rightBC.size());
+
 			out << INVOKEVIRTUAL << (quint16)curClass->constRTLOrRef;
             break;
         }
         case eAnd:
         {
+			left->generate(out, curClass, curMethod);
+			out << DUP;
+			out << INVOKEVIRTUAL << (quint16)curClass->constRTLGetIntRef;
+
+			QByteArray rightBC;
+			QDataStream rightBCOut(&rightBC, QIODevice::WriteOnly);
+			right->generate(rightBCOut, curClass, curMethod);
+
+			out << IFEQ << (quint16)(rightBC.size() + 6);
+			out.writeRawData(rightBC.data(), rightBC.size());
+
 			out << INVOKEVIRTUAL << (quint16)curClass->constRTLAndRef;
             break;
         }
