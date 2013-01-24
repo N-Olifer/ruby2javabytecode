@@ -75,6 +75,15 @@ class AttrMethodDef;
 #define NAME_RTL_NEQU "nequ"
 #define DESC_RTL_NEQU "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
 
+#define NAME_RTL_OR "or"
+#define DESC_RTL_OR "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
+
+#define NAME_RTL_AND "and"
+#define DESC_RTL_AND "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
+
+#define NAME_RTL_NOT "not"
+#define DESC_RTL_NOT "()"DESC_COMMON_VALUE
+
 #define NAME_RTL_UMINUS "uMinus"
 #define DESC_RTL_UMINUS "()"DESC_COMMON_VALUE
 
@@ -146,10 +155,16 @@ public:
     int constRTLDivRef;
     int constRTLMinusRef;
     int constRTLGetIntRef;
+
     int constRTLLessRef;
     int constRTLMoreRef;
     int constRTLEquRef;
     int constRTLNequRef;
+
+    int constRTLOrRef;
+    int constRTLAndRef;
+    int constRTLNotRef;
+
     int constRTLUMinusRef;
 
 	int constRTLInitByArrayRef;

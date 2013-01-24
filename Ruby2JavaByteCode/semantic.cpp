@@ -891,7 +891,15 @@ void AttrBinExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMe
             break;
         }
         case eOr:
+        {
+			out << INVOKEVIRTUAL << (quint16)curClass->constRTLOrRef;
+            break;
+        }
         case eAnd:
+        {
+			out << INVOKEVIRTUAL << (quint16)curClass->constRTLAndRef;
+            break;
+        }
         case eEqu:
         {
             out << INVOKEVIRTUAL << (quint16)curClass->constRTLEquRef;
@@ -934,7 +942,7 @@ AttrUnExpr* AttrUnExpr::fromParserNode(ExprNode* node)
 void AttrUnExpr::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
     transform();
-    if(expr->type == eBool || expr->type == eString)
+	if(type == eUMinus && (expr->type == eBool || expr->type == eString))
     {
         errors << "Incorrect type with uMinus";
         return;
@@ -964,6 +972,12 @@ void AttrUnExpr::generate(QDataStream &out, SemanticClass *curClass, SemanticMet
         {
             expr->generate(out, curClass, curMethod);
             out << INVOKEVIRTUAL << (quint16)curClass->constRTLUMinusRef;
+            break;
+        }
+        case eNot:
+        {
+            expr->generate(out, curClass, curMethod);
+			out << INVOKEVIRTUAL << (quint16)curClass->constRTLNotRef;
             break;
         }
     }
@@ -1311,6 +1325,13 @@ void AttrConstExpr::generate(QDataStream &out, SemanticClass *curClass, Semantic
 		out << DUP;
 		out << LDC << (quint8)constValue;
 		out << INVOKESPECIAL << (quint16)curClass->constRTLInitStringRef;
+    }
+    else if(type == eBool)
+    {
+		out << NEW << (quint16)curClass->constCommonValueClass;
+		out << DUP;
+		out << BIPUSH << (quint8)(intValue ? 1 : 0);
+		out << INVOKESPECIAL << (quint16)curClass->constRTLInitIntRef;
     }
 }
 

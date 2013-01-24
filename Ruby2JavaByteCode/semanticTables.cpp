@@ -210,6 +210,10 @@ void SemanticClass::addRTLConstants()
     constRTLNequRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_NEQU),QString(DESC_RTL_NEQU));
     constRTLUMinusRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_UMINUS),QString(DESC_RTL_UMINUS));
 
+    constRTLOrRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_OR),QString(DESC_RTL_OR));
+	constRTLAndRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_AND),QString(DESC_RTL_AND));
+	constRTLNotRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_NOT),QString(DESC_RTL_NOT));
+
 	constRTLClassArray = addConstantClass(QString(NAME_RTL_ARRAY));
 	constRTLGetArrayRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_GET_ARRAY),QString(DESC_RTL_GET_ARRAY));
 	constRTLInitByArrayRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_DEFAULT_CONSTRUCTOR),QString(DESC_RTL_INIT_ARRAY));

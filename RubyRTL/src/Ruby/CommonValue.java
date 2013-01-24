@@ -147,7 +147,13 @@ public class CommonValue {
         }
         throw new RuntimeException("Incorrect types (Ruby)");
     }
-    
+    public boolean getBoolean()
+    {
+        if(fType == Type.tInt) {
+            return fIntValue != 0 ? true : false;
+        }
+        return false;
+    }
     public CommonValue equ(CommonValue other) {
         if(fType == other.fType) {
             if(fType == Type.tInt) {
@@ -160,6 +166,38 @@ public class CommonValue {
             }
         }
         throw new RuntimeException("Incorrect types (Ruby)");
+    }
+    
+    public CommonValue or(CommonValue other) {
+        if(fType == other.fType) {
+            if(fType == Type.tInt) {
+                CommonValue result;
+                if(getBoolean() || other.getBoolean())
+                    result = new CommonValue(1);
+                else
+                    result = new CommonValue(0);
+                return result;
+            }
+        }
+        throw new RuntimeException("Incorrect types (Ruby)");
+    }
+    
+    public CommonValue and(CommonValue other) {
+        if(fType == other.fType) {
+            if(fType == Type.tInt) {
+                CommonValue result;
+                if(getBoolean() && other.getBoolean())
+                    result = new CommonValue(1);
+                else
+                    result = new CommonValue(0);
+                return result;
+            }
+        }
+        throw new RuntimeException("Incorrect types (Ruby)");
+    }
+    
+    public CommonValue not() {
+        return new CommonValue(getBoolean() ? 0 : 1);
     }
     
     public CommonValue nequ(CommonValue other) {
