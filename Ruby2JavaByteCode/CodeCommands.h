@@ -28,4 +28,5 @@
 #define POP				(quint8)0x57
 #define GETSTATIC		(quint8)0xB2
 #define PUTSTATIC		(quint8)0xB3
+#define ATHROW          (quint8)0xBF
 #endif // CODECOMMANDS_H
