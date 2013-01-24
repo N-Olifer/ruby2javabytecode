@@ -32,4 +32,16 @@ public class Array {
         array.set(index.getInt(), value);
         return value;
     }
+
+    @Override
+    public String toString() {
+        String result = new String();
+        for(CommonValue element : array) {
+            result += element.toString();
+            result += " ";
+        }
+        return result;
+    }
+    
+    
 }
