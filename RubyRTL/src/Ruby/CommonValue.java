@@ -217,6 +217,25 @@ public class CommonValue {
             case tArray:
                 System.out.print("-array-");
                 break;
-        }
+        }   
     }
+
+    @Override
+    public String toString() {
+        switch(fType) {
+            case tInt:
+                return String.valueOf(fIntValue);
+            case tString:
+                return fStringValue;
+            case tObject:
+                return fObjectValue.toString();
+            case tUninitialized:
+                return "Uninitialized";
+            case tArray:
+                return fArrayValue.toString(); //TODO красивая печать для массива
+        } 
+        return super.toString();
+    }
+    
+    
 }

@@ -9,6 +9,7 @@ SemanticConst::SemanticConst(ConstType type, int number, QString & value, int in
     this->type = type;
     this->number = number;
     this->strValue = value;
+	this->intValue = intValue;
     this->numberRef1 = ref1;
     this->numberRef2 = ref2;
 }
@@ -191,6 +192,7 @@ void SemanticClass::addRTLConstants()
 {
     constCommonValueClass = addConstantClass(QString(NAME_COMMON_VALUE));
     constRTLInitIntRef = addConstantMethodRef(QString(NAME_COMMON_VALUE), QString(NAME_RTL_INIT), QString(DESC_RTL_INIT_INT));
+    constRTLInitStringRef = addConstantMethodRef(QString(NAME_COMMON_VALUE), QString(NAME_RTL_INIT), QString(DESC_RTL_INIT_STRING));
     constRTLAddRef = addConstantMethodRef(QString(NAME_COMMON_VALUE), QString(NAME_RTL_ADD), QString(DESC_RTL_ADD));
     constRTLAssignRef = addConstantMethodRef(QString(NAME_COMMON_VALUE), QString(NAME_RTL_ASSIGN), QString(DESC_RTL_ASSIGN));
     constRTLInitUninitRef = addConstantMethodRef(QString(NAME_COMMON_VALUE), QString(NAME_RTL_INIT), QString(DESC_RTL_INIT_UNINIT));
@@ -286,7 +288,10 @@ void SemanticMethod::generate(QDataStream &out, SemanticClass* curClass)
 
 bool SemanticMethod::isSpecialMethodName(const QString &name)
 {
-    return name == NAME_NEW_METHOD || name == NAME_PRINTINT_METHOD || name == NAME_SUPER_METHOD;
+    return name == NAME_NEW_METHOD 
+		|| name == NAME_PRINTINT_METHOD 
+		|| name == NAME_SUPER_METHOD
+		|| name == NAME_PRINTSTRING_METHOD;
 }
 
 QDataStream & operator<< (QDataStream& out, const SemanticVar *var)

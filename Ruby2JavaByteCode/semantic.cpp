@@ -996,8 +996,7 @@ void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, Se
     bool methodFound = false;
     if(left == NULL)
     {
-        if(id == NAME_SUPER_METHOD ||
-                id == NAME_PRINTINT_METHOD)
+        if(SemanticMethod::isSpecialMethodName(id))
             methodFound = true;
     }
     else if(id == NAME_NEW_METHOD)
@@ -1126,6 +1125,12 @@ void AttrMethodCall::generate(QDataStream &out, SemanticClass *curClass, Semanti
         foreach(AttrExpr* argument, arguments)
             argument->generate(out, curClass, curMethod);
         out << INVOKESTATIC << (quint16)curClass->constants.value(curClass->constRTLConsolePrintIntRef)->number;
+    }
+    if(id == NAME_PRINTSTRING_METHOD)
+    {
+        foreach(AttrExpr* argument, arguments)
+            argument->generate(out, curClass, curMethod);
+		out << INVOKESTATIC << (quint16)curClass->constRTLConsolePrintStringRef;
     }
     else if(id == NAME_SUPER_METHOD)
     {
@@ -1258,7 +1263,7 @@ AttrConstExpr* AttrConstExpr::fromParserNode(ExprNode* node)
 
 void AttrConstExpr::doSemantics(QHash<QString, SemanticClass *> &classTable, SemanticClass *curClass, SemanticMethod *curMethod, QList<QString> &errors)
 {
-    if(type == eInt && intValue > VALUE_MAX2BIT)
+    if(type == eInt/* && intValue > VALUE_MAX2BIT*/)
     {
         constValue = curClass->addConstantInteger(intValue);
     }
@@ -1295,11 +1300,17 @@ void AttrConstExpr::generate(QDataStream &out, SemanticClass *curClass, Semantic
 {
     if(type == eInt)
     {
-        out << NEW << (quint16)curClass->constants.value(curClass->constCommonValueClass)->number;
-        out << DUP;
-        //TODO long int
-        out << BIPUSH << (qint8)intValue;
-        out << INVOKESPECIAL << (quint16)curClass->constants.value(curClass->constRTLInitIntRef)->number;
+		out << NEW << (quint16)curClass->constCommonValueClass;
+		out << DUP;
+		out << LDC << (quint8)constValue;
+		out << INVOKESPECIAL << (quint16)curClass->constRTLInitIntRef;
+    }
+    else if(type == eString)
+    {
+		out << NEW << (quint16)curClass->constCommonValueClass;
+		out << DUP;
+		out << LDC << (quint8)constValue;
+		out << INVOKESPECIAL << (quint16)curClass->constRTLInitStringRef;
     }
 }
 

@@ -26,14 +26,21 @@ class AttrMethodDef;
 #define NAME_NIL "nil"
 #define NAME_NEW_METHOD "new"
 #define NAME_PRINTINT_METHOD "printInt"
+#define NAME_PRINTSTRING_METHOD "printString"
 #define NAME_JAVA_OBJECT "java/lang/Object"
+
 #define NAME_JAVA_STRING "java/lang/String"
+#define DESC_JAVA_STRING "L"NAME_JAVA_STRING";"
+
+#define NAME_JAVA_INTEGER "java/lang/Integer"
+#define DESC_JAVA_INTEGER "L"NAME_JAVA_INTEGER";"
 
 #define NAME_RTL_INIT "<init>"
 #define DESC_RTL_INIT_INT "(I)V"
 #define DESC_RTL_INIT_UNINIT "()V"
 #define DESC_RTL_INIT_OBJECT "("DESC_COMMON_CLASS")V"
 #define DESC_RTL_INIT_ARRAY "("DESC_RTL_ARRAY")V"
+#define DESC_RTL_INIT_STRING "("DESC_JAVA_STRING")V"
 
 #define NAME_RTL_ADD "add"
 #define DESC_RTL_ADD "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
@@ -72,7 +79,7 @@ class AttrMethodDef;
 #define DESC_RTL_UMINUS "()"DESC_COMMON_VALUE
 
 #define NAME_RTL_GET_INT "getInt"
-#define DESC_RTL_GET_INT "()I"
+#define DESC_RTL_GET_INT "()"DESC_JAVA_INTEGER
 
 #define NAME_RTL_CONSOLE NAMESPACE "Console"
 #define NAME_RTL_CONSOLE_PRINT_INT "printInt"
@@ -128,7 +135,7 @@ public:
 
     int constRTLAddRef;
     int constRTLInitIntRef;
-
+	int constRTLInitStringRef;
     int constRTLAssignRef;
     int constRTLInitUninitRef;
 	int constRTLConsolePrintIntRef;
