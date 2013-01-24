@@ -14,7 +14,7 @@
 IDENTIFIER [A-Za-z_][A-Za-z_0-9]*
 SPACE_OR_EOL ([\n]+)|([\n]+([[:blank:]]+|[\n]+)+)|([[:blank:]]+)
 
-%x STRING
+%x STRING_X
 %x STRING2
 %s EXP_IN_STRING
 %x LINE_COMMENT
@@ -70,23 +70,23 @@ false return FALSE;
 true return TRUE;
 
 \" { literal[0] = 0;
-    BEGIN(STRING);
+    BEGIN(STRING_X);
     }
-<STRING>[^\\\n\"#{}]+ strcat(literal,yytext);
-<STRING>\\n strcat(literal,"\n");
-<STRING>\\\\ strcat(literal,"\\");
-<STRING>\\\" strcat(literal,"\"");
-<STRING>\\\' strcat(literal,"\'");
-<STRING>\\r strcat(literal,"\r");
-<STRING>\\s strcat(literal," ");
-<STRING>\\t strcat(literal,"\t");
-<STRING>\\[0-9]+ {
+<STRING_X>[^\\\n\"#{}]+ strcat(literal,yytext);
+<STRING_X>\\n strcat(literal,"\n");
+<STRING_X>\\\\ strcat(literal,"\\");
+<STRING_X>\\\" strcat(literal,"\"");
+<STRING_X>\\\' strcat(literal,"\'");
+<STRING_X>\\r strcat(literal,"\r");
+<STRING_X>\\s strcat(literal," ");
+<STRING_X>\\t strcat(literal,"\t");
+<STRING_X>\\[0-9]+ {
 	int result;
 	sscanf(yytext+1,"%o",&result);
 	sprintf(literal + strlen(literal),"%c",result);
     }
-<STRING>\\;
-<STRING>"#" {
+<STRING_X>\\;
+<STRING_X>"#" {
     printf("String in\"\"\t\t%s\n", literal);
 	literal[0] = 0;
     printf("+\n");
@@ -96,7 +96,7 @@ true return TRUE;
     printf("%s\t\t$identifier\n", yytext);
     printf(".to_s\t\tmethod to string\n");
     printf("+\n");
-	BEGIN(STRING);
+	BEGIN(STRING_X);
 	}
 <EXP_IN_STRING>\${IDENTIFIER}\" {
     printf("%s\t\t$identifier\n", yytext);
@@ -113,15 +113,17 @@ true return TRUE;
 <EXP_IN_STRING>"}" {
     printf(").to_s\t\tmethod to string\n");
     printf("+\n");
-    BEGIN(STRING);
+    BEGIN(STRING_X);
     }
 <EXP_IN_STRING>"}\"" {
     printf(").to_s\t\tmethod to string\n");
     BEGIN(INITIAL); 
     }
-<STRING>\" { 
-    printf("String in \"\"\t\t%s\n", literal);
-    BEGIN(INITIAL);
+<STRING_X>\" { 
+	BEGIN(INITIAL);
+	yylval.uString = (char*)malloc(sizeof(char)*strlen(literal)+1);
+	strcpy(yylval.uString,literal);
+	return STRING;
     }
 \' { literal[0] = 0;
     BEGIN(STRING2);
@@ -130,8 +132,10 @@ true return TRUE;
 <STRING2>\\n strcat(literal,"\n");
 <STRING2>\\\' strcat(literal,"\'");
 <STRING2>\' {
-    printf("String in \'\'\t\t%s\n", literal);
-    BEGIN(INITIAL);
+	BEGIN(INITIAL);
+	yylval.uString = (char*)malloc(sizeof(char)*strlen(literal)+1);
+	strcpy(yylval.uString,literal);
+	return STRING;
     }
 
 ";" return ';';

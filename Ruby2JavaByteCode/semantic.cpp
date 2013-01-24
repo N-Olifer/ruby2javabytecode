@@ -1283,7 +1283,9 @@ void AttrConstExpr::dotPrint(QTextStream & out)
             label = QString("false");
         break;
     case eString:
-        label = str;
+		label = "\\\"";
+        label += str;
+		label += "\\\"";
         break;
     }
     out << QString::number((int)this) + "[label=\"" + label + "\"]" + QString("\n");

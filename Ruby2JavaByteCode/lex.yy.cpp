@@ -569,7 +569,7 @@ char *yytext;
 	#include "structures.h"
 	#include "test.h"
 #define YY_NEVER_INTERACTIVE 1
-#define STRING 1
+#define STRING_X 1
 
 #define STRING2 2
 
@@ -945,7 +945,7 @@ case 23:
 YY_RULE_SETUP
 #line 72 "lexer.flex"
 { literal[0] = 0;
-    BEGIN(STRING);
+    BEGIN(STRING_X);
     }
 	YY_BREAK
 case 24:
@@ -1019,7 +1019,7 @@ YY_RULE_SETUP
     printf("%s\t\t$identifier\n", yytext);
     printf(".to_s\t\tmethod to string\n");
     printf("+\n");
-	BEGIN(STRING);
+	BEGIN(STRING_X);
 	}
 	YY_BREAK
 case 36:
@@ -1048,7 +1048,7 @@ YY_RULE_SETUP
 {
     printf(").to_s\t\tmethod to string\n");
     printf("+\n");
-    BEGIN(STRING);
+    BEGIN(STRING_X);
     }
 	YY_BREAK
 case 39:
@@ -1063,148 +1063,152 @@ case 40:
 YY_RULE_SETUP
 #line 122 "lexer.flex"
 { 
-    printf("String in \"\"\t\t%s\n", literal);
-    BEGIN(INITIAL);
+	BEGIN(INITIAL);
+	yylval.uString = (char*)malloc(sizeof(char)*strlen(literal)+1);
+	strcpy(yylval.uString,literal);
+	return STRING;
     }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 126 "lexer.flex"
+#line 128 "lexer.flex"
 { literal[0] = 0;
     BEGIN(STRING2);
     }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 129 "lexer.flex"
+#line 131 "lexer.flex"
 strcat(literal,yytext);
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 130 "lexer.flex"
+#line 132 "lexer.flex"
 strcat(literal,"\n");
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 131 "lexer.flex"
+#line 133 "lexer.flex"
 strcat(literal,"\'");
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 132 "lexer.flex"
+#line 134 "lexer.flex"
 {
-    printf("String in \'\'\t\t%s\n", literal);
-    BEGIN(INITIAL);
+	BEGIN(INITIAL);
+	yylval.uString = (char*)malloc(sizeof(char)*strlen(literal)+1);
+	strcpy(yylval.uString,literal);
+	return STRING;
     }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 137 "lexer.flex"
+#line 141 "lexer.flex"
 return ';';
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 138 "lexer.flex"
+#line 142 "lexer.flex"
 return '.';
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 139 "lexer.flex"
+#line 143 "lexer.flex"
 return ',';
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 140 "lexer.flex"
+#line 144 "lexer.flex"
 return  '{';
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 141 "lexer.flex"
+#line 145 "lexer.flex"
 return '}';
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 142 "lexer.flex"
+#line 146 "lexer.flex"
 return '[';
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 143 "lexer.flex"
+#line 147 "lexer.flex"
 return ']';
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 144 "lexer.flex"
+#line 148 "lexer.flex"
 return '(';
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 145 "lexer.flex"
+#line 149 "lexer.flex"
 return ')';
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 146 "lexer.flex"
+#line 150 "lexer.flex"
 return '+';
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 147 "lexer.flex"
+#line 151 "lexer.flex"
 return '-';
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 148 "lexer.flex"
+#line 152 "lexer.flex"
 return '*';
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 149 "lexer.flex"
+#line 153 "lexer.flex"
 return '/';
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 150 "lexer.flex"
+#line 154 "lexer.flex"
 return '=';
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 151 "lexer.flex"
+#line 155 "lexer.flex"
 return EQUAL;
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 152 "lexer.flex"
+#line 156 "lexer.flex"
 return '<';
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 153 "lexer.flex"
+#line 157 "lexer.flex"
 return '>';
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 155 "lexer.flex"
+#line 159 "lexer.flex"
 return NOTEQUAL;
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 156 "lexer.flex"
+#line 160 "lexer.flex"
 return OR;
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 157 "lexer.flex"
+#line 161 "lexer.flex"
 return AND;
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 158 "lexer.flex"
+#line 162 "lexer.flex"
 return '!';
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 160 "lexer.flex"
+#line 164 "lexer.flex"
 {
     int i, len = 0;
 	long result;
@@ -1221,7 +1225,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 173 "lexer.flex"
+#line 177 "lexer.flex"
 {
     int i, len = 0;
 	int result;
@@ -1238,7 +1242,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 186 "lexer.flex"
+#line 190 "lexer.flex"
 {
     int i, len = 0;
 	int result;
@@ -1254,7 +1258,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 198 "lexer.flex"
+#line 202 "lexer.flex"
 {
     int i, len = 0;
 	int result;
@@ -1270,7 +1274,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 210 "lexer.flex"
+#line 214 "lexer.flex"
 {
 	yylval.uId = (char*)malloc(sizeof(char) * strlen(yytext));
 	strcpy(yylval.uId, yytext);
@@ -1279,7 +1283,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 215 "lexer.flex"
+#line 219 "lexer.flex"
 {
 	yylval.uId = (char*)malloc(sizeof(char) * strlen(yytext));
 	strcpy(yylval.uId, yytext);
@@ -1288,7 +1292,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 220 "lexer.flex"
+#line 224 "lexer.flex"
 {
 	yylval.uId = (char*)malloc(sizeof(char) * strlen(yytext));
 	strcpy(yylval.uId, yytext);
@@ -1297,7 +1301,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 225 "lexer.flex"
+#line 229 "lexer.flex"
 {
 	yylval.uId = (char*)malloc(sizeof(char) * strlen(yytext));
 	strcpy(yylval.uId, yytext);
@@ -1306,7 +1310,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 230 "lexer.flex"
+#line 234 "lexer.flex"
 {
 	yylval.uId = (char*)malloc(sizeof(char) * strlen(yytext));
 	strcpy(yylval.uId, yytext);
@@ -1315,7 +1319,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 235 "lexer.flex"
+#line 239 "lexer.flex"
 {
 	yylval.uId = (char*)malloc(sizeof(char) * strlen(yytext));
 	strcpy(yylval.uId, yytext);
@@ -1324,32 +1328,32 @@ YY_RULE_SETUP
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 241 "lexer.flex"
+#line 245 "lexer.flex"
 return EOL;
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 242 "lexer.flex"
+#line 246 "lexer.flex"
 return EOL;
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 244 "lexer.flex"
+#line 248 "lexer.flex"
 
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 246 "lexer.flex"
+#line 250 "lexer.flex"
 printf("Error, unexpected lexem %s !!!!!!\n", yytext);
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 248 "lexer.flex"
+#line 252 "lexer.flex"
 ECHO;
 	YY_BREAK
-#line 1351 "lex.yy.cpp"
+#line 1355 "lex.yy.cpp"
 case YY_STATE_EOF(INITIAL):
-case YY_STATE_EOF(STRING):
+case YY_STATE_EOF(STRING_X):
 case YY_STATE_EOF(STRING2):
 case YY_STATE_EOF(EXP_IN_STRING):
 case YY_STATE_EOF(LINE_COMMENT):
@@ -2212,7 +2216,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 248 "lexer.flex"
+#line 252 "lexer.flex"
 
 
 
