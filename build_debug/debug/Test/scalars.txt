@@ -1,0 +1,20 @@
+a = 21320
+
+a = (b + c ) *2 - 1 /0
+
+asd = true
+
+a = false
+#comment
+variable = a || asd && true
+=begin
+ feefe
+ f e
+=end
+asd = nil
+asd = !a + -a
+
+arr = [1,
+	2,a + b]
+arr = []
+a = -b
