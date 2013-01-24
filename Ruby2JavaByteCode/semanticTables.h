@@ -30,6 +30,7 @@ class AttrMethodDef;
 #define NAME_JAVA_OBJECT "java/lang/Object"
 
 #define NAME_JAVA_STRING "java/lang/String"
+#define DESC_JAVA_STRING_INIT "(L"NAME_JAVA_STRING";)V"
 #define DESC_JAVA_STRING "L"NAME_JAVA_STRING";"
 
 #define NAME_JAVA_INTEGER "java/lang/Integer"
@@ -90,6 +91,10 @@ class AttrMethodDef;
 #define NAME_RTL_GET_INT "getInt"
 #define DESC_RTL_GET_INT "()I"
 
+#define NAME_EXEPTION "java/lang/Exception"
+#define DESC_EXEPTION "L"NAME_EXEPTION";"
+#define DESC_EXEPTION_CONSTRUCTOR "(Ljava/lang/String;)V"
+
 #define NAME_RTL_CONSOLE NAMESPACE "Console"
 #define NAME_RTL_CONSOLE_PRINT_INT "printInt"
 #define DESC_RTL_CONSOLE_PRINT_INT "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
@@ -135,11 +140,12 @@ enum ConstType
 class SemanticClass
 {
 public:
-    int constClass;
-    int constParent;
+    int constClass; // Номер константы собственного класса
+    int constParent; // Номер константы класса-родителя
 
     int constCommonValueClass;
 
+    // Константы для обращений к RTL
     int constRTLAddRef;
     int constRTLInitIntRef;
 	int constRTLInitStringRef;
@@ -165,6 +171,13 @@ public:
 
     int constRTLUMinusRef;
 
+    int constExeptionClassRef;
+    int constExeptionInitRef;
+    int constStringClassRef;
+    int constStringInitRef;
+
+    int constIncorrectMethodExepText;
+
 	int constRTLInitByArrayRef;
 	int constRTLGetArrayRef;
 	int constRTLClassArray;
@@ -175,18 +188,21 @@ public:
 
     bool isAbstract;
 
-    QString id;
-    QString parentId;
+    QString id; // Имя класса
+    QString parentId; // Имя родителя
 
-    QMap<QString, SemanticMethod*> methods;
-    QMap<int, SemanticConst*> constants;
-    QMap<QString, SemanticVar*> fields;
+    QMap<QString, SemanticMethod*> methods; // Методы
+    QMap<int, SemanticConst*> constants; // Таблица констант
+    QMap<QString, SemanticVar*> fields; // Поля
 
-    AttrClassDef* classDef;
+    AttrClassDef* classDef; // Указатель на узел дерева
 
     SemanticClass() { isAbstract = false; }
+
+    // Добавление поля
     void addField(QString & id, bool isStatic);
 
+    // Добавление констант
     int addConstantUtf8(QString & value);
     int addConstantInteger(int value);
     int addConstantString(QString & value);
@@ -197,25 +213,31 @@ public:
 
     void addRTLConstants();
 
+    // Генерация class-файла
     void generate();
 };
 
 class SemanticConst
 {
 public:
-    SemanticConst(ConstType type, int number, QString & strValue = QString(), int intValue = 666, int ref1 = -1, int ref2 = -1);
+    SemanticConst(ConstType type, int number, QString & strValue = QString(), int intValue = EMPTY_CONST_NUMBER, int ref1 = EMPTY_CONST_NUMBER, int ref2 = EMPTY_CONST_NUMBER);
 
     ConstType type;
     int number; // Номер константы
 
-    QString strValue;
-    int intValue;
+    QString strValue; // Строковое значение
+    int intValue; // Числовое значение
 
-    int numberRef1;
-    int numberRef2;
+    int numberRef1; // Номер первой константы, на которую ссылается
+    int numberRef2; // Номер второй константы, на которую ссылается
 
+    // Строковое представление типа константы
     QString typeToString();
+
+    // Строковое представление значения
     QString valueToString();
+
+    // Строковое представление номера
     QString numberToString();
 };
 
@@ -225,28 +247,32 @@ class SemanticMethod
 {
 public:
     QString id;
-    int constName;
-    int constDesc;
-    int constCode;
-    bool abstract;
-    QMap<QString, SemanticVar*> locals;
-    int paramCount;
-    AttrMethodDef* methodDef;
+    int constName; // номер константы имени
+    int constDesc; // номер константы дескриптора
+    int constCode; // номер константы Code
 
+    bool abstract;
+    QMap<QString, SemanticVar*> locals; // Таблица локальных переменных
+    int paramCount; // Количество параметров
+    AttrMethodDef* methodDef; // Указатель на узел в дереве
+
+    // Добавление локальной переменной
     void addLocalVar(QString & name, SemanticClass* currentClass);
 
+    // Генерация кода
     void generate(QDataStream & out, SemanticClass* curClass);
 
+    // Является ли имя метода специальным (new, super и т. д.)
     static bool isSpecialMethodName(const QString & name);
 };
 
 class SemanticVar
 {
 public:
-    int constName;
-    int constType;
-    int number;
-    bool isStatic;
+    int constName; // номер константы имени
+    int constType; // номер константы типа
+    int number; // Номер в талице
+    bool isStatic; // Является ли статическим полем
 
     SemanticVar(bool isStatic) { this->isStatic = isStatic; };
 };

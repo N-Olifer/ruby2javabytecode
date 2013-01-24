@@ -365,10 +365,19 @@ void AttrMethodDef::doSemantics(QHash<QString, SemanticClass *> &classTable, Sem
     if(body.isEmpty())
     {
         AttrReturnStmt* newLast = new AttrReturnStmt();
-        AttrConstExpr* value = new AttrConstExpr();
-        value->intValue = 0;
-        value->type = eInt;
-        newLast->expr = value;
+
+        if(curClass->id == NAME_MAIN_CLASS && id == NAME_MAIN_CLASS_METHOD)
+        {// В мэйне не надо
+             newLast->expr = NULL;
+        }
+        else
+        {
+            AttrConstExpr* value = new AttrConstExpr();
+            value->intValue = 0;
+            value->type = eInt;
+            newLast->expr = value;
+        }
+
         body << newLast;
     }
     else
@@ -490,12 +499,24 @@ void AttrMethodDef::generateCode(QDataStream &out, SemanticClass *curClass)
         byteOut << RETURN;
     else
     {
+        if(curClass->id == NAME_COMMON_CLASS)
+        {
+            byteOut << NEW << (quint16)curClass->constExeptionClassRef;
+            byteOut << DUP;
+            byteOut << NEW << (quint16)curClass->constStringClassRef;
+            byteOut << DUP;
+            byteOut << LDC << (quint8)curClass->constIncorrectMethodExepText;
+            byteOut << INVOKESPECIAL << (quint16)curClass->constStringInitRef;
+            byteOut << INVOKESPECIAL << (quint16)curClass->constExeptionInitRef;
+            byteOut << ATHROW;
+        }
+        // TODO кидать исключение
+
         byteOut << NEW << (quint16)curClass->constants.value(curClass->constCommonValueClass)->number;
         byteOut << DUP;
         byteOut << BIPUSH << (qint8)0;
         byteOut << INVOKESPECIAL << (quint16)curClass->constants.value(curClass->constRTLInitIntRef)->number;
         byteOut << ARETURN;
-        // TODO кидать исключение
     }
 
 
