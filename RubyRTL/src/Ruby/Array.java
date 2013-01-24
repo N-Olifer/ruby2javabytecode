@@ -21,11 +21,14 @@ public class Array {
     
     public void append(CommonValue value) {
         array.add(value);
-       // return array.indexOf(value);
     }
     
     public CommonValue get(CommonValue index) {
-        return array.get(index.getInt());
+        int i = index.getInt();
+        if(i < 0) {
+            i = array.size() + i;
+        }
+        return array.get(i);
     }
     
     public CommonValue set(CommonValue index, CommonValue value) {
@@ -36,10 +39,12 @@ public class Array {
     @Override
     public String toString() {
         String result = new String();
+        result += "[ ";
         for(CommonValue element : array) {
             result += element.toString();
             result += " ";
         }
+        result += "]";
         return result;
     }
     

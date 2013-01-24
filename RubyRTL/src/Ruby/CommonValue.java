@@ -225,7 +225,7 @@ public class CommonValue {
     public int getInt() {
         return fIntValue;
     }
-
+    
     public String getString() {
         return fStringValue;
     }
