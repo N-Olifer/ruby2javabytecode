@@ -1140,7 +1140,7 @@ void AttrMethodCall::doSemantics(QHash<QString, SemanticClass *> &classTable, Se
         desc += DESC_COMMON_VALUE;
         if(id != NAME_SUPER_METHOD)
         {
-            if(id != NAME_RTL_CONSOLE_PRINT_INT && id != NAME_RTL_CONSOLE_PRINT_STRING)
+            if(id != NAME_RTL_CONSOLE_PRINT_INT && id != NAME_RTL_CONSOLE_PRINT && id != NAME_RTL_CONSOLE_PRINTLN)
             {
                 if(curClass->id == NAME_MAIN_CLASS)
                 // Статический метод класса MainClass
@@ -1188,11 +1188,17 @@ void AttrMethodCall::generate(QDataStream &out, SemanticClass *curClass, Semanti
             argument->generate(out, curClass, curMethod);
         out << INVOKESTATIC << (quint16)curClass->constants.value(curClass->constRTLConsolePrintIntRef)->number;
     }
-    if(id == NAME_PRINTSTRING_METHOD)
+    else if(id == NAME_PRINTLN_METHOD)
     {
         foreach(AttrExpr* argument, arguments)
             argument->generate(out, curClass, curMethod);
-		out << INVOKESTATIC << (quint16)curClass->constRTLConsolePrintStringRef;
+		out << INVOKESTATIC << (quint16)curClass->constRTLConsolePrintlnRef;
+	}
+    else if(id == NAME_PRINT_METHOD)
+    {
+        foreach(AttrExpr* argument, arguments)
+            argument->generate(out, curClass, curMethod);
+		out << INVOKESTATIC << (quint16)curClass->constRTLConsolePrintRef;
     }
     else if(id == NAME_SUPER_METHOD)
     {

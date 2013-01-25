@@ -197,7 +197,8 @@ void SemanticClass::addRTLConstants()
     constRTLAssignRef = addConstantMethodRef(QString(NAME_COMMON_VALUE), QString(NAME_RTL_ASSIGN), QString(DESC_RTL_ASSIGN));
     constRTLInitUninitRef = addConstantMethodRef(QString(NAME_COMMON_VALUE), QString(NAME_RTL_INIT), QString(DESC_RTL_INIT_UNINIT));
 	constRTLConsolePrintIntRef = addConstantMethodRef(QString(NAME_RTL_CONSOLE), QString(NAME_RTL_CONSOLE_PRINT_INT), QString(DESC_RTL_CONSOLE_PRINT_INT));
-    constRTLConsolePrintStringRef = addConstantMethodRef(QString(NAME_RTL_CONSOLE),QString(NAME_RTL_CONSOLE_PRINT_STRING),QString(DESC_RTL_CONSOLE_PRINT_STRING));
+    constRTLConsolePrintRef = addConstantMethodRef(QString(NAME_RTL_CONSOLE),QString(NAME_RTL_CONSOLE_PRINT),QString(DESC_RTL_CONSOLE_PRINT));
+    constRTLConsolePrintlnRef = addConstantMethodRef(QString(NAME_RTL_CONSOLE),QString(NAME_RTL_CONSOLE_PRINTLN),QString(DESC_RTL_CONSOLE_PRINTLN));
     constRTLInitObjectRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_INIT),QString(DESC_RTL_INIT_OBJECT));
     constRTLGetObjectRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_GET_OBJECT),QString(DESC_RTL_GET_OBJECT));
     constRTLMulRef = addConstantMethodRef(QString(NAME_COMMON_VALUE),QString(NAME_RTL_MUL),QString(DESC_RTL_MUL));
@@ -300,7 +301,8 @@ bool SemanticMethod::isSpecialMethodName(const QString &name)
     return name == NAME_NEW_METHOD 
 		|| name == NAME_PRINTINT_METHOD 
 		|| name == NAME_SUPER_METHOD
-		|| name == NAME_PRINTSTRING_METHOD;
+		|| name == NAME_PRINT_METHOD
+		|| name == NAME_PRINTLN_METHOD;
 }
 
 QDataStream & operator<< (QDataStream& out, const SemanticVar *var)
