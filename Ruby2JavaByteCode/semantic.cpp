@@ -1200,6 +1200,12 @@ void AttrMethodCall::generate(QDataStream &out, SemanticClass *curClass, Semanti
             argument->generate(out, curClass, curMethod);
 		out << INVOKESTATIC << (quint16)curClass->constRTLConsolePrintRef;
     }
+	else if(id == NAME_GETS_METHOD)
+	{
+        foreach(AttrExpr* argument, arguments)
+            argument->generate(out, curClass, curMethod);
+		out << INVOKESTATIC << (quint16)curClass->constRTLConsoleGetsRef;
+	}
     else if(id == NAME_SUPER_METHOD)
     {
         // TODO

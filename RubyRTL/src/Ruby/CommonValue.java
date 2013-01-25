@@ -141,7 +141,7 @@ public class CommonValue {
                 return result;
             }
             if (fType == Type.tString) {
-                return new CommonValue(fStringValue.compareTo(other.fStringValue) == -1 ? 1 : 0);
+                return new CommonValue(fStringValue.compareTo(other.fStringValue) < 0 ? 1 : 0);
             }
         }
         throw new RuntimeException("Incorrect types (Ruby)");
@@ -159,7 +159,7 @@ public class CommonValue {
                 return result;
             }
             if (fType == Type.tString) {
-                return new CommonValue(fStringValue.compareTo(other.fStringValue) == 1 ? 1 : 0);
+                return new CommonValue(fStringValue.compareTo(other.fStringValue) > 0 ? 1 : 0);
             }
         }
         throw new RuntimeException("Incorrect types (Ruby)");
