@@ -13,8 +13,12 @@ public class Console {
         System.out.print(arg.getInt());
         return arg;
     }
-    static public CommonValue printString(CommonValue arg) {
+    static public CommonValue print(CommonValue arg) {
         System.out.print(arg.toString());
+        return arg;
+    }
+    static public CommonValue println(CommonValue arg) {
+        System.out.println(arg.toString());
         return arg;
     }
 }

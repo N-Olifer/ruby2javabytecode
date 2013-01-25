@@ -26,7 +26,8 @@ class AttrMethodDef;
 #define NAME_NIL "nil"
 #define NAME_NEW_METHOD "new"
 #define NAME_PRINTINT_METHOD "printInt"
-#define NAME_PRINTSTRING_METHOD "printString"
+#define NAME_PRINT_METHOD "print"
+#define NAME_PRINTLN_METHOD "println"
 #define NAME_JAVA_OBJECT "java/lang/Object"
 
 #define NAME_JAVA_STRING "java/lang/String"
@@ -98,8 +99,10 @@ class AttrMethodDef;
 #define NAME_RTL_CONSOLE NAMESPACE "Console"
 #define NAME_RTL_CONSOLE_PRINT_INT "printInt"
 #define DESC_RTL_CONSOLE_PRINT_INT "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
-#define NAME_RTL_CONSOLE_PRINT_STRING "printString"
-#define DESC_RTL_CONSOLE_PRINT_STRING "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
+#define NAME_RTL_CONSOLE_PRINTLN "println"
+#define DESC_RTL_CONSOLE_PRINTLN "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
+#define NAME_RTL_CONSOLE_PRINT "print"
+#define DESC_RTL_CONSOLE_PRINT "("DESC_COMMON_VALUE")"DESC_COMMON_VALUE
 
 #define NAME_RTL_ARRAY NAMESPACE "Array"
 #define DESC_RTL_ARRAY "L"NAME_RTL_ARRAY";"
@@ -152,7 +155,8 @@ public:
     int constRTLAssignRef;
     int constRTLInitUninitRef;
 	int constRTLConsolePrintIntRef;
-	int constRTLConsolePrintStringRef;
+	int constRTLConsolePrintRef;
+	int constRTLConsolePrintlnRef;
     int constRTLInitObjectRef;
     int constRTLGetObjectRef;
     int constRTLMulRef;
