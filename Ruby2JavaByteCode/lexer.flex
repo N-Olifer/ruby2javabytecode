@@ -86,45 +86,27 @@ true return TRUE;
 	sprintf(literal + strlen(literal),"%c",result);
     }
 <STRING_X>\\;
-<STRING_X>"#" {
-    printf("String in\"\"\t\t%s\n", literal);
-	literal[0] = 0;
-    printf("+\n");
-    BEGIN(EXP_IN_STRING);
-	}
-<EXP_IN_STRING>\${IDENTIFIER} {
-    printf("%s\t\t$identifier\n", yytext);
-    printf(".to_s\t\tmethod to string\n");
-    printf("+\n");
-	BEGIN(STRING_X);
-	}
-<EXP_IN_STRING>\${IDENTIFIER}\" {
-    printf("%s\t\t$identifier\n", yytext);
-    printf(".to_s\t\tmethod to string\n");
+<STRING_X>"#{" {
     BEGIN(INITIAL);
+	
+	char * ttt = (char*)malloc(sizeof(char)*strlen(literal)+3);
+	ttt[0]= 0;
+	strcat(ttt,"\"");
+	strcat(ttt,literal);
+	strcat(ttt,"\"+(");
+	strcpy(literal,ttt);
+
+	char *p = ttt;
+	char *q = p + strlen(p);
+	while(q > p)
+		unput(*--q);
 	}
-<EXP_IN_STRING>"{" {
-    printf("String in\"\"\t\t%s\n", literal);
-	literal[0] = 0;
-    printf("+\n");
-	printf("(\n");
-    BEGIN(EXP_IN_STRING);
-	}
-<EXP_IN_STRING>"}" {
-    printf(").to_s\t\tmethod to string\n");
-    printf("+\n");
-    BEGIN(STRING_X);
-    }
-<EXP_IN_STRING>"}\"" {
-    printf(").to_s\t\tmethod to string\n");
-    BEGIN(INITIAL); 
-    }
 <STRING_X>\" { 
 	BEGIN(INITIAL);
 	yylval.uString = (char*)malloc(sizeof(char)*strlen(literal)+1);
 	strcpy(yylval.uString,literal);
 	return STRING;
-    }
+    }	
 \' { literal[0] = 0;
     BEGIN(STRING2);
     }
@@ -137,12 +119,23 @@ true return TRUE;
 	strcpy(yylval.uString,literal);
 	return STRING;
     }
+\} {
+	literal[0] = 0;
+	strcat(literal,")+\"");
+	char *p = literal;
+	char *q = p + strlen(p);
+	while(q > p)
+		unput(*--q);
+	literal[0] = 0;
+	
+    }
+\}\" {
+		unput(')');
+	}
 
 ";" return ';';
 "." return '.';
 "," return ',';
-"{" return  '{';
-"}" return '}';
 "[" return '[';
 "]" return ']';
 "(" return '(';
@@ -155,7 +148,6 @@ true return TRUE;
 "==" return EQUAL;
 "<" return '<';
 ">" return '>';
-
 "!=" return NOTEQUAL;
 "||" return OR;
 "&&" return AND;
